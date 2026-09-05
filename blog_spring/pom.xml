@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.1</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.example</groupId>
+    <artifactId>blog_spring</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>blog_spring</name>
+    <description>blog_spring</description>
+    <modules>
+        <module>blog_common</module>
+        <module>blog_domain</module>
+        <module>blog_web</module>
+    </modules>
+
+    <packaging>pom</packaging>
+    <url/>
+
+    <properties>
+        <java.version>17</java.version>
+        <blog.common.version>0.0.1-SNAPSHOT</blog.common.version>
+        <blog.domain.version>0.0.1-SNAPSHOT</blog.domain.version>
+        <blog.web.version>0.0.1-SNAPSHOT</blog.web.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>blog_common</artifactId>
+                <version>${blog.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>blog_domain</artifactId>
+                <version>${blog.domain.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>blog_web</artifactId>
+                <version>${blog.web.version}</version>
+            </dependency>
+
+<!--            blog_common-->
+<!--            blog_donain-->
+<!--            blog_web-->
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+
+    </build>
+
+</project>
