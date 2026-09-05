@@ -1,3 +1,5 @@
 spring:
   application:
     name: blog_web
+jwt:
+  secretary:YSsnBVr/X7IK6VVg72BSWag3POEbuAgny0ip39N1eB0=

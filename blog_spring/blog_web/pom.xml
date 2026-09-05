@@ -11,9 +11,7 @@
     </parent>
 
 
-    <groupId>com.example</groupId>
     <artifactId>blog_web</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>blog_web</name>
     <description>blog_web</description>
     <packaging>jar</packaging>
@@ -32,6 +30,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>blog_domain</artifactId>
         </dependency>
 
 

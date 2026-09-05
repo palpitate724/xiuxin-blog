@@ -29,6 +29,12 @@
         <blog.common.version>0.0.1-SNAPSHOT</blog.common.version>
         <blog.domain.version>0.0.1-SNAPSHOT</blog.domain.version>
         <blog.web.version>0.0.1-SNAPSHOT</blog.web.version>
+
+<!--        blog_common-->
+        <jwt.version>0.12.6</jwt.version>
+<!--        blog_domain-->
+        <mybatisplus.version>3.5.3</mybatisplus.version>
+<!--        blog_web-->
     </properties>
 
     <dependencies>
@@ -65,8 +71,37 @@
             </dependency>
 
 <!--            blog_common-->
+<!--            JWT-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+
+
+
 <!--            blog_donain-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatisplus.version}</version>
+            </dependency>
+
+
+
 <!--            blog_web-->
+
+
 
         </dependencies>
     </dependencyManagement>
