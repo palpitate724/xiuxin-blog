@@ -1,3 +1,15 @@
 spring:
   application:
-    name: blog_donain
+    name: blog_domain
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/xiuxinblog?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      username: root
+      password: szc321321
+#sql日志
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#jwt密钥
+jwt:
+  secretKey: YSsnBVr/X7IK6VVg72BSWag3POEbuAgny0ip39N1eB0=
