@@ -36,7 +36,7 @@ public class AddCatSerImpl implements AddCatService {
         Result result = Result.getInstance();
 
         // 分类名存在，返回错误
-        if (catMapper.selectByMap(Map.of("catname", acd.getCatname())) == null){
+        if (catMapper.selectByMap(Map.of("catname", acd.getCatname())) != null){
             result.setCode(ResultCode.CATEGORY_ALREADY_EXIST.getCode());
             result.setMessage(ResultCode.CATEGORY_ALREADY_EXIST.getMessage());
             result.setData(null);

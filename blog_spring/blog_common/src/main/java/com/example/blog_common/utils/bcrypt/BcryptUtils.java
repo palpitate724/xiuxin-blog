@@ -6,7 +6,7 @@ import org.mindrot.jbcrypt.BCrypt;
 /**
  * BCrypt工具类
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/08
  */
 public class BcryptUtils {
 

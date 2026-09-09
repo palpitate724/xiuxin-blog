@@ -1,12 +1,15 @@
 package com.example.blog_domain.mapper;
 
 
+import com.example.blog_domain.entity.ArtTagEntity;
 import com.example.blog_domain.entity.UserEntity;
 import com.example.blog_common.utils.bcrypt.BcryptUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,8 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestUserMapper {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ArtTagMapper artTagMapper;
 
     private Long testUserId;
+    private List<Long> artids;
+
+
 
     /**
      * 测试插入用户
@@ -30,7 +38,7 @@ public class TestUserMapper {
         
         UserEntity user = new UserEntity();
         user.setUsername("test");
-        user.setUserpassword(BcryptUtils.jiami("test"));
+        user.setPassword(BcryptUtils.jiami("test"));
         user.setTouxiangurl("test");
         user.setEmail("test");
         user.setDeleted(0);

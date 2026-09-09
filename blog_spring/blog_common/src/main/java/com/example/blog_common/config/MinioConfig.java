@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Minio配置类，用于配置Minio服务的连接信息
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/08
  */
 @Configuration
 public class MinioConfig {

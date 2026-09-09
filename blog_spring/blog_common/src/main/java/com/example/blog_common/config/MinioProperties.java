@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * Minio 配置对象，用于存储 Minio 服务的连接信息
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/08
  */
 @ConfigurationProperties(prefix = "minio")
 @Component

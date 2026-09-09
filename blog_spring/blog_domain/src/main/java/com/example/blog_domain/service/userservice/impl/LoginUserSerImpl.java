@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 /**
  * 用户登录service
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/08
  */
 @Service
 public class LoginUserSerImpl implements LoginUserService {

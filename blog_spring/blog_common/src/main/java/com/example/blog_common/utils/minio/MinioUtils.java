@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * minio工具类
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/08
  */
 @Component
 public class MinioUtils {

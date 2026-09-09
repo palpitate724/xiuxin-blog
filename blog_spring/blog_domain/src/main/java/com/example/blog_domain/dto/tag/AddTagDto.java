@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 添加标签的DTO
  * @author palpitate
- * @date 2023/09/05
+ * @date 2026/09/08
  */
 @Data
 public class AddTagDto {
