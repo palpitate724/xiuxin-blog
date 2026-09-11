@@ -7,6 +7,7 @@ import com.example.blog_common.utils.minio.MinioUtils;
 import com.example.blog_domain.service.userservice.MinioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author palpitate
  * @date 2023/09/04
  */
+@Transactional(rollbackFor = Exception.class)
 @Slf4j
 @Service
 public class MinioSerImpl implements MinioService {

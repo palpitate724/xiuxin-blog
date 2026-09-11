@@ -11,6 +11,7 @@ import com.example.blog_domain.vo.cat.SelectCatVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import static com.baomidou.mybatisplus.extension.ddl.DdlScriptErrorHandler.Print
  * @author palpitate
  * @date 2026/09/09
  */
+@Transactional(rollbackFor = Exception.class)
 @Slf4j
 @Service
 public class AddCatSerImpl implements AddCatService {

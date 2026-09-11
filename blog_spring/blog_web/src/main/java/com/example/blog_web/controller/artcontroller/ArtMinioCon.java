@@ -3,8 +3,6 @@ package com.example.blog_web.controller.artcontroller;
 
 import com.example.blog_common.result.Result;
 import com.example.blog_domain.service.userservice.MinioService;
-import com.example.blog_web.config.Log;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
  * @author palpitate
  * @date 2026/09/09
  */
-@Transactional(rollbackFor = Exception.class)
 @RestController
 @RequestMapping("/api/v1/art/minio")
 public class ArtMinioCon {
@@ -29,7 +26,6 @@ public class ArtMinioCon {
      * @param file 文件
      * @return Result 对象
      */
-    @Log
     @PostMapping
     public Result upFile(@RequestBody MultipartFile file) {
         return minioService.upFile(file, "art");

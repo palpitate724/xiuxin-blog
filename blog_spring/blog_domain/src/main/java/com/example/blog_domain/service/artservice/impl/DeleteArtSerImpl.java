@@ -7,6 +7,7 @@ import com.example.blog_domain.mapper.ArtTagMapper;
 import com.example.blog_domain.service.artservice.DeleteArtService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
  * @author palpitate
  * @date 2026/09/10
  */
+@Transactional(rollbackFor = Exception.class)
 @Slf4j
 @Service
 public class DeleteArtSerImpl implements DeleteArtService {

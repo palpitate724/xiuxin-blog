@@ -3,7 +3,6 @@ package com.example.blog_web.controller.usercontroller;
 
 import com.example.blog_common.result.Result;
 import com.example.blog_domain.service.userservice.MinioService;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
  * @author palpitate
  * @date 2026/09/09
  */
-@Transactional(rollbackFor = Exception.class)
 @RestController
 @RequestMapping("/api/v1/user/{id}/minio")
 public class UserMinioCon {

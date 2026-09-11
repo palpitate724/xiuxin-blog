@@ -8,6 +8,7 @@ import com.example.blog_domain.service.tagservice.SelectTagListService;
 import com.example.blog_domain.vo.tag.SelectTagVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author palpitate
  * @date 2026/09/09
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class SelectTagListSerImpl implements SelectTagListService {
 

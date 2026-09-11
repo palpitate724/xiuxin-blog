@@ -15,6 +15,7 @@ import com.example.blog_domain.vo.tag.TagVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
  * @author palpitate
  * @date 2026/09/09
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 @Slf4j
 public class SelectArtListImpl implements SelectArtListService {
