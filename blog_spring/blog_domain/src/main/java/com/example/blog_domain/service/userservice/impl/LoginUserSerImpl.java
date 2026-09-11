@@ -12,14 +12,18 @@ import com.example.blog_domain.mapper.UserMapper;
 import com.example.blog_common.result.Result;
 import com.example.blog_domain.service.userservice.LoginUserService;
 import com.example.blog_domain.vo.user.LoginUserVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 用户登录service
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/09
  */
+@Transactional(rollbackFor = Exception.class)
+@Slf4j
 @Service
 public class LoginUserSerImpl implements LoginUserService {
     /**

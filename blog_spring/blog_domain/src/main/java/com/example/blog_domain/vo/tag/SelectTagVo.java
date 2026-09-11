@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 查询标签列表的VO
  * @author palpitate
- * @date 2023/09/05
+ * @date 2026/09/09
  */
 @Data
 public class SelectTagVo {

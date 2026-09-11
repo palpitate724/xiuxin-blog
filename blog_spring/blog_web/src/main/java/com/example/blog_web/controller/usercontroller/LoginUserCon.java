@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 用户登录控制器
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/09
  */
 @RestController
 @RequestMapping("/api/v1/user")
@@ -23,6 +23,11 @@ public class LoginUserCon {
         this.loginUserService = loginUserService;
     }
 
+    /**
+     * 用户登录
+     * @param lud
+     * @return
+     */
     @PostMapping("/login")
     public Result login(@RequestBody LoginUserDto lud){
         return loginUserService.login(lud);

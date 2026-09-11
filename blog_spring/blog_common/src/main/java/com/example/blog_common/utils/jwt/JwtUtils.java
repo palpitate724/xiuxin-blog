@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Jwt工具类
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/09
  */
 @Component
 public class JwtUtils {
@@ -25,18 +25,29 @@ public class JwtUtils {
     }
 
 
-   // 获取密钥
+    /**
+     * 获取密钥
+     * @return
+     */
     public SecretKey SecretKey(){
         return Jwts.SIG.HS256.key().build();
     }
 
-    //string-secretkey
+    /**
+     * string-secretkey
+     * @return
+     */
     public SecretKey getSecretKey(){
         String jwtSecret = jwtProperties.getSecretKey();
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // 获取token
+    /**
+     * 获取token
+     * @param id
+     * @param username
+     * @return
+     */
     public String getToken(Long id,String username){
         return Jwts.builder()
                 .signWith(getSecretKey())
@@ -47,7 +58,11 @@ public class JwtUtils {
                 .compact();
     }
 
-    // 校验token
+    /**
+     * 校验token
+     * @param token
+     * @return
+     */
     public boolean isTokenValid(String token){
         try {
             Jws<Claims> jws = Jwts.parser()

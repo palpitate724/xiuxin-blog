@@ -9,24 +9,34 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 用户Minio控制器
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/09
  */
 @RestController
 @RequestMapping("/api/v1/user/{id}/minio")
 public class UserMinioCon {
 
-    private final MinioService minioService;
-    public UserMinioCon(MinioService minioService) {
-        this.minioService = minioService;
+    private final MinioService MinioService;
+    public UserMinioCon(MinioService MinioService) {
+        this.MinioService = MinioService;
     }
 
+    /**
+     * 上传用户头像文件
+     * @param file
+     * @return
+     */
     @PostMapping
     public Result upFile(@RequestBody MultipartFile file) {
-        return minioService.upFile(file, "user");
+        return MinioService.upFile(file, "user");
     }
 
+    /**
+     * 获取临时用户头像url
+     * @param objectName
+     * @return
+     */
     @GetMapping
     public Result getObjectUrl(@PathVariable("id") String objectName) {
-        return minioService.getObjectUrl(objectName);
+        return MinioService.getObjectUrl(objectName);
     }
 }
