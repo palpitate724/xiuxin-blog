@@ -11,6 +11,7 @@ import com.example.blog_domain.vo.cat.SelectCatVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -20,8 +21,9 @@ import static com.baomidou.mybatisplus.extension.ddl.DdlScriptErrorHandler.Print
 /**
  * 添加分类服务实现类
  * @author palpitate
- * @date 2023/09/05
+ * @date 2026/09/09
  */
+@Transactional(rollbackFor = Exception.class)
 @Slf4j
 @Service
 public class AddCatSerImpl implements AddCatService {
@@ -36,7 +38,7 @@ public class AddCatSerImpl implements AddCatService {
         Result result = Result.getInstance();
 
         // 分类名存在，返回错误
-        if (catMapper.selectByMap(Map.of("catname", acd.getCatname())) == null){
+        if (catMapper.selectByMap(Map.of("catname", acd.getCatname())) != null){
             result.setCode(ResultCode.CATEGORY_ALREADY_EXIST.getCode());
             result.setMessage(ResultCode.CATEGORY_ALREADY_EXIST.getMessage());
             result.setData(null);

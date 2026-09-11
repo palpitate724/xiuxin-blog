@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * 密钥映射
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/09
  */
 @ConfigurationProperties(prefix = "jwt")
 @Component

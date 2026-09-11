@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 查询分类列表控制器
  * @author palpitate
- * @date 2023/09/05
+ * @date 2026/09/09
  */
 @RestController
 @RequestMapping("/api/v1/{id}/cat")
@@ -22,6 +22,10 @@ public class SelectCatListCon {
     }
 
 
+    /**
+     * 查询分类列表
+     * @return
+     */
     @GetMapping
     public Result selectCatList() {
         return selectCatListService.selectListCat();

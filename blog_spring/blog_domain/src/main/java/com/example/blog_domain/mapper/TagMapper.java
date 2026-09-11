@@ -7,7 +7,7 @@ import com.example.blog_domain.entity.TagEntity;
 /**
  * 标签Mapper接口
  * @author palpitate
- * @date 2023/09/05
+ * @date 2026/09/09
  */
 public interface TagMapper extends BaseMapper<TagEntity> {
 }

@@ -88,7 +88,12 @@ public enum ResultCode {
      * 文章已删除
      */
     ARTICLE_DELETED(3002, "文章已删除"),
-    
+
+    /**
+     * 文章添加失败
+     */
+    ARTICLE_NOT_INSERT(3003,"文章插入失败"),
+
     /**
      * 评论不存在
      */
