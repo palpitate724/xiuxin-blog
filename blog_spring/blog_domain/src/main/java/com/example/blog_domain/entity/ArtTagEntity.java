@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  *文章标签表
  * @author palpitate
- * @date 2026/09/08
+ * @date 2026/09/09
  */
 @Data
 @TableName("art_tag")

@@ -8,6 +8,7 @@ import com.example.blog_domain.entity.TagEntity;
 import com.example.blog_domain.mapper.TagMapper;
 import com.example.blog_domain.service.tagservice.AddTagService;
 import com.example.blog_domain.vo.tag.SelectTagVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,9 @@ import java.util.Map;
 /**
  * 添加标签服务实现类
  * @author palpitate
- * @date 2023/09/05
+ * @date 2026/09/09
  */
+@Slf4j
 @Service
 public class AddTagSerImpl implements AddTagService {
 

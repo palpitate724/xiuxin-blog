@@ -9,5 +9,10 @@ import com.example.blog_common.result.Result;
  * @date 2026/09/09
  */
 public interface SelectArtListService {
+
+    /**
+     * 查询文章列表
+     * @return
+     */
     Result selectArtList();
 }

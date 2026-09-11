@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 统一返回结果类
  * @author palpitate
- * @date 2026/09/08
+ * @date 2026/09/09
  */
 @Data
 public class Result {

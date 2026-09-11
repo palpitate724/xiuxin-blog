@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 分类表
  * @author palpitate
- * @date 2026/09/08
+ * @date 2026/09/09
  */
 @Data
 @TableName("cat")

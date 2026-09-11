@@ -7,9 +7,14 @@ import com.example.blog_domain.dto.cat.AddCatDto;
 /**
  * 添加分类服务接口
  * @author palpitate
- * @date 2023/09/05
+ * @date 2026/09/09
  */
 public interface AddCatService {
 
-    Result addCat(AddCatDto acd);
+    /**
+     * 添加分类
+     * @param addCatDto
+     * @return
+     */
+    Result addCat(AddCatDto addCatDto);
 }

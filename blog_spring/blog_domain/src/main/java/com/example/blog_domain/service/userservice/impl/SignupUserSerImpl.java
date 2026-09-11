@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 /**
  * 用户注册service
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/09
  */
 @Slf4j
 @Service

@@ -6,7 +6,7 @@ import com.example.blog_domain.dto.user.LoginUserDto;
 /**
  * Login User Service
  * @author palpitate
- * @date 2023/09/04
+ * @date 2026/09/09
  */
 public interface LoginUserService {
     /**

@@ -16,7 +16,6 @@ public class SelectArtListVo {
 
     private Long id; // 文章ID
     private String artname; // 文章标题
-    private String cont; // 文章内容
     private Long userid; // 用户ID
     private Long catid; // 分类ID
     private String fenmianurl; // 封面URL

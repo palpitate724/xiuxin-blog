@@ -7,9 +7,15 @@ import com.example.blog_common.result.Result;
 /**
  * ArtMinio服务接口
  * @author palpitate
- * @date 2023/09/05
+ * @date 2026/09/09
  */
 public interface AddArtService {
 
-    Result addArt(AddArtDto aad);
+
+    /**
+     * 添加文章
+     * @param addArtDto
+     * @return
+     */
+    Result addArt(AddArtDto addArtDto);
 }

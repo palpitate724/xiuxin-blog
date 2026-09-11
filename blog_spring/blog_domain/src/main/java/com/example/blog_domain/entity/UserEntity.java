@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  *用户表
  * @author palpitate
- * @date 2026/09/08
+ * @date 2026/09/09
  */
 @Data
 @TableName("user")

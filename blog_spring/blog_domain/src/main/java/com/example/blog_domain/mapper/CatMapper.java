@@ -7,7 +7,7 @@ import com.example.blog_domain.entity.CatEntity;
 /**
  * CatMapper
  * @author palpitate
- * @date 2026/09/08
+ * @date 2026/09/09
  */
 public interface CatMapper extends BaseMapper<CatEntity> {
 }

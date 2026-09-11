@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 查询分类列表服务实现类
  * @author palpitate
- * @date 2023/09/05
+ * @date 2026/09/09
  */
 @Service
 public class SelectCatListSerImpl implements SelectCatListService {
@@ -41,10 +41,12 @@ public class SelectCatListSerImpl implements SelectCatListService {
                     return selectCatVo;
                 })
                 .toList();
+
         Result result = Result.getInstance();
         result.setCode(ResultCode.SUCCESS.getCode());
         result.setMessage(ResultCode.SUCCESS.getMessage());
         result.setData(selectCatVoList);
+
         return result;
     }
 }

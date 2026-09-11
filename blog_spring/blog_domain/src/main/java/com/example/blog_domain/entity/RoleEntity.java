@@ -8,7 +8,7 @@ import lombok.Data;
 /**
  * 角色表
  * @author palpitate
- * @date 2026/09/08
+ * @date 2026/09/09
  */
 @Data
 @TableName("role")

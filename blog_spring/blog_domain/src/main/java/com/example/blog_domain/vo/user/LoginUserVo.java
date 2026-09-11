@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 登录用户信息Vo
  * @author palpitate
- * @date 2026/09/08
+ * @date 2026/09/09
  */
 @Data
 public class LoginUserVo {
