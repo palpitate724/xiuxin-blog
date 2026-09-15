@@ -10,6 +10,6 @@ import lombok.Data;
  */
 @Data
 public class LoginUserDto {
-    private String username; // 用户名
+    private String name; // 用户名
     private String password; // 密码
 }

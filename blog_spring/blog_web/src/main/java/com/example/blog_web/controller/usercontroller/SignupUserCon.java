@@ -30,6 +30,7 @@ public class SignupUserCon {
      */
     @PostMapping("/signup")
     public Result signup(@RequestBody SignupUserDto sud){
+        System.out.println(sud);
         return signupUserService.signupUser(sud);
     }
 

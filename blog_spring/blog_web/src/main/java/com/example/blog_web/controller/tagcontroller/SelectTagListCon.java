@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2026/09/09
  */
 @RestController
-@RequestMapping("/api/v1/{id}/tag")
+@RequestMapping("/api/v1/tag")
 public class SelectTagListCon {
 
     private SelectTagListService selectTagListService;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2026/09/09
  */
 @RestController
-@RequestMapping("/api/v1/{id}/cat")
+@RequestMapping("/api/v1/cat")
 public class SelectCatListCon {
 
     private final SelectCatListService selectCatListService;

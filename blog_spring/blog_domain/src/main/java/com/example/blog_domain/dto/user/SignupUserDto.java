@@ -11,8 +11,8 @@ import lombok.Data;
 @Data
 public class SignupUserDto {
 
-    private String username; // 用户名
+    private String name; // 用户名
     private String password; // 密码
     private String email; // 邮箱
-    private String touxiangurl; // 头像
+    private String objectname; // 头像
 }
