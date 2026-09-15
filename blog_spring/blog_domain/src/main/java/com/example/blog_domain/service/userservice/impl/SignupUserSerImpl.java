@@ -58,7 +58,7 @@ public class SignupUserSerImpl implements SignupUserService {
             BeanUtils.copyProperties(ue, suv);
             result.setCode(ResultCode.SUCCESS.getCode());
             result.setMessage(ResultCode.SUCCESS.getMessage());
-            result.setData(suv);
+            result.setData(null);
             return result;
 
         }catch (Exception e){

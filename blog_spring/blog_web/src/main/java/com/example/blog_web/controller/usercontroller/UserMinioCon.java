@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2026/09/09
  */
 @RestController
-@RequestMapping("/api/v1/user/{id}/minio")
+@RequestMapping("/api/v1/user/minio")
 public class UserMinioCon {
 
     private final MinioService MinioService;
@@ -26,7 +26,7 @@ public class UserMinioCon {
      * @return
      */
     @PostMapping
-    public Result upFile(@RequestBody MultipartFile file) {
+    public Result upFile(@RequestParam("file") MultipartFile file) {
         return MinioService.upFile(file, "user");
     }
 
@@ -36,7 +36,8 @@ public class UserMinioCon {
      * @return
      */
     @GetMapping
-    public Result getObjectUrl(@PathVariable("id") String objectName) {
+    public Result getObjectUrl(@RequestParam("objectname") String objectName) {
+        System.out.println("getObjectUrl: " + objectName);
         return MinioService.getObjectUrl(objectName);
     }
 }

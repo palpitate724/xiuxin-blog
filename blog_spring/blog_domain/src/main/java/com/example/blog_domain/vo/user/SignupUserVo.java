@@ -12,6 +12,5 @@ import lombok.Data;
 public class SignupUserVo {
     private Long id; // 用户id
     private String username; // 用户名
-    private String password; // 密码
     private String objecturl; // 头像
 }

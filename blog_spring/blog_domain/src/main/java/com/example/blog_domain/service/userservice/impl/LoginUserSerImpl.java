@@ -51,7 +51,7 @@ public class LoginUserSerImpl implements LoginUserService {
 
         UserEntity ue = userMapper.selectOne(
                 new LambdaQueryWrapper<UserEntity>()
-                        .eq(UserEntity::getUsername, lud.getUsername())
+                        .eq(UserEntity::getName, lud.getName())
                         .eq(UserEntity::getDeleted, 0)
         );
         // 用户不存在
@@ -70,8 +70,8 @@ public class LoginUserSerImpl implements LoginUserService {
         else {
             LoginUserVo luv = new LoginUserVo();
             BeanUtils.copyProperties(ue,luv);
-            luv.setTouxiangurl(minioUtils.getObjectUrl(ue.getTouxiangurl()));
-            luv.setToken(jwtUtils.getToken(ue.getId(),ue.getUsername()));
+            luv.setTouxiangurl(minioUtils.getObjectUrl(ue.getObjectname()));
+            luv.setToken(jwtUtils.getToken(ue.getId(),ue.getName()));
 
             result.setCode(ResultCode.SUCCESS.getCode());
             result.setMessage(ResultCode.SUCCESS.getMessage());
