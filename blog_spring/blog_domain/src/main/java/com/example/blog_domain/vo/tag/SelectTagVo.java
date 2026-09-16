@@ -12,5 +12,5 @@ import lombok.Data;
 public class SelectTagVo {
 
     private Long id; // 标签ID
-    private String tagname; // 标签名
+    private String name; // 标签名
 }

@@ -46,11 +46,11 @@ public class SelectArtListImpl implements SelectArtListService {
     public Result selectArtList() {
         Result result = Result.getInstance();
 
-        try{
+//        try{
             //查询所有文章
             List<ArtEntity> ae = artMapper.selectList(
                     new LambdaQueryWrapper<ArtEntity>()
-                            .select(ArtEntity::getId, ArtEntity::getArtname, ArtEntity::getUserid, ArtEntity::getCatid, ArtEntity::getFenmianurl, ArtEntity::getSum, ArtEntity::getCjiantime)
+                            .select(ArtEntity::getId, ArtEntity::getName, ArtEntity::getUserid, ArtEntity::getCatid, ArtEntity::getFenmianurl, ArtEntity::getSum, ArtEntity::getCjiantime)
                             .eq(ArtEntity::getDeleted, 0)
             );
 
@@ -67,6 +67,7 @@ public class SelectArtListImpl implements SelectArtListService {
                         return selectArtListVo;
                     })
                     .toList();
+
             //收集ArtEntity list中的id
             List<Long> artids = ae.stream()
                     .map(ArtEntity::getId)
@@ -78,6 +79,7 @@ public class SelectArtListImpl implements SelectArtListService {
 
             //根据id查询ArtTagEntity list
             List<SelectArtTagVo> satvl = artTagMapper.selectArtTagList(artids);
+            System.out.println("satvl: " + satvl);
 
             //将ArtTagEntity list转为Map
             Map<Long, List<SelectArtTagVo>> satvlmap = satvl.stream()
@@ -99,11 +101,11 @@ public class SelectArtListImpl implements SelectArtListService {
             result.setCode(ResultCode.SUCCESS.getCode());
             result.setMessage(ResultCode.SUCCESS.getMessage());
             result.setData(satlv);
-        }catch (Exception e){
-            result.setCode(ResultCode.FAIL.getCode());
-            result.setMessage(ResultCode.FAIL.getMessage());
-            result.setData(null);
-        }
+//        }catch (Exception e){
+//            result.setCode(ResultCode.FAIL.getCode());
+//            result.setMessage(ResultCode.FAIL.getMessage());
+//            result.setData(null);
+//        }
 
         return result;
     }

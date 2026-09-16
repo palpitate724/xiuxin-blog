@@ -6,7 +6,7 @@
 
 <!--    arttaglist-->
     <select id="selectArtTagList" resultType="com.example.blog_domain.vo.arttag.SelectArtTagVo">
-        select artid, tagid, tagname
+        select artid, tag.id, tag.name
         from art_tag,tag
         where tag.id = tagid AND artid IN
         <foreach collection="artids" item="artid" open="(" separator="," close=")">

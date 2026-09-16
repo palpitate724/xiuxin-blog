@@ -10,5 +10,5 @@ import lombok.Data;
 @Data
 public class AddCatDto {
 
-    private String catname; // 分类名称
+    private String name; // 分类名称
 }

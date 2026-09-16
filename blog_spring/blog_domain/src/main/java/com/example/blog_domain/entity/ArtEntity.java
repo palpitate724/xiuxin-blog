@@ -14,7 +14,7 @@ import lombok.Data;
 public class ArtEntity {
 
     private Long id; //文章id
-    private String artname; //文章名称
+    private String name; //文章名称
     private long userid; //作者id
     private long catid; //分类id
     private String fenmianurl; //封面图片url

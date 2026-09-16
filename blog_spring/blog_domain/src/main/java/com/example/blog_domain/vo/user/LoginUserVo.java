@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class LoginUserVo {
     private Long id; // 用户ID
-    private String username; // 用户名
+    private String name; // 用户名
     private String touxiangurl; // 头像地址
     private String token; // token
 }
