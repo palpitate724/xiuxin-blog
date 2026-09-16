@@ -37,7 +37,7 @@ public class AddTagSerImpl implements AddTagService {
         Result result = Result.getInstance();
 
         // 判断标签是否已存在
-        if (tagMapper.selectByMap(Map.of("tagname", atd.getTagname())) != null){
+        if (!tagMapper.selectByMap(Map.of("name", atd.getName())).isEmpty()){
             result.setCode(ResultCode.TAG_ALREADY_EXIST.getCode());
             result.setMessage(ResultCode.TAG_ALREADY_EXIST.getMessage());
             result.setData(null);

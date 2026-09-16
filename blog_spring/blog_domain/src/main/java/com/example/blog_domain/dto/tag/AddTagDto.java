@@ -11,5 +11,5 @@ import lombok.Data;
 @Data
 public class AddTagDto {
 
-    private String tagname; // 标签名
+    private String name; // 标签名
 }

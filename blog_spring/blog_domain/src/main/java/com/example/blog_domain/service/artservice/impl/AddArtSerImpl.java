@@ -44,7 +44,7 @@ public class AddArtSerImpl implements AddArtService {
     public Result addArt(AddArtDto aad) {
         Result result = Result.getInstance();
 
-        try{
+//        try{
             ArtEntity ae = new ArtEntity();
             BeanUtils.copyProperties(aad, ae);
 
@@ -66,11 +66,11 @@ public class AddArtSerImpl implements AddArtService {
             result.setCode(ResultCode.SUCCESS.getCode());
             result.setMessage(ResultCode.SUCCESS.getMessage());
             result.setData(ae.getId());
-        }catch (Exception e){
-            result.setCode(ResultCode.ARTICLE_NOT_INSERT.getCode());
-            result.setMessage(ResultCode.ARTICLE_NOT_INSERT.getMessage());
-            result.setData(null);
-        }
+//        }catch (Exception e){
+//            result.setCode(ResultCode.ARTICLE_NOT_INSERT.getCode());
+//            result.setMessage(ResultCode.ARTICLE_NOT_INSERT.getMessage());
+//            result.setData(null);
+//        }
 
         return result;
     }

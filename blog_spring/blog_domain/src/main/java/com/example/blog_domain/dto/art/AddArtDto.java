@@ -14,7 +14,7 @@ import java.util.List;
 public class AddArtDto {
 
 
-    private String artname; // 文章名称
+    private String name; // 文章名称
     private Long userid; // 用户ID
     private Long catid; // 分类ID
     private String fenmianurl; // 封面URL

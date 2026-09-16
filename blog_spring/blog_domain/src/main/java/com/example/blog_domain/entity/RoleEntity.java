@@ -15,7 +15,7 @@ import lombok.Data;
 public class RoleEntity {
 
     private Long id; //角色id
-    private String rolename; //角色名称
+    private String name; //角色名称
     private String cjiantime; //创建时间
     private int deleted; //删除标志 0:未删除 1:已删除
 

@@ -11,6 +11,6 @@ import lombok.Data;
 @Data
 public class SignupUserVo {
     private Long id; // 用户id
-    private String username; // 用户名
+    private String name; // 用户名
     private String objecturl; // 头像
 }
