@@ -17,7 +17,7 @@ public class ArtEntity {
     private String name; //文章名称
     private long userid; //作者id
     private long catid; //分类id
-    private String fenmianurl; //封面图片url
+    private String objectname; //封面图片url
     private String sum; //文章摘要
     private String cont; //文章内容
     private String cjiantime; //创建时间

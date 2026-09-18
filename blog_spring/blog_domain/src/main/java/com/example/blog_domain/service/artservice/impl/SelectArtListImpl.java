@@ -1,7 +1,6 @@
 package com.example.blog_domain.service.artservice.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.blog_common.enums.ResultCode;
 import com.example.blog_common.result.Result;
 import com.example.blog_common.utils.minio.MinioUtils;
@@ -9,7 +8,7 @@ import com.example.blog_domain.entity.ArtEntity;
 import com.example.blog_domain.mapper.ArtMapper;
 import com.example.blog_domain.mapper.ArtTagMapper;
 import com.example.blog_domain.service.artservice.SelectArtListService;
-import com.example.blog_domain.vo.art.SelectArtListVo;
+import com.example.blog_domain.vo.art.SelectArtVo;
 import com.example.blog_domain.vo.arttag.SelectArtTagVo;
 import com.example.blog_domain.vo.tag.TagVo;
 import lombok.extern.slf4j.Slf4j;
@@ -46,25 +45,26 @@ public class SelectArtListImpl implements SelectArtListService {
     public Result selectArtList() {
         Result result = Result.getInstance();
 
-//        try{
+        try{
             //查询所有文章
             List<ArtEntity> ae = artMapper.selectList(
                     new LambdaQueryWrapper<ArtEntity>()
-                            .select(ArtEntity::getId, ArtEntity::getName, ArtEntity::getUserid, ArtEntity::getCatid, ArtEntity::getFenmianurl, ArtEntity::getSum, ArtEntity::getCjiantime)
+                            .select(ArtEntity::getId, ArtEntity::getName, ArtEntity::getUserid, ArtEntity::getCatid, ArtEntity::getObjectname, ArtEntity::getSum, ArtEntity::getCjiantime)
                             .eq(ArtEntity::getDeleted, 0)
             );
 
             //为所有查询到的文章申请临封面url
             ae.forEach(ArtEntity -> {
-                ArtEntity.setFenmianurl(minioUtils.getObjectUrl(ArtEntity.getFenmianurl()));
+                ArtEntity.setObjectname(minioUtils.getObjectUrl(ArtEntity.getObjectname()));
             });
 
             //将查询结果转为SelectArtListVo list
-            List<SelectArtListVo> salv = ae.stream()
+            List<SelectArtVo> salv = ae.stream()
                     .map(ArtEntity -> {
-                        SelectArtListVo selectArtListVo = new SelectArtListVo();
-                        BeanUtils.copyProperties(ArtEntity, selectArtListVo);
-                        return selectArtListVo;
+                        SelectArtVo selectArtVo = new SelectArtVo();
+                        BeanUtils.copyProperties(ArtEntity, selectArtVo);
+                        selectArtVo.setFenmianurl(ArtEntity.getObjectname());
+                        return selectArtVo;
                     })
                     .toList();
 
@@ -74,8 +74,8 @@ public class SelectArtListImpl implements SelectArtListService {
                     .toList();
 
             //将SelectArtListVo list转为Map
-            Map<Long, SelectArtListVo> satlv = salv.stream()
-                    .collect(Collectors.toMap(SelectArtListVo::getId, selectArtListVo -> selectArtListVo));
+            Map<Long, SelectArtVo> satlv = salv.stream()
+                    .collect(Collectors.toMap(SelectArtVo::getId, selectArtVo -> selectArtVo));
 
             //根据id查询ArtTagEntity list
             List<SelectArtTagVo> satvl = artTagMapper.selectArtTagList(artids);
@@ -98,14 +98,18 @@ public class SelectArtListImpl implements SelectArtListService {
                 satlv.get(artid).setTagvolist(tvl);
             }
 
+            //将Map结果转为List
+            List<SelectArtVo> satlvlist = satlv.values().stream()
+                    .toList();
+
             result.setCode(ResultCode.SUCCESS.getCode());
             result.setMessage(ResultCode.SUCCESS.getMessage());
-            result.setData(satlv);
-//        }catch (Exception e){
-//            result.setCode(ResultCode.FAIL.getCode());
-//            result.setMessage(ResultCode.FAIL.getMessage());
-//            result.setData(null);
-//        }
+            result.setData(satlvlist);
+        }catch (Exception e){
+            result.setCode(ResultCode.FAIL.getCode());
+            result.setMessage(ResultCode.FAIL.getMessage());
+            result.setData(null);
+        }
 
         return result;
     }

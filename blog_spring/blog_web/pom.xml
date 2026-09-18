@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.example</groupId>
         <artifactId>blog_spring</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
 
@@ -31,7 +31,6 @@
             <groupId>com.example</groupId>
             <artifactId>blog_domain</artifactId>
         </dependency>
-
 
 
     </dependencies>
