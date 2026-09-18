@@ -13,6 +13,8 @@
           <option value="blog_common" />
           <option value="blog_web" />
           <option value="blog_web" />
+          <option value="blog_domain" />
+          <option value="blog_web" />
         </list>
       </option>
       <option name="ignoredPackages">
@@ -25,6 +27,8 @@
           <option value="com.squareup.okhttp3:okhttp:4.9.1" />
           <option value="org.bouncycastle:bcprov-jdk18on:1.81" />
           <option value="com.squareup.okhttp3:okhttp:4.9.1" />
+          <option value="org.bouncycastle:bcprov-jdk18on:1.81" />
+          <option value="com.squareup.okio:okio:2.8.0" />
         </list>
       </option>
       <option name="ignoredReasons">
@@ -37,6 +41,8 @@
           <option value="其他" />
           <option value="不可利用" />
           <option value="其他" />
+          <option value="其他" />
+          <option value="不可利用" />
         </list>
       </option>
     </inspection_tool>
