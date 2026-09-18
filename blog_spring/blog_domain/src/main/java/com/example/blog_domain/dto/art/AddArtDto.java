@@ -17,7 +17,7 @@ public class AddArtDto {
     private String name; // 文章名称
     private Long userid; // 用户ID
     private Long catid; // 分类ID
-    private String fenmianurl; // 封面URL
+    private String objectname; // 封面URL
     private String sum; // 文章摘要
     private String cont; // 文章内容
 

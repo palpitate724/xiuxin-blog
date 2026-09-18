@@ -12,7 +12,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>blog_spring</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>blog_spring</name>
     <description>blog_spring</description>
 

@@ -49,6 +49,7 @@ public class JwtUtils {
      * @return
      */
     public String getToken(Long id,String username){
+        System.out.println("getSecretKey()"+getSecretKey());
         return Jwts.builder()
                 .signWith(getSecretKey())
                 .claim("id",id)
