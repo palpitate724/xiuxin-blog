@@ -2,6 +2,9 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+src/main/resources/application-jwt.yaml
+src/main/resources/application-minio.yaml
+src/main/resources/application-db.yaml
 
 ### STS ###
 .apt_generated
