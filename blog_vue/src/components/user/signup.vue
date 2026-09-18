@@ -518,6 +518,7 @@ const handleSubmit = (e: Event) => {
   outline: none;
   backdrop-filter: blur(10px);
   caret-color: #38BDF8;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .form-input:hover {
@@ -682,6 +683,107 @@ const handleSubmit = (e: Event) => {
   
   .signup-title {
     font-size: 1.5rem;
+  }
+  
+  .signup-header {
+    margin-bottom: 20px;
+  }
+  
+  .avatar-upload-container {
+    gap: 16px;
+  }
+  
+  .avatar-circle {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .avatar-placeholder {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .avatar-info {
+    height: 52px;
+    padding: 6px 12px;
+  }
+  
+  .avatar-title {
+    font-size: 0.8rem;
+  }
+  
+  .avatar-hint {
+    display: none; /* 移动端隐藏格式提示 */
+  }
+  
+  .upload-button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .file-status {
+    display: none; /* 移动端隐藏文件状态 */
+  }
+  
+  .error-message {
+    display: none; /* 移动端隐藏错误消息 */
+  }
+  
+  .form-input {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+  
+  .submit-button {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .signup-card {
+    padding: 32px 24px;
+  }
+  
+  .signup-title {
+    font-size: 1.6rem;
+  }
+  
+  .avatar-upload-container {
+    gap: 20px;
+  }
+  
+  .avatar-circle {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .avatar-info {
+    height: 56px;
+  }
+  
+  .avatar-hint {
+    display: none; /* 移动端隐藏格式提示 */
+  }
+  
+  .file-status {
+    display: none; /* 移动端隐藏文件状态 */
+  }
+  
+  .error-message {
+    display: none; /* 移动端隐藏错误消息 */
+  }
+  
+  .form-group {
+    gap: 16px;
+  }
+  
+  .form-input {
+    padding: 12px 16px;
+  }
+  
+  .submit-button {
+    padding: 12px 24px;
   }
 }
 </style>
