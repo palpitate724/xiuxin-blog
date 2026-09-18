@@ -35,6 +35,37 @@
           <circle cx="75" cy="75" r="3" fill="#8b5cf6" opacity="0.5">
             <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/>
           </circle>
+          
+          <!-- 随机移动的光点 -->
+          <circle r="2" fill="#3b82f6" opacity="0.8">
+            <animate attributeName="cx" values="30;70;30" dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="30;70;30" dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="4s" repeatCount="indefinite"/>
+          </circle>
+          
+          <circle r="1.5" fill="#06b6d4" opacity="0.7">
+            <animate attributeName="cx" values="70;30;70" dur="3s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="40;60;40" dur="3s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3s" repeatCount="indefinite"/>
+          </circle>
+          
+          <circle r="2.5" fill="#8b5cf6" opacity="0.6">
+            <animate attributeName="cx" values="40;60;40" dur="5s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="60;40;60" dur="5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.6;0.9;0.6" dur="5s" repeatCount="indefinite"/>
+          </circle>
+          
+          <circle r="1" fill="#3b82f6" opacity="0.9">
+            <animate attributeName="cx" values="20;80;20" dur="6s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="50;50;50" dur="6s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.9;0.4;0.9" dur="6s" repeatCount="indefinite"/>
+          </circle>
+          
+          <circle r="1.8" fill="#06b6d4" opacity="0.5">
+            <animate attributeName="cx" values="50;50;50" dur="3.5s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="20;80;20" dur="3.5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3.5s" repeatCount="indefinite"/>
+          </circle>
         </svg>
       </div>
       <h1 class="logo-title">蔚蓝极客</h1>
@@ -143,6 +174,14 @@
 }
 
 @media (max-width: 768px) {
+  .logo-container {
+    padding: 20px;
+  }
+  
+  .logo-icon {
+    margin-bottom: 24px;
+  }
+  
   .logo-svg {
     width: 100px;
     height: 100px;
@@ -155,6 +194,7 @@
   
   .logo-subtitle {
     font-size: 1rem;
+    margin-bottom: 20px;
   }
   
   .tech-stack {
@@ -164,6 +204,40 @@
   .tech-tag {
     padding: 4px 12px;
     font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-container {
+    padding: 16px;
+  }
+  
+  .logo-icon {
+    margin-bottom: 20px;
+  }
+  
+  .logo-svg {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .logo-title {
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+  }
+  
+  .logo-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+  
+  .tech-stack {
+    gap: 6px;
+  }
+  
+  .tech-tag {
+    padding: 3px 10px;
+    font-size: 0.7rem;
   }
 }
 </style>
