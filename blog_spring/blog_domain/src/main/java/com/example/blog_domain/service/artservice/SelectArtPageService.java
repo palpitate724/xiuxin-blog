@@ -8,11 +8,11 @@ import com.example.blog_common.result.Result;
  * @author palpitate
  * @date 2026/09/09
  */
-public interface SelectArtListService {
+public interface SelectArtPageService {
 
     /**
-     * 查询文章列表
+     * 分页查询文章列表
      * @return
      */
-    Result selectArtList();
+    Result selectArtPage(Integer page, Integer size);
 }

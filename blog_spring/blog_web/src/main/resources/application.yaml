@@ -1,24 +1,27 @@
 spring:
   application:
     name: blog_web
+  # 数据源配置
   datasource:
     driver-class-name:
     url:
     username:
     password:
+  # 配置文件导入
+  # 在该文件中设置配置项后可删除该导入配置文件的语句
   config:
     import:
       - classpath:application-jwt.yaml
       - classpath:application-minio.yaml
       - classpath:application-db.yaml
-
-##sql日志
+# sql日志配置
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#jwt密钥
+# jwt密钥
 jwt:
   secretKey:
+# minio对象存储服务配置
 minio:
   endpoint:
   bucketName:
