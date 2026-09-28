@@ -1,7 +1,6 @@
 package com.example.blog_domain.service.artservice.impl;
 
 
-import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.blog_common.enums.ResultCode;
 import com.example.blog_common.result.Result;
@@ -14,14 +13,11 @@ import com.example.blog_domain.mapper.ArtTagMapper;
 import com.example.blog_domain.mapper.TagMapper;
 import com.example.blog_domain.service.artservice.SelectArtService;
 import com.example.blog_domain.vo.art.SelectArtByIdVo;
-import com.example.blog_domain.vo.art.SelectArtVo;
-import com.example.blog_domain.vo.arttag.SelectArtTagVo;
 import com.example.blog_domain.vo.tag.TagVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,9 +29,9 @@ import java.util.List;
 public class SelectArtSerImpl implements SelectArtService {
 
     private final TagMapper tagMapper;
-    private ArtMapper artMapper;
-    private ArtTagMapper artTagMapper;
-    private MinioUtils minioUtils;
+    private final ArtMapper artMapper;
+    private final ArtTagMapper artTagMapper;
+    private final MinioUtils minioUtils;
     public SelectArtSerImpl(ArtMapper artMapper, ArtTagMapper artTagMapper, MinioUtils minioUtils, TagMapper tagMapper) {
         this.artMapper = artMapper;
         this.minioUtils = minioUtils;
@@ -69,12 +65,16 @@ public class SelectArtSerImpl implements SelectArtService {
             // 获取封面临时访问url
             sabiv.setFenmianurl(minioUtils.getObjectUrl(ae.getObjectname()));
             BeanUtils.copyProperties(ae, sabiv);
+            sabiv.setId(ae.getId().toString());
+            sabiv.setUserid(ae.getUserid().toString());
+            sabiv.setCatid(ae.getCatid().toString());
 
             // 组装标签列表
             List<TagVo> tvl = new ArrayList<>();
             for (TagEntity te : tel) {
                 TagVo tv = new TagVo();
                 BeanUtils.copyProperties(te, tv);
+                tv.setId(te.getId().toString());
                 tvl.add(tv);
             }
             sabiv.setTagvolist(tvl);

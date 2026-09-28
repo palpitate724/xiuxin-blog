@@ -14,10 +14,10 @@ import java.util.List;
 @Data
 public class SelectArtVo {
 
-    private Long id; // 文章ID
+    private String id; // 文章ID
     private String name; // 文章标题
-    private Long userid; // 用户ID
-    private Long catid; // 分类ID
+    private String userid; // 用户ID
+    private String catid; // 分类ID
     private String fenmianurl; // 封面URL
     private String sum; // 文章摘要
 

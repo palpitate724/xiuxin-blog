@@ -47,7 +47,7 @@ public class SelectArtPageImpl implements SelectArtPageService {
     public Result selectArtPage(Integer page, Integer size) {
         Result result = Result.getInstance();
 
-        try{
+//        try{
             //设置分页查询条件
             //创建分页对象
             Page<ArtEntity> artPage = new Page<>(page, size);
@@ -69,30 +69,36 @@ public class SelectArtPageImpl implements SelectArtPageService {
                     .map(ArtEntity -> {
                         SelectArtVo selectArtVo = new SelectArtVo();
                         BeanUtils.copyProperties(ArtEntity, selectArtVo);
+                        selectArtVo.setId(ArtEntity.getId().toString());
                         selectArtVo.setFenmianurl(ArtEntity.getObjectname());
                         return selectArtVo;
                     })
                     .toList();
 
             //收集ArtEntity list中的id
-            List<Long> artids = aePage.getRecords().stream()
+            List<String> artids = aePage.getRecords().stream()
                     .map(ArtEntity::getId)
+                    .map(String::valueOf)
                     .toList();
+        //收集ArtEntity list中的id
+        List<Long> artidl = aePage.getRecords().stream()
+                .map(ArtEntity::getId)
+                .toList();
 
             //将SelectArtListVo list转为Map
-            Map<Long, SelectArtVo> satlv = salv.stream()
+            Map<String, SelectArtVo> satlv = salv.stream()
                     .collect(Collectors.toMap(SelectArtVo::getId, selectArtVo -> selectArtVo));
 
             //根据id查询ArtTagEntity list
-            List<SelectArtTagVo> satvl = artTagMapper.selectArtTagList(artids);
+            List<SelectArtTagVo> satvl = artTagMapper.selectArtTagList(artidl);
             System.out.println("satvl: " + satvl);
 
             //将ArtTagEntity list转为Map
-            Map<Long, List<SelectArtTagVo>> satvlmap = satvl.stream()
+            Map<String, List<SelectArtTagVo>> satvlmap = satvl.stream()
                     .collect(Collectors.groupingBy(SelectArtTagVo::getArtid));
 
             //将tag标签列表组装进selectartlistvo
-            for (Long artid : artids){
+            for (String artid : artids){
                 //将map转为list
                 List<TagVo> tvl = satvlmap.get(artid).stream()
                         .map(selectArtTagVo -> {
@@ -119,11 +125,11 @@ public class SelectArtPageImpl implements SelectArtPageService {
             result.setCode(ResultCode.SUCCESS.getCode());
             result.setMessage(ResultCode.SUCCESS.getMessage());
             result.setData(savPage);
-        }catch (Exception e){
-            result.setCode(ResultCode.FAIL.getCode());
-            result.setMessage(ResultCode.FAIL.getMessage());
-            result.setData(null);
-        }
+//        }catch (Exception e){
+//            result.setCode(ResultCode.FAIL.getCode());
+//            result.setMessage(ResultCode.FAIL.getMessage());
+//            result.setData(null);
+//        }
 
         return result;
     }

@@ -1,12 +1,15 @@
 package com.example.blog_web.aop;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.boot.jackson.autoconfigure.JacksonProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -27,6 +30,15 @@ public class LogAop {
     public Object aroundLog(ProceedingJoinPoint joinPoint) throws Throwable {
 
         log.info("================================== 开始执行 ==================================");
+
+        // 获取请求
+        ServletRequestAttributes attributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes == null) {
+            return null;
+        }
+        HttpServletRequest request = attributes.getRequest();
+
         Long kstime = System.currentTimeMillis(); // 开始时间
         String className = joinPoint.getSignature().toString(); // 类名
         String methodName = joinPoint.getSignature().getName(); // 方法名
@@ -36,7 +48,7 @@ public class LogAop {
         String params = joinPoint.toShortString(); // 参数
 
         Long jstime = System.currentTimeMillis(); // 结束时间
-
+        log.info("访问url：{}", request.getRequestURL());
         log.info("执行时间：{}ms", jstime - kstime);
         log.info("执行方法：{}.{}", className, methodName);
         log.info("方法参数：{}", params);

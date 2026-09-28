@@ -64,8 +64,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
 <!--        aop-->
@@ -152,9 +152,6 @@
 
 
 <!--            blog_web-->
-
-
-
 
         </dependencies>
     </dependencyManagement>

@@ -34,22 +34,22 @@ public class JwtProTest {
 
 
     @GetMapping("/test")
-    public Map<Long, SelectArtVo> test() {
+    public Map<String, SelectArtVo> test() {
         List<Long> artids = List.of(2097580568131289089L, 2097580572833103874L, 2097580577190985730L);
         List<SelectArtTagVo> sav = artTagMapper.selectArtTagList(artids);
 
         List<SelectArtVo> selectArtVos = artids.stream()
                 .map(artid -> {
                     SelectArtVo selectArtVo = new SelectArtVo();
-                    selectArtVo.setId(artid);
+                    selectArtVo.setId(artid.toString());
                     return selectArtVo;
                 })
                 .toList();
 
-        Map<Long, SelectArtVo> satvMap = selectArtVos.stream()
+        Map<String, SelectArtVo> satvMap = selectArtVos.stream()
                 .collect(Collectors.toMap(SelectArtVo::getId, selectArtVo -> selectArtVo));
 
-        Map<Long, List<SelectArtTagVo>> artTagMap = sav.stream()
+        Map<String, List<SelectArtTagVo>> artTagMap = sav.stream()
                 .collect(Collectors.groupingBy(SelectArtTagVo::getArtid));
 
         for (Long artid : artids){
