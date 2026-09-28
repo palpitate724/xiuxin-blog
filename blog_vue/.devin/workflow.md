@@ -66,59 +66,6 @@
 └─────────────────────────────────────────────────────┘
 ```
 
-## 技能包路径映射
-
-> 所有技能文档位于 `.devin/skills/` 目录下，按开发阶段分类组织在子目录中。  
-> 子目录包括：`01-开发规范`、`02-组件封装`、`03-AI辅助设计`（含工程化保障层、视觉创作扩展层、设计方向层、系统生成层、质量校验层）、`04-主题定制`、`05-性能优化`。  
-> 以下技能可通过 `skill` 工具加载为**可执行技能**，其余为本地 Markdown 文档。
-
-| 阶段 | 技能名称 | 路径 | 可执行 |
-|------|----------|------|--------|
-| 01 | element-plus-best-practices | `.devin/skills/01-开发规范/element-plus-best-practices.md` | ❌ 文档 |
-| 01 | project-structure | `.devin/skills/01-开发规范/project-structure.md` | ❌ 文档 |
-| 01 | vue3-component-standards | `.devin/skills/01-开发规范/vue3-component-standards.md` | ❌ 文档 |
-| 01 | auto-import-config | `.devin/skills/05-性能优化/auto-import-config.md` | ❌ 文档 |
-| 02-03 | frontend-design | `.devin/skills/03-AI辅助设计/设计方向层/frontend-design.md` | ❌ 文档 |
-| 02 | tasteskill | `.devin/skills/03-AI辅助设计/设计方向层/tasteskill.md` | ❌ 文档 |
-| 03 | ui-ux-pro-max | `.devin/skills/03-AI辅助设计/系统生成层/ui-ux-pro-max.md` | ✅ `skill` |
-| 05 | composition-patterns | `.devin/skills/02-组件封装/composition-patterns.md` | ❌ 文档 |
-| 05 | custom-form-pattern | `.devin/skills/02-组件封装/custom-form-pattern.md` | ❌ 文档 |
-| 05 | custom-table-pattern | `.devin/skills/02-组件封装/custom-table-pattern.md` | ❌ 文档 |
-| 05 | props-slots-forwarding | `.devin/skills/02-组件封装/props-slots-forwarding.md` | ❌ 文档 |
-| 05 | form-validation-regle | `.devin/skills/02-组件封装/form-validation-regle.md` | ❌ 文档 |
-| 05 | form-validation-veevalidate | `.devin/skills/02-组件封装/form-validation-veevalidate.md` | ❌ 文档 |
-| 03 | create-adaptable-composable | `.devin/skills/03-AI辅助设计/工程化保障层/create-adaptable-composable.md` | ❌ 文档 |
-| 03 | vue-best-practices | `.devin/skills/03-AI辅助设计/工程化保障层/vue-best-practices.md` | ❌ 文档 |
-| 03 | vue-debug-guides | `.devin/skills/03-AI辅助设计/工程化保障层/vue-debug-guides.md` | ❌ 文档 |
-| 06 | vue-pinia-best-practices | `.devin/skills/03-AI辅助设计/工程化保障层/vue-pinia-best-practices.md` | ❌ 文档 |
-| 06 | vue-router-best-practices | `.devin/skills/03-AI辅助设计/工程化保障层/vue-router-best-practices.md` | ❌ 文档 |
-| 06 | component-lazy-loading | `.devin/skills/05-性能优化/component-lazy-loading.md` | ❌ 文档 |
-| 06 | gsap-skills | `.devin/skills/03-AI辅助设计/视觉创作扩展层/gsap-skills.md` | ❌ 文档 |
-| 06 | motion-vue | `.devin/skills/03-AI辅助设计/视觉创作扩展层/motion-vue.md` | ❌ 文档 |
-| 06 | vue3-echarts | `.devin/skills/03-AI辅助设计/视觉创作扩展层/vue3-echarts.md` | ❌ 文档 |
-| 06 | apexcharts-vue | `.devin/skills/03-AI辅助设计/视觉创作扩展层/apexcharts-vue.md` | ❌ 文档 |
-| 04 | awesome-design-md | `.devin/skills/04-主题定制/awesome-design-md.md` | ❌ 文档 |
-| 04 | el-icon | `.devin/skills/04-主题定制/el-icon.md` | ❌ 文档 |
-| 04 | icon-system | `.devin/skills/04-主题定制/icon-system.md` | ❌ 文档 |
-| 04 | design-tokens | `.devin/skills/04-主题定制/design-tokens.md` | ❌ 文档 |
-| 04 | css-variable-theming | `.devin/skills/04-主题定制/css-variable-theming.md` | ❌ 文档 |
-| 04 | dark-mode | `.devin/skills/04-主题定制/dark-mode.md` | ❌ 文档 |
-| 07 | impeccable | `.devin/skills/03-AI辅助设计/质量校验层/impeccable.md` | ✅ `skill` |
-| 07 | web-design-guidelines | `.devin/skills/03-AI辅助设计/质量校验层/web-design-guidelines.md` | ❌ 文档 |
-| 07 | audit-component | `.devin/skills/03-AI辅助设计/质量校验层/audit-component.md` | ❌ 文档 |
-| 07 | a11y-audit | `.devin/skills/03-AI辅助设计/质量校验层/a11y-audit.md` | ❌ 文档 |
-| 07 | bee-dev-a11y | `.devin/skills/03-AI辅助设计/质量校验层/bee-dev-a11y.md` | ❌ 文档 |
-| 07 | vue-testing-best-practices | `.devin/skills/03-AI辅助设计/工程化保障层/vue-testing-best-practices.md` | ❌ 文档 |
-| 08 | canvas-design | `.devin/skills/03-AI辅助设计/视觉创作扩展层/canvas-design.md` | ❌ 文档 |
-| 08 | algorithmic-art | `.devin/skills/03-AI辅助设计/视觉创作扩展层/algorithmic-art.md` | ❌ 文档 |
-| 08 | remotion | `.devin/skills/03-AI辅助设计/视觉创作扩展层/remotion.md` | ❌ 文档 |
-| 09 | vue-expert-performance | `.devin/skills/03-AI辅助设计/工程化保障层/vue-expert-performance.md` | ❌ 文档 |
-| 09 | vue-scan | `.devin/skills/05-性能优化/vue-scan.md` | ❌ 文档 |
-| 09 | jeecg-codegen | `.devin/skills/03-AI辅助设计/工程化保障层/jeecg-codegen.md` | ❌ 文档 |
-| 09 | vtj-pro | `.devin/skills/03-AI辅助设计/工程化保障层/vtj-pro.md` | ❌ 文档 |
-
-> **可执行技能**：`impeccable`、`ui-ux-pro-max`、`ui-styling`、`brand`、`configure-sandbox`、`pool-product-reference`、`skill-creator`
-
 ## 详细工作流程
 
 ### 阶段一：项目初始化
