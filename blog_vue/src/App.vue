@@ -7,6 +7,23 @@ const checkMobile = () => {
   isMobile.value = window.innerWidth <= 768 || 'ontouchstart' in window
 }
 
+// 回到顶部功能
+const showBackTop = ref(false)
+const scrollProgress = ref(0)
+
+function handleScroll() {
+  showBackTop.value = window.scrollY > 300
+  
+  // 更新滚动进度
+  const scrollTop = window.scrollY
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight
+  scrollProgress.value = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 // 鼠标显示控制
 const isOverInput = ref(false)
 
@@ -32,15 +49,16 @@ const handleMouseMove = (e: MouseEvent) => {
   const target = e.target as HTMLElement
   const isInput = target.closest('.form-input') !== null
   const isFormGroup = target.closest('.form-group') !== null
+  const isPagination = target.closest('.pagination') !== null
   
-  // 检查是否在输入框或表单组上
-  const shouldHide = isInput || isFormGroup
+  // 检查是否在输入框、表单组或分页上
+  const shouldHide = isInput || isFormGroup || isPagination
   
   if (shouldHide !== isOverInput.value) {
     isOverInput.value = shouldHide
   }
   
-  // 根据是否在输入框/表单组上设置透明度
+  // 根据是否在输入框/表单组/分页上设置透明度
   const shouldShow = !shouldHide && !isMobile.value
   cursorStyle.value = {
     left: `${e.clientX}px`,
@@ -393,6 +411,9 @@ onMounted(() => {
   document.addEventListener('mousemove', handleMouseMove)
   document.addEventListener('mouseleave', handleMouseLeave)
   
+  // 监听滚动位置
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  
   // 更新轨迹透明度
   const updateTrails = () => {
     cursorTrails.value = cursorTrails.value.map(trail => ({
@@ -414,6 +435,7 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkMobile)
   document.removeEventListener('mousemove', handleMouseMove)
   document.removeEventListener('mouseleave', handleMouseLeave)
+  window.removeEventListener('scroll', handleScroll)
   
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId)
@@ -436,6 +458,9 @@ defineExpose({
 
 <template>
   <div class="app-container" :class="{ 'hide-default-cursor': !isMobile }">
+    <!-- 顶部滚动进度条 -->
+    <div class="scroll-progress" :style="{ width: scrollProgress + '%' }"></div>
+    
     <!-- 背景动画 -->
     <canvas ref="matrixCanvas" class="matrix-rain"></canvas>
     <canvas ref="curvesCanvas" class="curves-background"></canvas>
@@ -454,6 +479,18 @@ defineExpose({
     <!-- 页面扭曲效果 -->
     <div class="distortion-effect" :style="distortionStyle"></div>
     
+    <!-- 回到顶部按钮 -->
+    <transition name="fade">
+      <button
+        v-show="showBackTop"
+        class="back-top"
+        @click="scrollToTop"
+        aria-label="回到顶部"
+      >
+        ↑
+      </button>
+    </transition>
+    
     <router-view></router-view>
   </div>
 </template>
@@ -469,6 +506,26 @@ defineExpose({
 
 .app-container.hide-default-cursor {
   cursor: none;
+}
+
+/* 顶部滚动进度条 */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    rgba(0, 204, 255, 0.8) 0%, 
+    rgba(6, 182, 212, 0.9) 50%, 
+    rgba(139, 92, 246, 0.8) 100%
+  );
+  width: 0%;
+  z-index: 9999;
+  transition: width 0.1s linear;
+  box-shadow: 
+    0 0 10px rgba(0, 204, 255, 0.5),
+    0 0 20px rgba(6, 182, 212, 0.3),
+    0 0 30px rgba(139, 92, 246, 0.2);
 }
 
 @media (max-width: 768px) {
@@ -541,5 +598,62 @@ defineExpose({
     width: 400px;
     height: 400px;
   }
+}
+
+/* 回到顶部按钮 */
+.back-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    rgba(0, 204, 255, 0.9) 0%, 
+    rgba(6, 182, 212, 0.95) 50%, 
+    rgba(139, 92, 246, 0.9) 100%
+  );
+  color: #fff;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 
+    0 4px 15px rgba(0, 204, 255, 0.4),
+    0 0 20px rgba(6, 182, 212, 0.3),
+    inset 0 0 10px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  z-index: 999;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 204, 255, 0.3);
+}
+
+.back-top:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 
+    0 8px 25px rgba(0, 204, 255, 0.5),
+    0 0 30px rgba(6, 182, 212, 0.4),
+    0 0 40px rgba(139, 92, 246, 0.3),
+    inset 0 0 15px rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, 
+    rgba(6, 182, 212, 1) 0%, 
+    rgba(139, 92, 246, 1) 50%, 
+    rgba(168, 85, 247, 1) 100%
+  );
+}
+
+.back-top:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+/* 淡入淡出过渡 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

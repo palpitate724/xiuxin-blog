@@ -3,12 +3,16 @@ import { http } from './requset'
 const artapi = import.meta.env.VITE_API_ART
 
 /**
- * 查询文章api接口方法(还未完善)
+ * 分页查询文章api接口方法(还未完善)
  */
-export const getart = () => {
+export const getart = (page: number,size: number) => {
     return http.request({
         url: artapi,
-        method: 'get'
+        method: 'get',
+        params: {
+            page,
+            size
+        }
     })
 }
 
@@ -39,3 +43,14 @@ export const insart = (name: string, userid: string, catid: string, objectname: 
     })
 }
 
+/**
+ * 精确查询文章
+ * @param id
+ * @returns 
+ */
+export const selectart = (id: string) => {
+    return http.request({
+        url: `${artapi}/${id}`,
+        method: 'get',
+    })
+}

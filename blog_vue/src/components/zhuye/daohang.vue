@@ -23,17 +23,6 @@
         </div>
       </div>
       
-      <!-- 右侧区域：用户登录 -->
-      <div class="daohang-right">
-        <!-- 用户登录 -->
-        <a href="/user" class="login-link">
-          <svg viewBox="0 0 24 24" class="login-icon">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>登录</span>
-        </a>
-      </div>
     </div>
   </nav>
 </template>

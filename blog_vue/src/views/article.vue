@@ -11,6 +11,15 @@
       </div>
     </section>
     
+    <!-- 加载状态 -->
+    <div v-if="isLoading" class="loading-state">
+      <p>加载中...</p>
+    </div>
+    
+    <!-- 错误状态 -->
+    <div v-if="error" class="error-state">
+      <p>{{ error }}</p>
+    </div>
     <!-- 主内容区域 - 三列布局 -->
     <section class="main-content">
       <!-- 左列：章节索引 -->
@@ -38,10 +47,7 @@
         
         <!-- 正文内容 -->
         <div class="content-container">
-          <div v-for="(section, index) in contentSections" :key="index" :id="'chapter-' + (index + 1)" class="content-section">
-            <h2 class="section-title">{{ section.title }}</h2>
-            <div class="section-content" v-html="section.content"></div>
-          </div>
+          <div v-html="htmltext"></div>
         </div>
       </main>
       
@@ -56,52 +62,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 // @ts-ignore
 import daohang from '../components/zhuye/daohang.vue'
+import { art } from '../stores/art/art'
+import { gethtml } from '../utils/md'
 
-// 文章数据
-const articleTitle = ref('深入理解 Vue 3 Composition API')
-const articleMeta = ref('发布于 2024年1月15日 · 阅读时间 15分钟')
-const articleAbstract = ref('本文将深入探讨 Vue 3 Composition API 的核心概念、使用场景以及最佳实践，帮助开发者更好地理解和应用这一强大的功能。')
+const route = useRoute()
+const arts = art()
+const articleId = route.params.id as string
 
-// 章节索引
-const chapters = ref([
-  '什么是 Composition API',
-  '为什么要使用 Composition API',
-  '核心概念详解',
-  '实际应用场景',
-  '最佳实践指南',
-  '与 Options API 的对比',
-  '常见问题解答',
-  '总结与展望'
-])
+// 加载状态
+const isLoading = ref(true)
+const error = ref('')
 
-const activeChapter = ref(0)
+// 使用store中的数据
+const articleTitle = computed(() => arts.name || '加载中...')
+const articleMeta = computed(() => arts.userid ? `作者ID: ${arts.userid}` : '发布时间未知')
+const articleAbstract = computed(() => arts.sum || '文章摘要')
+const mdtext = computed(() => arts.cont || '# 暂无内容')
+const htmltext = ref('')
 
-// 正文内容
-const contentSections = ref([
-  {
-    title: '什么是 Composition API',
-    content: '<p>Composition API 是 Vue 3 引入的一套新的 API，它提供了一种更灵活的方式来组织组件逻辑。与 Options API 相比，Composition API 允许我们将相关功能的代码组织在一起，而不是按照 data、methods、computed 等选项分散。</p><p>这种组织方式使得代码更加模块化、可复用，并且更容易进行类型推断。</p>'
-  },
-  {
-    title: '为什么要使用 Composition API',
-    content: '<p>Composition API 的出现解决了 Options API 在大型项目中的一些痛点：</p><ul><li>逻辑复用更加方便</li><li>更好的 TypeScript 支持</li><li>更灵活的代码组织方式</li><li>更容易进行代码分割和优化</li></ul>'
-  },
-  {
-    title: '核心概念详解',
-    content: '<p>Composition API 的核心概念包括：</p><ul><li><strong>setup() 函数</strong>：组件的入口点</li><li><strong>ref 和 reactive</strong>：响应式数据的创建</li><li><strong>computed 和 watch</strong>：计算属性和侦听器</li><li><strong>生命周期钩子</strong>：组件生命周期管理</li></ul>'
-  }
-])
-
-const scrollToChapter = (index: number) => {
-  activeChapter.value = index
-  const element = document.getElementById(`chapter-${index + 1}`)
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
+const getselectart = async () => {
+  try {
+    isLoading.value = true
+    error.value = ''
+    await arts.getart(articleId)
+    htmltext.value = gethtml(mdtext.value)
+  } catch (err) {
+    error.value = '加载文章失败，请稍后重试'
+    console.error('加载文章失败:', err)
+  } finally {
+    isLoading.value = false
   }
 }
+
+onMounted(async () => {
+  await getselectart()
+})
 </script>
 
 <style scoped>
@@ -142,6 +141,26 @@ const scrollToChapter = (index: number) => {
   font-size: 1.1rem;
   color: rgba(147, 197, 253, 0.8);
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: rgba(147, 197, 253, 0.8);
+  font-size: 1.1rem;
+}
+
+/* 错误状态 */
+.error-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: rgba(239, 68, 68, 0.8);
+  font-size: 1.1rem;
 }
 
 /* 主内容区域 - 三列布局 */

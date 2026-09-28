@@ -6,7 +6,7 @@
 在开始任何代码生成之前：
 1. 阅读 `.devin/workflow.md` 了解完整的九阶段开发工作流程
 2. 确定当前任务处于工作流程的哪个阶段
-3. 查阅该阶段对应的技能文件（位于 `.devin/skills/` 目录）
+3. 查阅该阶段对应的技能文件（位于 `.devin/skills/` 目录 (已同步至 `D:\\skills\\`)）
 4. 按照技能文件的指导进行设计和开发
 5. 确保生成的代码符合工作流程中定义的最佳实践
 
@@ -18,64 +18,68 @@
 
 ## 已加载技能
 
+> **⚠️ 技能加载说明**
+> - 当前通过 `skill` 工具**可加载**的运行技能仅 7 个：`impeccable` ✅、`ui-ux-pro-max` ✅、`ui-styling` ✅、`brand` ✅、`configure-sandbox` ✅、`pool-product-reference` ✅、`skill-creator` ✅
+> - 本项目 AGENTS.md 引用的技能中，仅 `impeccable` 与 `ui-ux-pro-max` 能通过 `skill` 工具加载为**可执行技能**；其余 40 个为本地 Markdown 文档 (位于 `D:\\skills\\` 目录)，可直接阅读指导。
+
 ### 01-开发规范
-- `element-plus-best-practices.md` - Element Plus 最佳实践
-- `project-structure.md` - 项目结构规范
-- `vue3-component-standards.md` - Vue3 组件标准
+- `D:\\skills\\element-plus-best-practices.md` - Element Plus 最佳实践
+- `D:\\skills\\project-structure.md` - 项目结构规范
+- `D:\\skills\\vue3-component-standards.md` - Vue3 组件标准
 
 ### 02-组件封装
-- `composition-patterns.md` - Composition API 模式
-- `custom-form-pattern.md` - 自定义表单模式
-- `custom-table-pattern.md` - 自定义表格模式
-- `form-validation-regle.md` - Regle 表单验证
-- `form-validation-veevalidate.md` - VeeValidate 表单验证
-- `props-slots-forwarding.md` - Props 和 Slots 转发
+- `D:\\skills\\composition-patterns.md` - Composition API 模式
+- `D:\\skills\\custom-form-pattern.md` - 自定义表单模式
+- `D:\\skills\\custom-table-pattern.md` - 自定义表格模式
+- `D:\\skills\\form-validation-regle.md` - Regle 表单验证
+- `D:\\skills\\form-validation-veevalidate.md` - VeeValidate 表单验证
+- `D:\\skills\\props-slots-forwarding.md` - Props 和 Slots 转发
 
 ### 03-AI辅助设计
 #### 工程化保障层
-- `create-adaptable-composable.md` - 创建可适配的 Composable
-- `jeecg-codegen.md` - Jeecg 代码生成
-- `vtj-pro.md` - VTJ Pro 工具
-- `vue-best-practices.md` - Vue 最佳实践
-- `vue-debug-guides.md` - Vue 调试指南
-- `vue-expert-performance.md` - Vue 专家级性能优化
-- `vue-pinia-best-practices.md` - Pinia 最佳实践
-- `vue-router-best-practices.md` - Vue Router 最佳实践
-- `vue-testing-best-practices.md` - Vue 测试最佳实践
+- `D:\\skills\\create-adaptable-composable.md` - 创建可适配的 Composable
+- `D:\\skills\\jeecg-codegen.md` - Jeecg 代码生成
+- `D:\\skills\\vtj-pro.md` - VTJ Pro 工具
+- `D:\\skills\\vue-best-practices.md` - Vue 最佳实践
+- `D:\\skills\\vue-debug-guides.md` - Vue 调试指南
+- `D:\\skills\\vue-expert-performance.md` - Vue 专家级性能优化
+- `D:\\skills\\vue-pinia-best-practices.md` - Pinia 最佳实践
+- `D:\\skills\\vue-router-best-practices.md` - Vue Router 最佳实践
+- `D:\\skills\\vue-testing-best-practices.md` - Vue 测试最佳实践
 
 #### 视觉创作扩展层
-- `algorithmic-art.md` - 算法艺术
-- `apexcharts-vue.md` - ApexCharts Vue 集成
-- `canvas-design.md` - Canvas 设计
-- `gsap-skills.md` - GSAP 动效技能
-- `motion-vue.md` - Vue 动效
-- `remotion.md` - Remotion 视频制作
-- `vue3-echarts.md` - Vue3 ECharts 集成
+- `D:\\skills\\algorithmic-art.md` - 算法艺术
+- `D:\\skills\\apexcharts-vue.md` - ApexCharts Vue 集成
+- `D:\\skills\\canvas-design.md` - Canvas 设计
+- `D:\\skills\\gsap-skills.md` - GSAP 动效技能
+- `D:\\skills\\motion-vue.md` - Vue 动效
+- `D:\\skills\\remotion.md` - Remotion 视频制作
+- `D:\\skills\\vue3-echarts.md` - Vue3 ECharts 集成
 
 #### 设计方向层
-- `frontend-design.md` - 前端设计
-- `tasteskill.md` - 审美技能
-- `ui-ux-pro-max.md` - UI/UX 专业级设计
+- `D:\\skills\\frontend-design.md` - 前端设计
+- `D:\\skills\\tasteskill.md` - 审美技能
+- `D:\\skills\\ui-ux-pro-max.md` - UI/UX 专业级设计 ✅ `skill` 可加载
 
 #### 质量校验层
-- `a11y-audit.md` - 可访问性审计
-- `audit-component.md` - 组件审计
-- `bee-dev-a11y.md` - Bee Dev 可访问性
-- `impeccable.md` - 完美设计审计
-- `web-design-guidelines.md` - Web 设计指南
+- `D:\\skills\\a11y-audit.md` - 可访问性审计
+- `D:\\skills\\audit-component.md` - 组件审计
+- `D:\\skills\\bee-dev-a11y.md` - Bee Dev 可访问性
+- `D:\\skills\\impeccable.md` - 完美设计审计 ✅ `skill` 可加载
+- `D:\\skills\\web-design-guidelines.md` - Web 设计指南
 
 ### 04-主题定制
-- `awesome-design-md.md` - 设计文档生成
-- `css-variable-theming.md` - CSS 变量主题
-- `dark-mode.md` - 暗黑模式
-- `design-tokens.md` - 设计令牌
-- `el-icon.md` - Element Plus 图标
-- `icon-system.md` - 图标系统
+- `D:\\skills\\awesome-design-md.md` - 设计文档生成
+- `D:\\skills\\css-variable-theming.md` - CSS 变量主题
+- `D:\\skills\\dark-mode.md` - 暗黑模式
+- `D:\\skills\\design-tokens.md` - 设计令牌
+- `D:\\skills\\el-icon.md` - Element Plus 图标
+- `D:\\skills\\icon-system.md` - 图标系统
 
 ### 05-性能优化
-- `auto-import-config.md` - 自动导入配置
-- `component-lazy-loading.md` - 组件懒加载
-- `vue-scan.md` - Vue 扫描工具
+- `D:\\skills\\auto-import-config.md` - 自动导入配置
+- `D:\\skills\\component-lazy-loading.md` - 组件懒加载
+- `D:\\skills\\vue-scan.md` - Vue 扫描工具
 
 ## 开发工作流程
 
@@ -134,6 +138,6 @@
 - `npm run preview` - 预览生产构建
 
 ### 使用说明
-当需要使用特定技能时，可以参考 `.devin/skills/` 目录下的相应文档。每个技能文件都包含详细的指导说明和最佳实践。
+当需要使用特定技能时，可以参考 `.devin/skills/` 或 `D:\\skills\\` 目录下的相应文档。每个技能文件都包含详细的指导说明和最佳实践。
 
 详细的完整工作流程请参考 `.devin/workflow.md` 文件。

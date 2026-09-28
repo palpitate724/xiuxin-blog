@@ -13,6 +13,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* 隐藏原生滚动条 - Firefox */
+  scrollbar-width: none;
+}
+
+/* 隐藏原生滚动条 - Chrome / Edge / Safari */
+::-webkit-scrollbar {
+  display: none;
 }
 
 #app {
