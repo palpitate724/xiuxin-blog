@@ -32,7 +32,6 @@
             <artifactId>blog_domain</artifactId>
         </dependency>
 
-
     </dependencies>
 
     <build>

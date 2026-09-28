@@ -11,6 +11,6 @@ import lombok.Data;
 @Data
 public class SelectCatVo {
 
-    private Long id; // 分类ID
+    private String id; // 分类ID
     private String name; // 分类名称
 }

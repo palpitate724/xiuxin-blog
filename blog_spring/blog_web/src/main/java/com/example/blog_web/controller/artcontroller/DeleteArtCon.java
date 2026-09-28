@@ -24,11 +24,11 @@ public class DeleteArtCon {
 
     /**
      * 删除文章
-     * @param artid
+     * @param id
      * @return
      */
-    @DeleteMapping("/{artid}")
-    public Result deleteArt(@PathVariable Long artid) {
-        return deleteArtService.deleteArt(artid);
+    @DeleteMapping("/{id}")
+    public Result deleteArt(@PathVariable Long id) {
+        return deleteArtService.deleteArt(id);
     }
 }

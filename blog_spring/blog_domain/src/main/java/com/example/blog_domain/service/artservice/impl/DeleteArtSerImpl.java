@@ -31,7 +31,7 @@ public class DeleteArtSerImpl implements DeleteArtService {
     public Result deleteArt(Long artid) {
         Result result = Result.getInstance();
 
-//        try{
+        try{
             //删除文章关联标签
             artTagMapper.deleteById(artid);
             //删除文章
@@ -41,11 +41,11 @@ public class DeleteArtSerImpl implements DeleteArtService {
             result.setMessage(ResultCode.SUCCESS.getMessage());
             result.setData(null);
 
-//        }catch (Exception e){
-//            result.setCode(ResultCode.ARTICLE_DELETED.getCode());
-//            result.setMessage(ResultCode.ARTICLE_DELETED.getMessage());
-//            result.setData(null);
-//        }
+        }catch (Exception e){
+            result.setCode(ResultCode.ARTICLE_DELETED.getCode());
+            result.setMessage(ResultCode.ARTICLE_DELETED.getMessage());
+            result.setData(null);
+        }
 
         return result;
     }
