@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 .阶段任务提示.md
 **/img
+
+.devin/
+.impeccable/
+.poolside/
