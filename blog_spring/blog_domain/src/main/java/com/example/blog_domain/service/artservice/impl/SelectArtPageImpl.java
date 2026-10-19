@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -80,10 +81,10 @@ public class SelectArtPageImpl implements SelectArtPageService {
                     .map(ArtEntity::getId)
                     .map(String::valueOf)
                     .toList();
-        //收集ArtEntity list中的id
-        List<Long> artidl = aePage.getRecords().stream()
-                .map(ArtEntity::getId)
-                .toList();
+            //收集ArtEntity list中的id
+            List<Long> artidl = aePage.getRecords().stream()
+                    .map(ArtEntity::getId)
+                    .toList();
 
             //将SelectArtListVo list转为Map
             Map<String, SelectArtVo> satlv = salv.stream()
@@ -91,7 +92,6 @@ public class SelectArtPageImpl implements SelectArtPageService {
 
             //根据id查询ArtTagEntity list
             List<SelectArtTagVo> satvl = artTagMapper.selectArtTagList(artidl);
-            System.out.println("satvl: " + satvl);
 
             //将ArtTagEntity list转为Map
             Map<String, List<SelectArtTagVo>> satvlmap = satvl.stream()
@@ -100,7 +100,7 @@ public class SelectArtPageImpl implements SelectArtPageService {
             //将tag标签列表组装进selectartlistvo
             for (String artid : artids){
                 //将map转为list
-                List<TagVo> tvl = satvlmap.get(artid).stream()
+                List<TagVo> tvl = satvlmap.getOrDefault(artid, Collections.emptyList()).stream()
                         .map(selectArtTagVo -> {
                             TagVo tagVo = new TagVo();
                             BeanUtils.copyProperties(selectArtTagVo, tagVo);
