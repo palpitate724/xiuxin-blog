@@ -27,7 +27,7 @@ public class JwtUtils {
 
     /**
      * 获取密钥
-     * @return
+     * @return SecretKey
      */
     public SecretKey SecretKey(){
         return Jwts.SIG.HS256.key().build();
@@ -35,7 +35,7 @@ public class JwtUtils {
 
     /**
      * string-secretkey
-     * @return
+     * @return SecretKey
      */
     public SecretKey getSecretKey(){
         String jwtSecret = jwtProperties.getSecretKey();
@@ -46,7 +46,7 @@ public class JwtUtils {
      * 获取token
      * @param id
      * @param username
-     * @return
+      * @return String
      */
     public String getToken(Long id,String username){
         System.out.println("getSecretKey()"+getSecretKey());
@@ -62,7 +62,7 @@ public class JwtUtils {
     /**
      * 校验token
      * @param token
-     * @return
+      * @return boolean
      */
     public boolean isTokenValid(String token){
         try {
