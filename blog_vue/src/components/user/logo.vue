@@ -5,9 +5,9 @@
         <svg viewBox="0 0 100 100" class="logo-svg">
           <defs>
             <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-              <stop offset="50%" style="stop-color:#06b6d4;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+              <stop offset="0%" style="stop-color:var(--color-accent);stop-opacity:1" />
+              <stop offset="50%" style="stop-color:var(--color-accent-secondary);stop-opacity:1" />
+              <stop offset="100%" style="stop-color:var(--color-accent-tertiary);stop-opacity:1" />
             </linearGradient>
             <filter id="glow">
               <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -26,42 +26,42 @@
           </text>
           
           <!-- 装饰点 -->
-          <circle cx="25" cy="25" r="3" fill="#3b82f6" opacity="0.6">
+          <circle cx="25" cy="25" r="3" fill="var(--color-accent)" opacity="0.6">
             <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
           </circle>
-          <circle cx="75" cy="25" r="2" fill="#06b6d4" opacity="0.4">
+          <circle cx="75" cy="25" r="2" fill="var(--color-accent-secondary)" opacity="0.4">
             <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3s" repeatCount="indefinite"/>
           </circle>
-          <circle cx="75" cy="75" r="3" fill="#8b5cf6" opacity="0.5">
+          <circle cx="75" cy="75" r="3" fill="var(--color-accent-tertiary)" opacity="0.5">
             <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/>
           </circle>
           
           <!-- 随机移动的光点 -->
-          <circle r="2" fill="#3b82f6" opacity="0.8">
+          <circle r="2" fill="var(--color-accent)" opacity="0.8">
             <animate attributeName="cx" values="30;70;30" dur="4s" repeatCount="indefinite"/>
             <animate attributeName="cy" values="30;70;30" dur="4s" repeatCount="indefinite"/>
             <animate attributeName="opacity" values="0.8;0.3;0.8" dur="4s" repeatCount="indefinite"/>
           </circle>
           
-          <circle r="1.5" fill="#06b6d4" opacity="0.7">
+          <circle r="1.5" fill="var(--color-accent-secondary)" opacity="0.7">
             <animate attributeName="cx" values="70;30;70" dur="3s" repeatCount="indefinite"/>
             <animate attributeName="cy" values="40;60;40" dur="3s" repeatCount="indefinite"/>
             <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3s" repeatCount="indefinite"/>
           </circle>
           
-          <circle r="2.5" fill="#8b5cf6" opacity="0.6">
+          <circle r="2.5" fill="var(--color-accent-tertiary)" opacity="0.6">
             <animate attributeName="cx" values="40;60;40" dur="5s" repeatCount="indefinite"/>
             <animate attributeName="cy" values="60;40;60" dur="5s" repeatCount="indefinite"/>
             <animate attributeName="opacity" values="0.6;0.9;0.6" dur="5s" repeatCount="indefinite"/>
           </circle>
           
-          <circle r="1" fill="#3b82f6" opacity="0.9">
+          <circle r="1" fill="var(--color-accent)" opacity="0.9">
             <animate attributeName="cx" values="20;80;20" dur="6s" repeatCount="indefinite"/>
             <animate attributeName="cy" values="50;50;50" dur="6s" repeatCount="indefinite"/>
             <animate attributeName="opacity" values="0.9;0.4;0.9" dur="6s" repeatCount="indefinite"/>
           </circle>
           
-          <circle r="1.8" fill="#06b6d4" opacity="0.5">
+          <circle r="1.8" fill="var(--color-accent-secondary)" opacity="0.5">
             <animate attributeName="cx" values="50;50;50" dur="3.5s" repeatCount="indefinite"/>
             <animate attributeName="cy" values="20;80;20" dur="3.5s" repeatCount="indefinite"/>
             <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3.5s" repeatCount="indefinite"/>
@@ -103,23 +103,23 @@
 .logo-svg {
   width: 140px;
   height: 140px;
-  filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.3));
+  filter: drop-shadow(0 0 20px var(--color-accent-glow-soft));
   animation: float 4s ease-in-out infinite;
 }
 
 .logo-title {
   font-size: 2.8rem;
   font-weight: 700;
-  color: white;
+  color: var(--color-white);
   margin: 0 0 8px 0;
   letter-spacing: 4px;
-  text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+  text-shadow: 0 0 30px var(--color-accent-glow-dimmer);
   font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 .logo-subtitle {
   font-size: 1.2rem;
-  color: rgba(147, 197, 253, 0.9);
+  color: var(--color-text-secondary);
   margin: 0 0 24px 0;
   font-weight: 300;
   letter-spacing: 2px;
@@ -135,10 +135,10 @@
 
 .tech-tag {
   padding: 6px 16px;
-  background: rgba(59, 130, 246, 0.15);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  border-radius: 20px;
-  color: #93c5fd;
+  background: var(--color-accent-glow-xlight);
+  border: 1px solid var(--color-border-stronger);
+  border-radius: var(--radius-xxl);
+  color: var(--color-text-secondary);
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 1px;
@@ -147,10 +147,10 @@
 }
 
 .tech-tag:hover {
-  background: rgba(59, 130, 246, 0.25);
-  border-color: rgba(59, 130, 246, 0.5);
+  background: var(--color-accent-glow-light);
+  border-color: var(--color-accent-glow-dimmer);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 12px var(--color-accent-glow-soft);
 }
 
 @keyframes fadeInUp {

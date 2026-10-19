@@ -1,6 +1,23 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
+// 将 hex 颜色转换为 rgba 字符串
+const hexToRgba = (hex: string, alpha: number): string => {
+  let r: number, g: number, b: number
+  if (hex.length === 4) {
+    r = parseInt(hex[1] + hex[1], 16)
+    g = parseInt(hex[2] + hex[2], 16)
+    b = parseInt(hex[3] + hex[3], 16)
+  } else if (hex.length === 7) {
+    r = parseInt(hex[1] + hex[2], 16)
+    g = parseInt(hex[3] + hex[4], 16)
+    b = parseInt(hex[5] + hex[6], 16)
+  } else {
+    return hex
+  }
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
 // 检测是否为移动设备
 const isMobile = ref(false)
 const checkMobile = () => {
@@ -38,13 +55,6 @@ const cursorTrails = ref<Array<{ x: number; y: number; opacity: number; text: st
 const maxTrails = 8
 const cursorText = ref('</>')
 
-// 扭曲效果
-const distortionStyle = ref({
-  left: '0px',
-  top: '0px',
-  opacity: '0'
-})
-
 const handleMouseMove = (e: MouseEvent) => {
   const target = e.target as HTMLElement
   const isInput = target.closest('.form-input') !== null
@@ -61,13 +71,6 @@ const handleMouseMove = (e: MouseEvent) => {
   // 根据是否在输入框/表单组/分页上设置透明度
   const shouldShow = !shouldHide && !isMobile.value
   cursorStyle.value = {
-    left: `${e.clientX}px`,
-    top: `${e.clientY}px`,
-    opacity: shouldShow ? '1' : '0'
-  }
-  
-  // 更新扭曲效果位置
-  distortionStyle.value = {
     left: `${e.clientX}px`,
     top: `${e.clientY}px`,
     opacity: shouldShow ? '1' : '0'
@@ -92,19 +95,16 @@ const handleMouseMove = (e: MouseEvent) => {
 
 const handleMouseLeave = () => {
   cursorStyle.value.opacity = '0'
-  distortionStyle.value.opacity = '0'
 }
 
 // 表单组件在输入时隐藏/恢复自定义鼠标
 const hideCustomCursor = () => {
   cursorStyle.value.opacity = '0'
-  distortionStyle.value.opacity = '0'
 }
 
 const showCustomCursor = () => {
   if (!isOverInput.value && !isMobile.value) {
     cursorStyle.value.opacity = '1'
-    distortionStyle.value.opacity = '1'
   }
 }
 
@@ -162,6 +162,36 @@ let currentGroupIndex = 0
 let transitionProgress = 0
 let isTransitioning = false
 
+// Canvas 颜色变量（从 CSS 变量读取）
+let matrixRainBgColor = 'rgba(10, 22, 40, 0.05)'
+let matrixGreenColor = '#00ff00'
+let matrixGreenDarkColor = '#00aa00'
+let matrixWhiteColor = '#ffffff'
+let curveColors: string[] = []
+
+const initCanvasColors = () => {
+  const styles = getComputedStyle(document.documentElement)
+  matrixRainBgColor = styles.getPropertyValue('--color-bg-deep').trim()
+  matrixGreenColor = styles.getPropertyValue('--color-matrix-green').trim()
+  matrixGreenDarkColor = styles.getPropertyValue('--color-matrix-green-dark').trim()
+  matrixWhiteColor = styles.getPropertyValue('--color-white').trim()
+  
+  // 曲线颜色 - 使用 CSS 变量构造 rgba 颜色
+  const accentColor = styles.getPropertyValue('--color-accent').trim()
+  const accentSecondary = styles.getPropertyValue('--color-accent-secondary').trim()
+  const accentTertiarySoft = styles.getPropertyValue('--color-accent-tertiary-soft').trim()
+  const accentIndigo = styles.getPropertyValue('--color-accent-indigo').trim()
+  const accentSky = styles.getPropertyValue('--color-accent-sky').trim()
+  
+  curveColors = [
+    hexToRgba(accentColor, 0.3),
+    hexToRgba(accentSecondary, 0.25),
+    accentTertiarySoft,
+    hexToRgba(accentIndigo, 0.25),
+    hexToRgba(accentSky, 0.2)
+  ]
+}
+
 const initMatrixRain = () => {
   const canvas = matrixCanvas.value
   if (!canvas) return
@@ -188,10 +218,10 @@ const initMatrixRain = () => {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?'
   
   const drawMatrix = () => {
-    ctx.fillStyle = 'rgba(10, 22, 40, 0.05)'
+    ctx.fillStyle = hexToRgba(matrixRainBgColor, 0.05)
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     
-    ctx.fillStyle = '#0f0'
+    ctx.fillStyle = matrixGreenColor
     ctx.font = `${fontSize}px monospace`
     
     for (let i = 0; i < drops.length; i++) {
@@ -201,11 +231,11 @@ const initMatrixRain = () => {
       
       const brightness = Math.random()
       if (brightness > 0.95) {
-        ctx.fillStyle = '#fff'
+        ctx.fillStyle = matrixWhiteColor
       } else if (brightness > 0.8) {
-        ctx.fillStyle = '#0f0'
+        ctx.fillStyle = matrixGreenColor
       } else {
-        ctx.fillStyle = '#0a0'
+        ctx.fillStyle = matrixGreenDarkColor
       }
       
       ctx.fillText(text, x, y)
@@ -265,13 +295,7 @@ const initCurves = () => {
       const controlX2 = endX + (Math.random() - 0.5) * canvas.width * 0.5
       const controlY2 = endY + (Math.random() - 0.5) * canvas.height * 0.5
       
-      const colors = [
-        'rgba(59, 130, 246, 0.3)',
-        'rgba(6, 182, 212, 0.25)',
-        'rgba(139, 92, 246, 0.2)',
-        'rgba(99, 102, 241, 0.25)',
-        'rgba(14, 165, 233, 0.2)'
-      ]
+      const colors = curveColors
       const color = colors[Math.floor(Math.random() * colors.length)]
       
       curves.push({
@@ -426,6 +450,9 @@ onMounted(() => {
   
   animationFrameId = requestAnimationFrame(updateTrails)
   
+  // 初始化画布颜色（从 CSS 变量读取）
+  initCanvasColors()
+  
   // 初始化背景动画
   initMatrixRain()
   initCurves()
@@ -459,7 +486,7 @@ defineExpose({
 <template>
   <div class="app-container" :class="{ 'hide-default-cursor': !isMobile }">
     <!-- 顶部滚动进度条 -->
-    <div class="scroll-progress" :style="{ width: scrollProgress + '%' }"></div>
+    <div class="scroll-progress" :style="{ transform: `scaleX(${scrollProgress / 100})` }"></div>
     
     <!-- 背景动画 -->
     <canvas ref="matrixCanvas" class="matrix-rain"></canvas>
@@ -475,9 +502,6 @@ defineExpose({
          :style="getTrailStyle(trail, index)">
       {{ trail.text }}
     </div>
-    
-    <!-- 页面扭曲效果 -->
-    <div class="distortion-effect" :style="distortionStyle"></div>
     
     <!-- 回到顶部按钮 -->
     <transition name="fade">
@@ -499,7 +523,7 @@ defineExpose({
 .app-container {
   min-height: 100vh;
   position: relative;
-  background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1b2a 100%);
+  background: linear-gradient(135deg, var(--color-bg-deep) 0%, var(--color-bg-mid) 50%, var(--color-bg-deep) 100%);
   margin: 0;
   padding: 0;
 }
@@ -514,18 +538,20 @@ defineExpose({
   top: 0;
   left: 0;
   height: 4px;
-  background: linear-gradient(90deg, 
-    rgba(0, 204, 255, 0.8) 0%, 
-    rgba(6, 182, 212, 0.9) 50%, 
-    rgba(139, 92, 246, 0.8) 100%
+  width: 100%;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: linear-gradient(90deg,
+    var(--color-progress-start) 0%,
+    var(--color-accent-secondary) 50%,
+    var(--color-accent-tertiary) 100%
   );
-  width: 0%;
   z-index: 9999;
-  transition: width 0.1s linear;
-  box-shadow: 
-    0 0 10px rgba(0, 204, 255, 0.5),
-    0 0 20px rgba(6, 182, 212, 0.3),
-    0 0 30px rgba(139, 92, 246, 0.2);
+  transition: transform 0.1s linear;
+  box-shadow:
+    0 0 10px var(--color-progress-start-soft),
+    0 0 20px var(--color-accent-glow),
+    0 0 30px var(--color-accent-tertiary-soft);
 }
 
 @media (max-width: 768px) {
@@ -534,8 +560,7 @@ defineExpose({
   }
   
   .cursor-follower,
-  .cursor-trail,
-  .distortion-effect {
+  .cursor-trail {
     display: none !important;
   }
 }
@@ -578,7 +603,7 @@ defineExpose({
   transform: translate(-50%, -50%);
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--color-accent-glow) 0%, transparent 70%);
   animation: pulse 4s ease-in-out infinite;
 }
 
@@ -609,36 +634,36 @@ defineExpose({
   height: 48px;
   border: none;
   border-radius: 50%;
-  background: linear-gradient(135deg, 
-    rgba(0, 204, 255, 0.9) 0%, 
-    rgba(6, 182, 212, 0.95) 50%, 
-    rgba(139, 92, 246, 0.9) 100%
+  background: linear-gradient(135deg,
+    var(--color-progress-start) 0%,
+    var(--color-accent-secondary) 50%,
+    var(--color-accent-tertiary) 100%
   );
-  color: #fff;
+  color: var(--color-white);
   font-size: 22px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 
-    0 4px 15px rgba(0, 204, 255, 0.4),
-    0 0 20px rgba(6, 182, 212, 0.3),
-    inset 0 0 10px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 15px var(--color-accent-glow),
+    0 0 20px var(--color-accent-secondary-soft),
+    inset 0 0 10px var(--color-white-softest);
   transition: all 0.3s ease;
-  z-index: 999;
+  z-index: var(--z-modal);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 204, 255, 0.3);
+  border: 1px solid var(--color-progress-start-softer);
 }
 
 .back-top:hover {
   transform: translateY(-4px) scale(1.05);
-  box-shadow: 
-    0 8px 25px rgba(0, 204, 255, 0.5),
-    0 0 30px rgba(6, 182, 212, 0.4),
-    0 0 40px rgba(139, 92, 246, 0.3),
-    inset 0 0 15px rgba(255, 255, 255, 0.2);
-  background: linear-gradient(135deg, 
-    rgba(6, 182, 212, 1) 0%, 
-    rgba(139, 92, 246, 1) 50%, 
-    rgba(168, 85, 247, 1) 100%
+  box-shadow:
+    0 8px 25px var(--color-accent-glow),
+    0 0 30px var(--color-accent-secondary-softer),
+    0 0 40px var(--color-accent-tertiary-softer),
+    inset 0 0 15px var(--color-white-soft);
+  background: linear-gradient(135deg,
+    var(--color-accent-secondary) 0%,
+    var(--color-accent-tertiary) 50%,
+    var(--color-accent-tertiary-light) 100%
   );
 }
 

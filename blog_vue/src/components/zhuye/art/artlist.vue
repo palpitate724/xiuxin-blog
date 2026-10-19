@@ -132,9 +132,9 @@ defineExpose({
   margin-bottom: 0;
   overflow: hidden;
   border-radius: 16px;
-  background: rgba(30, 41, 59, 0.4);
+  background: var(--color-surface);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(59, 130, 246, 0.15);
+  border: 1px solid var(--color-border);
   transition: all 0.3s ease;
   width: 100%;
   opacity: 0;
@@ -162,15 +162,15 @@ defineExpose({
 
 .blog-item:hover {
   transform: translateY(-4px);
-  border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
+  border-color: var(--color-border-stronger);
+  box-shadow: 0 8px 32px var(--color-accent-glow);
 }
 
 .blog-cover {
   flex: 0 0 50%;
   height: 100%;
   overflow: hidden;
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, var(--color-bg-nav) 0%, var(--color-accent) 100%);
   transition: transform 0.3s ease;
   position: relative;
 }
@@ -227,7 +227,7 @@ defineExpose({
 .blog-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: white;
+  color: var(--color-white);
   margin-bottom: 16px;
   line-height: 1.4;
   text-decoration: none;
@@ -236,12 +236,12 @@ defineExpose({
 }
 
 .blog-title:hover {
-  color: #00ccff;
+  color: var(--color-progress-start);
 }
 
 .blog-excerpt {
   font-size: 1rem;
-  color: rgba(148, 163, 184, 0.8);
+  color: var(--color-text-dim);
   line-height: 1.6;
   margin-bottom: 24px;
   flex: 1;
@@ -251,7 +251,7 @@ defineExpose({
   display: flex;
   gap: 16px;
   font-size: 0.875rem;
-  color: rgba(147, 197, 253, 0.7);
+  color: var(--color-accent-lighter);
 }
 
 .blog-date {
@@ -285,7 +285,7 @@ defineExpose({
 
 /* Element Plus 分页组件样式覆盖（非background模式） */
 .pagination :deep(.el-pagination) {
-  --el-pagination-text-color: rgba(147, 197, 253, 0.8);
+  --el-pagination-text-color: var(--color-text-secondary);
   --el-pagination-bg-color: transparent;
   --el-pagination-border-radius: 8px;
   --el-pagination-font-size: 0.9rem;
@@ -293,9 +293,9 @@ defineExpose({
 
 /* 普通页码按钮 */
 .pagination :deep(.el-pager li) {
-  background-color: rgba(59, 130, 246, 0.1);
-  color: rgba(147, 197, 253, 0.8);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background-color: var(--color-border-dim);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-strong);
   border-radius: 8px;
   min-width: 40px;
   height: 40px;
@@ -305,24 +305,24 @@ defineExpose({
 
 /* 普通页码悬停 */
 .pagination :deep(.el-pager li:hover) {
-  background-color: rgba(59, 130, 246, 0.2);
-  color: white;
-  border-color: rgba(59, 130, 246, 0.4);
+  background-color: var(--color-accent-glow-soft);
+  color: var(--color-white);
+  border-color: var(--color-border-stronger);
 }
 
 /* 选中页码 - 强制高亮 */
 .pagination :deep(.el-pager li.is-active) {
-  background-color: rgba(59, 130, 246, 0.4) !important;
-  color: white !important;
-  border-color: rgba(59, 130, 246, 0.6) !important;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4) !important;
+  background-color: var(--color-accent-glow-semidark) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-border-strongest) !important;
+  box-shadow: 0 2px 8px var(--color-accent-glow-semidark) !important;
 }
 
 /* 上一页/下一页按钮 - 默认不高亮 */
 .pagination :deep(.el-pagination button) {
-  background-color: rgba(59, 130, 246, 0.1) !important;
-  color: rgba(147, 197, 253, 0.8) !important;
-  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  background-color: var(--color-accent-glow-softer) !important;
+  color: var(--color-text-secondary) !important;
+  border: 1px solid var(--color-border-strong) !important;
   border-radius: 8px;
   min-width: 80px;
   height: 40px;
@@ -331,22 +331,22 @@ defineExpose({
 
 /* 上一页/下一页按钮悬停 */
 .pagination :deep(.el-pagination button:hover:not(:disabled)) {
-  background-color: rgba(59, 130, 246, 0.2) !important;
-  color: white !important;
-  border-color: rgba(59, 130, 246, 0.4) !important;
+  background-color: var(--color-accent-glow-soft) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-border-stronger) !important;
 }
 
 /* 禁用按钮 */
 .pagination :deep(.el-pagination button:disabled) {
   background-color: rgba(59, 130, 246, 0.05) !important;
-  color: rgba(147, 197, 253, 0.4) !important;
-  border-color: rgba(59, 130, 246, 0.1) !important;
+  color: var(--color-accent-lighter) !important;
+  border-color: var(--color-border-dim) !important;
 }
 
 /* 省略号 - 不高亮 */
 .pagination :deep(.el-pager li.more) {
   background-color: transparent !important;
-  color: rgba(147, 197, 253, 0.5) !important;
+  color: var(--color-accent-light) !important;
   border: none !important;
   cursor: default !important;
 }

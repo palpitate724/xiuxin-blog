@@ -37,7 +37,10 @@ const METEOR_CONFIG = {
   headColor: '#ffffff',
   glowColor: '#96DCFF',
   tailStartColor: '#96DCFF',
-  tailEndColor: 'rgba(150, 220, 255, 0)',
+  tailEndColor: 'var(--color-meteor-tail-fade)',
+  
+  // 从 CSS 变量读取颜色（通过 getComputedStyle 在 initCanvas 中动态设置）
+  // 这些是默认值，实际渲染时会从 :root 读取 var(--color-*) 变量
   
   // 线条粗细 - 极细
   lineWidthMin: 0.5,
@@ -81,6 +84,31 @@ let animationId: number | null = null
 let meteorTimer: number | null = null
 let isMobile = false
 
+// 从 CSS 变量读取颜色（通过 getComputedStyle）
+// 这些默认值会在 initCanvas 中被 :root 的 CSS 变量覆盖
+let meteorHeadColor = '#ffffff'
+let meteorTailColor = '#96DCFF'
+let meteorTailFadeColor = 'rgba(150, 220, 255, 0)'
+
+// 将 hex 颜色转换为 rgba 字符串
+const hexToRgba = (hex: string, alpha: number): string => {
+  // 处理 #RGB 和 #RRGGBB 格式
+  let r: number, g: number, b: number
+  if (hex.length === 4) {
+    r = parseInt(hex[1] + hex[1], 16)
+    g = parseInt(hex[2] + hex[2], 16)
+    b = parseInt(hex[3] + hex[3], 16)
+  } else if (hex.length === 7) {
+    r = parseInt(hex[1] + hex[2], 16)
+    g = parseInt(hex[3] + hex[4], 16)
+    b = parseInt(hex[5] + hex[6], 16)
+  } else {
+    // 可能是 rgba() 格式，直接返回
+    return hex
+  }
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
 // ============ 初始化Canvas ============
 const initCanvas = () => {
   const canvas = canvasRef.value
@@ -94,6 +122,12 @@ const initCanvas = () => {
   
   // 检测是否为移动端
   isMobile = window.innerWidth <= 768
+  
+  // 从 CSS 变量读取颜色配置
+  const styles = getComputedStyle(document.documentElement)
+  meteorHeadColor = styles.getPropertyValue('--color-white').trim()
+  meteorTailColor = styles.getPropertyValue('--color-accent-laser').trim()
+  meteorTailFadeColor = styles.getPropertyValue('--color-meteor-tail-fade').trim()
   
   // 开始动画循环
   loop()
@@ -236,9 +270,9 @@ const drawMeteor = (meteor: Meteor) => {
     
     // 创建线性渐变（头部到尾部）- 青蓝色
     const gradient = ctx.createLinearGradient(meteor.x, meteor.y, meteor.trail[0].x, meteor.trail[0].y)
-    gradient.addColorStop(0, `rgba(255, 255, 255, ${flickerAlpha})`) // 头部亮白（带闪烁）
-    gradient.addColorStop(0.1, `rgba(150, 220, 255, ${flickerAlpha * 0.8})`) // 青蓝色
-    gradient.addColorStop(1, 'rgba(150, 220, 255, 0)') // 尾部透明
+    gradient.addColorStop(0, hexToRgba(meteorHeadColor, flickerAlpha)) // 头部亮白（带闪烁）
+    gradient.addColorStop(0.1, hexToRgba(meteorTailColor, flickerAlpha * 0.8)) // 青蓝色
+    gradient.addColorStop(1, meteorTailFadeColor) // 尾部透明
     
     ctx.strokeStyle = gradient
     // 极细的线条 - 激光感
@@ -252,9 +286,9 @@ const drawMeteor = (meteor: Meteor) => {
     const tailY = meteor.y - meteor.vy * (meteor.length / 20)
     
     const gradient = ctx.createLinearGradient(meteor.x, meteor.y, tailX, tailY)
-    gradient.addColorStop(0, `rgba(255, 255, 255, ${flickerAlpha})`)
-    gradient.addColorStop(0.1, `rgba(150, 220, 255, ${flickerAlpha * 0.8})`)
-    gradient.addColorStop(1, 'rgba(150, 220, 255, 0)')
+    gradient.addColorStop(0, hexToRgba(meteorHeadColor, flickerAlpha))
+    gradient.addColorStop(0.1, hexToRgba(meteorTailColor, flickerAlpha * 0.8))
+    gradient.addColorStop(1, meteorTailFadeColor)
     
     ctx.beginPath()
     ctx.moveTo(meteor.x, meteor.y)
@@ -268,7 +302,7 @@ const drawMeteor = (meteor: Meteor) => {
   // 绘制流星头部（高亮核心，大小随机）
   ctx.beginPath()
   ctx.arc(meteor.x, meteor.y, meteor.size, 0, Math.PI * 2)
-  ctx.fillStyle = `rgba(255, 255, 255, ${flickerAlpha})`
+  ctx.fillStyle = hexToRgba(meteorHeadColor, flickerAlpha)
   ctx.fill()
 }
 

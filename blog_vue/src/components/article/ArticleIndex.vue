@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { parseArticleIndex, parseArticleIndexFromHtml, flattenIndices, type ArticleIndex } from '@/utils/markdown'
+import { parseArticleIndex, parseArticleIndexFromHtml, flattenIndices } from '@/utils/markdown'
 
 const props = defineProps<{
   content: string // markdown文本或HTML文本
@@ -54,8 +54,8 @@ const scrollToHeading = (id: string) => {
 
 <style scoped>
 .article-index {
-  background: rgba(10, 22, 40, 0.6);
-  border: 1px solid rgba(0, 204, 255, 0.2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-dim);
   border-radius: 8px;
   padding: 16px;
   backdrop-filter: blur(10px);
@@ -64,10 +64,10 @@ const scrollToHeading = (id: string) => {
 .index-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #00ccff;
+  color: var(--color-progress-start);
   margin: 0 0 12px 0;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(0, 204, 255, 0.2);
+  border-bottom: 1px solid var(--color-border-dim);
 }
 
 .index-list {
@@ -82,7 +82,7 @@ const scrollToHeading = (id: string) => {
 
 .index-link {
   display: block;
-  color: rgba(147, 197, 253, 0.9);
+  color: var(--color-accent-lighter);
   text-decoration: none;
   font-size: 0.9rem;
   padding: 4px 8px;
@@ -92,8 +92,8 @@ const scrollToHeading = (id: string) => {
 }
 
 .index-link:hover {
-  color: #00ccff;
-  background: rgba(0, 204, 255, 0.1);
+  color: var(--color-progress-start);
+  background: var(--color-accent-glow);
   transform: translateX(4px);
 }
 
@@ -118,6 +118,6 @@ const scrollToHeading = (id: string) => {
 .level-6 .index-link {
   font-weight: 400;
   font-size: 0.85rem;
-  color: rgba(147, 197, 253, 0.7);
+  color: var(--color-text-muted);
 }
 </style>

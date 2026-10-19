@@ -1,21 +1,24 @@
 <template>
   <section class="hero-section" ref="heroSectionRef">
     <div class="hero-content">
-      <!-- 淡入淡出切换：预创建所有video，用opacity过渡 -->
+      <!-- 懒加载：所有video使用 preload="none" + poster，仅活跃的video加载source -->
       <video
         v-for="(video, index) in videos"
         :key="video"
         ref="videoRefs"
         class="hero-video"
         :class="{ active: index === currentVideoIndex }"
-        autoplay
+        :poster="posters[index]"
+        preload="none"
         muted
         playsinline
-        :src="video"
         @ended="handleVideoEnded(index)"
         @error="handleVideoError"
         @loadeddata="handleVideoLoaded"
-      ></video>
+      >
+        <!-- 仅活跃的视频才加载 source，实现懒加载 -->
+        <source v-if="index === currentVideoIndex" :src="video" type="video/mp4">
+      </video>
       
       <div class="hero-overlay"></div>
       <div class="hero-text">
@@ -44,7 +47,12 @@ const SWITCH_INTERVAL = 15000 // 兜底切换时间（毫秒）
 /* ---------- 路径生成 ---------- */
 // 用 new URL 处理带空格/括号的路径，避免打包后 404
 const videos = fileNames.map(
-  name => new URL(`../../assets/img/${name}`, import.meta.url).href
+  name => new URL(`../../../public/video/${name}`, import.meta.url).href
+)
+
+/* ---------- 封面海报 ---------- */
+const posters = fileNames.map(
+  (_, index) => new URL(`../../../public/video/poster-${index + 1}.jpg`, import.meta.url).href
 )
 
 /* ---------- 状态 ---------- */
@@ -56,14 +64,20 @@ let videoInterval: number | null = null
 /* ---------- 切换逻辑 ---------- */
 async function nextVideo() {
   console.log('切换到下一个视频')
-  // 1. 索引循环
-  const nextIndex = (currentVideoIndex.value + 1) % videos.length
+  // 1. 暂停当前视频
+  const prevIndex = currentVideoIndex.value
+  if (videoRefs.value[prevIndex]) {
+    videoRefs.value[prevIndex].pause()
+  }
+
+  // 2. 索引循环
+  const nextIndex = (prevIndex + 1) % videos.length
   currentVideoIndex.value = nextIndex
 
-  // 2. 等 DOM 更新完成
+  // 3. 等 DOM 更新完成 (source 元素被渲染)
   await nextTick()
 
-  // 3. 手动 load + play，否则画面不刷新
+  // 4. 手动 load + play，否则画面不刷新
   const v = videoRefs.value[nextIndex]
   if (v) {
     v.load()
@@ -98,8 +112,9 @@ onMounted(() => {
   // 兜底：即使 @ended 未触发，也能定时切换
   videoInterval = window.setInterval(nextVideo, SWITCH_INTERVAL)
   
-  // 初始播放第一个视频
+  // 初始播放第一个视频（已经设置首个 source）
   if (videoRefs.value[0]) {
+    videoRefs.value[0].load()
     videoRefs.value[0].play().catch(err => {
       console.error('初始视频播放失败:', err)
     })
@@ -112,6 +127,8 @@ onBeforeUnmount(() => {
     clearInterval(videoInterval)
     videoInterval = null
   }
+  // 暂停所有视频，释放内存
+  videoRefs.value.forEach(v => v.pause())
 })
 
 // 暴露内部ref给父组件，用于滚动监听
@@ -133,7 +150,7 @@ defineExpose({
   height: 100vh;
   border-radius: 0;
   overflow: hidden;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  border-bottom: 1px solid var(--color-border-strong);
 }
 
 .hero-video {
@@ -144,12 +161,12 @@ defineExpose({
   object-fit: cover;
   z-index: -1;
   opacity: 0;
-  transition: opacity 1.5s ease-in-out;
+  transition: opacity var(--duration-hero-fade) var(--ease-standard);
   /* 扭曲动画效果 */
   animation: 
-    pulse 8s ease-in-out infinite,
-    subtle-rotate 20s linear infinite,
-    hue-shift 15s linear infinite;
+    pulse var(--duration-hero-pulse) var(--ease-standard) infinite,
+    subtle-rotate var(--duration-hero-rotate) var(--ease-linear) infinite,
+    hue-shift var(--duration-hero-hue) var(--ease-linear) infinite;
   filter: blur(0px);
 }
 
@@ -203,18 +220,19 @@ defineExpose({
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(10, 22, 40, 0.3) 0%, rgba(30, 41, 59, 0.2) 100%);
+  background: linear-gradient(135deg, var(--color-cover-gradient-start) 0%, var(--color-cover-gradient-end) 100%);
+  opacity: 0; /* 罩层透明 - 视频完全展示 */
   /* 叠加动态扭曲效果 */
-  animation: overlay-pulse 10s ease-in-out infinite;
+  animation: overlay-pulse var(--duration-hero-overlay) var(--ease-standard) infinite;
 }
 
 /* 叠加层脉冲效果 */
 @keyframes overlay-pulse {
   0%, 100% {
-    opacity: 0.3;
+    opacity: var(--color-overlay-opacity-soft);
   }
   50% {
-    opacity: 0.35;
+    opacity: var(--color-overlay-opacity-mid);
   }
 }
 
@@ -226,7 +244,7 @@ defineExpose({
   text-align: center;
   z-index: 10;
   /* 文字也添加轻微抖动效果 */
-  animation: text-float 6s ease-in-out infinite;
+  animation: text-float var(--duration-hero-text-float) var(--ease-standard) infinite;
 }
 
 /* 文字浮动效果 */
@@ -240,18 +258,18 @@ defineExpose({
 }
 
 .hero-title {
-  font-size: 3rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 16px;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  letter-spacing: 2px;
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  margin-bottom: var(--spacing-md);
+  text-shadow: 0 4px 20px var(--color-shadow-text);
+  letter-spacing: var(--hero-letter-spacing);
 }
 
 .hero-subtitle {
-  font-size: 1.2rem;
-  color: rgba(147, 197, 253, 0.9);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  font-size: var(--font-size-hero-subtitle);
+  color: var(--color-accent-light);
+  text-shadow: 0 2px 10px var(--color-shadow-text);
 }
 
 /* 移动端适配 */
@@ -261,19 +279,19 @@ defineExpose({
   }
   
   .hero-title {
-    font-size: 2rem;
+    font-size: var(--font-size-hero-title-mobile);
   }
   
   .hero-subtitle {
-    font-size: 1rem;
+    font-size: var(--font-size-hero-subtitle-mobile);
   }
   
   .hero-video {
     /* 移动端减弱动画效果 */
     animation: 
-      pulse 10s ease-in-out infinite,
-      subtle-rotate 30s linear infinite,
-      hue-shift 20s linear infinite;
+      pulse var(--duration-hero-pulse-mobile) var(--ease-standard) infinite,
+      subtle-rotate var(--duration-hero-rotate-mobile) var(--ease-linear) infinite,
+      hue-shift var(--duration-hero-hue-mobile) var(--ease-linear) infinite;
   }
 }
 
@@ -283,11 +301,32 @@ defineExpose({
   }
   
   .hero-title {
-    font-size: 1.5rem;
+    font-size: var(--font-size-hero-title-sm);
   }
   
   .hero-subtitle {
-    font-size: 0.9rem;
+    font-size: var(--font-size-hero-subtitle-sm);
+  }
+}
+
+/* 减少 motion 偏好 - 禁用 Hero 区域动画 */
+@media (prefers-reduced-motion: reduce) {
+  .hero-video {
+    animation: none;
+    transition: none;
+  }
+  
+  .hero-overlay {
+    animation: none;
+    opacity: 0;
+  }
+  
+  .hero-text {
+    animation: none;
+  }
+  
+  .hero-video:hover {
+    filter: none;
   }
 }
 </style>

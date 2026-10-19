@@ -1,11 +1,21 @@
 import MarkdownIt from 'markdown-it'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/atom-one-dark.css'
 import anchor from 'markdown-it-anchor'
 
 // 初始化markdown-it实例
 const md = new MarkdownIt({
   html: true,
   linkify: true,
-  typographer: true
+  typographer: true,
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value
+      } catch (_) {}
+    }
+    return ''
+  }
 }).use(anchor, {
   level: [1, 2, 3, 4, 5, 6], // 支持所有级别的标题
   slugify: (s: string) => s

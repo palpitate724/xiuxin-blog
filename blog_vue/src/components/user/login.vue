@@ -144,15 +144,15 @@ const handleSubmit = (e: Event) => {
 .login-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: white;
+  color: var(--color-white);
   margin: 0 0 8px 0;
   letter-spacing: 1px;
-  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  text-shadow: 0 0 20px var(--color-progress-start-soft);
 }
 
 .login-subtitle {
   font-size: 0.95rem;
-  color: rgba(147, 197, 253, 0.8);
+  color: var(--color-accent-lighter);
   margin: 0;
 }
 
@@ -171,7 +171,7 @@ const handleSubmit = (e: Event) => {
 .form-label {
   font-size: 0.9rem;
   font-weight: 500;
-  color: rgba(147, 197, 253, 0.9);
+  color: var(--color-text-secondary);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -180,20 +180,20 @@ const handleSubmit = (e: Event) => {
 .label-icon {
   width: 18px;
   height: 18px;
-  color: #3b82f6;
+  color: var(--color-accent);
 }
 
 .form-input {
   padding: 14px 16px;
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-stronger);
   border-radius: 8px;
   font-size: 1rem;
-  color: white;
+  color: var(--color-white);
   transition: all 0.3s ease;
   outline: none;
   backdrop-filter: blur(10px);
-  caret-color: #38BDF8;
+  caret-color: var(--color-accent-cyan);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -202,26 +202,26 @@ const handleSubmit = (e: Event) => {
 }
 
 .form-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-glow), 0 0 20px rgba(59, 130, 246, 0.1);
 }
 
 .form-input::placeholder {
-  color: rgba(148, 163, 184, 0.5);
+  color: var(--color-text-placeholder);
 }
 
 /* 修复浏览器自动填充样式 */
 .form-input:-webkit-autofill,
 .form-input:-webkit-autofill:hover,
 .form-input:-webkit-autofill:focus {
-  -webkit-text-fill-color: white;
-  -webkit-box-shadow: 0 0 0 30px rgba(30, 41, 59, 0.4) inset;
+  -webkit-text-fill-color: var(--color-white);
+  -webkit-box-shadow: 0 0 0 30px var(--color-surface) inset;
   transition: background-color 5000s ease-in-out 0s;
-  caret-color: #38BDF8;
+  caret-color: var(--color-accent-cyan);
 }
 
 .form-input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 30px rgba(30, 41, 59, 0.4) inset, 0 0 0 3px rgba(59, 130, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.1);
+  -webkit-box-shadow: 0 0 0 30px var(--color-surface) inset, 0 0 0 3px var(--color-accent-glow), 0 0 20px rgba(59, 130, 246, 0.1);
 }
 
 .form-options {
@@ -229,6 +229,7 @@ const handleSubmit = (e: Event) => {
   justify-content: space-between;
   align-items: center;
   font-size: 0.9rem;
+  color: var(--color-text-muted-softer);
 }
 
 .checkbox-label {
@@ -236,48 +237,48 @@ const handleSubmit = (e: Event) => {
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  color: rgba(148, 163, 184, 0.8);
+  color: var(--color-text-muted-softer);
   transition: color 0.3s ease;
 }
 
 .checkbox-label:hover {
-  color: rgba(147, 197, 253, 0.9);
+  color: var(--color-text-secondary);
 }
 
 .checkbox {
   cursor: pointer;
-  accent-color: #3b82f6;
+  accent-color: var(--color-accent);
   width: 16px;
   height: 16px;
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-stronger);
   border-radius: 4px;
   backdrop-filter: blur(10px);
 }
 
 .forgot-link {
-  color: #3b82f6;
+  color: var(--color-accent);
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .forgot-link:hover {
-  color: #60a5fa;
-  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  color: var(--color-accent-light);
+  text-shadow: 0 0 10px var(--color-accent-glow);
 }
 
 .submit-button {
   padding: 14px 24px;
-  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #8b5cf6 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-secondary) 50%, var(--color-accent-tertiary) 100%);
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 15px var(--color-accent-glow);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -293,7 +294,7 @@ const handleSubmit = (e: Event) => {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-white-soft), transparent);
   transition: left 0.5s ease;
 }
 
@@ -303,7 +304,7 @@ const handleSubmit = (e: Event) => {
 
 .submit-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 25px var(--color-accent-glow);
 }
 
 .submit-button:active {
@@ -324,17 +325,17 @@ const handleSubmit = (e: Event) => {
   text-align: center;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid rgba(59, 130, 246, 0.2);
+  border-top: 1px solid var(--color-border-dim);
 }
 
 .footer-text {
   font-size: 0.9rem;
-  color: rgba(148, 163, 184, 0.8);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .register-link {
-  color: #3b82f6;
+  color: var(--color-accent);
   text-decoration: none;
   font-weight: 600;
   margin-left: 4px;
@@ -342,20 +343,20 @@ const handleSubmit = (e: Event) => {
 }
 
 .register-link:hover {
-  color: #60a5fa;
-  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  color: var(--color-accent-light);
+  text-shadow: 0 0 10px var(--color-accent-glow);
 }
 
 .social-login {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid rgba(59, 130, 246, 0.2);
+  border-top: 1px solid var(--color-border-dim);
 }
 
 .social-title {
   text-align: center;
   font-size: 0.85rem;
-  color: rgba(148, 163, 184, 0.8);
+  color: var(--color-text-secondary);
   margin: 0 0 16px 0;
 }
 
@@ -372,8 +373,8 @@ const handleSubmit = (e: Event) => {
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-dim);
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   text-decoration: none;
@@ -386,10 +387,10 @@ const handleSubmit = (e: Event) => {
 }
 
 .social-icon:hover {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.4);
+  background: var(--color-accent-glow);
+  border-color: var(--color-accent-light);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 15px var(--color-accent-glow);
 }
 
 .social-icon:hover svg {
@@ -397,18 +398,18 @@ const handleSubmit = (e: Event) => {
 }
 
 .social-icon.github:hover {
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+  border-color: var(--color-white-softer);
+  box-shadow: 0 4px 15px var(--color-white-soft);
 }
 
 .social-icon.google:hover {
-  border-color: rgba(66, 133, 244, 0.4);
-  box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+  border-color: var(--color-google-blue-soft);
+  box-shadow: 0 4px 15px var(--color-google-blue-soft);
 }
 
 .social-icon.gitee:hover {
-  border-color: rgba(237, 77, 75, 0.4);
-  box-shadow: 0 4px 15px rgba(237, 77, 75, 0.3);
+  border-color: var(--color-gitee-red-soft);
+  box-shadow: 0 4px 15px var(--color-gitee-red-soft);
 }
 
 @keyframes slideIn {
