@@ -253,15 +253,15 @@ const handleSubmit = (e: Event) => {
 .signup-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: white;
+  color: var(--color-white);
   margin: 0 0 8px 0;
   letter-spacing: 1px;
-  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  text-shadow: 0 0 20px var(--color-accent-glow);
 }
 
 .signup-subtitle {
   font-size: 0.95rem;
-  color: rgba(147, 197, 253, 0.8);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -296,24 +296,24 @@ const handleSubmit = (e: Event) => {
   height: 58px;
   border-radius: 50%;
   overflow: hidden;
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  border: 1px solid var(--color-accent-cyan-soft);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 26, 44, 0.6);
+  background: var(--color-bg-avatar);
   transition: all 0.3s ease;
   flex-shrink: 0;
-  box-shadow: 0 0 8px rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 8px var(--color-accent-cyan-glow);
 }
 
 .avatar-circle:hover {
-  border-color: rgba(56, 189, 248, 0.5);
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+  border-color: var(--color-accent-cyan-glow-soft);
+  box-shadow: 0 0 12px var(--color-accent-cyan-glow-soft);
 }
 
 .avatar-circle.has-avatar {
-  border-color: rgba(56, 189, 248, 0.4);
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+  border-color: var(--color-accent-cyan-soft);
+  box-shadow: 0 0 10px var(--color-accent-cyan-glow);
 }
 
 .avatar-image {
@@ -325,7 +325,7 @@ const handleSubmit = (e: Event) => {
 .avatar-placeholder {
   width: 28px;
   height: 28px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-white-soft);
 }
 
 .avatar-info {
@@ -334,8 +334,8 @@ const handleSubmit = (e: Event) => {
   align-items: center;
   justify-content: space-between;
   padding: 8px 16px;
-  background: rgba(15, 26, 44, 0.7);
-  border: 1px solid rgba(56, 189, 248, 0.2);
+  background: var(--color-bg-avatar-strong);
+  border: 1px solid var(--color-accent-cyan-softer);
   border-radius: 12px;
   backdrop-filter: blur(10px);
   height: 58px;
@@ -345,73 +345,17 @@ const handleSubmit = (e: Event) => {
 .avatar-header {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-}
-
-.avatar-title {
-  color: #CBD5E1;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.avatar-hint {
-  color: #94A3B8;
-  font-size: 0.75rem;
-  font-weight: 400;
-}
-
-.file-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 12px;
-  background: rgba(56, 189, 248, 0.1);
-  border-radius: 6px;
-  border: 1px solid rgba(56, 189, 248, 0.2);
-  margin-top: 4px;
-}
-
-.file-name {
-  color: #FFFFFF;
-  font-size: 0.8rem;
-  font-weight: 500;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.file-size {
-  color: #94A3B8;
-  font-size: 0.75rem;
-  font-weight: 400;
-}
-
-.error-message {
-  color: #EF4444;
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 6px 12px;
-  background: rgba(239, 68, 68, 0.1);
-  border-radius: 6px;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  margin-top: 4px;
-}
-
-.avatar-header {
-  display: flex;
-  flex-direction: column;
   gap: 2px;
 }
 
 .avatar-title {
-  color: #CBD5E1;
+  color: var(--color-text-secondary);
   font-size: 0.85rem;
   font-weight: 500;
 }
 
 .avatar-hint {
-  color: #94A3B8;
+  color: var(--color-text-muted);
   font-size: 0.75rem;
   font-weight: 400;
 }
@@ -421,10 +365,10 @@ const handleSubmit = (e: Event) => {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(56, 189, 248, 0.15);
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: var(--color-accent-cyan-glow);
+  border: 1px solid var(--color-accent-cyan-soft);
   border-radius: 8px;
-  color: #38BDF8;
+  color: var(--color-accent-cyan);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -434,9 +378,9 @@ const handleSubmit = (e: Event) => {
 }
 
 .upload-button:hover {
-  background: rgba(56, 189, 248, 0.25);
-  border-color: rgba(56, 189, 248, 0.5);
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+  background: var(--color-accent-cyan-glow-soft);
+  border-color: var(--color-accent-cyan-glow-soft);
+  box-shadow: 0 0 12px var(--color-accent-cyan-glow-soft);
   transform: translateY(-1px);
 }
 
@@ -451,13 +395,13 @@ const handleSubmit = (e: Event) => {
   align-items: center;
   gap: 8px;
   padding: 6px 10px;
-  background: rgba(56, 189, 248, 0.1);
-  border-radius: 6px;
-  border: 1px solid rgba(56, 189, 248, 0.2);
+  background: var(--color-accent-cyan-glow);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-accent-cyan-soft);
 }
 
 .file-name {
-  color: #FFFFFF;
+  color: var(--color-white);
   font-size: 0.8rem;
   font-weight: 500;
   flex: 1;
@@ -467,19 +411,19 @@ const handleSubmit = (e: Event) => {
 }
 
 .file-size {
-  color: #94A3B8;
+  color: var(--color-text-muted);
   font-size: 0.75rem;
   font-weight: 400;
 }
 
 .error-message {
-  color: #EF4444;
+  color: var(--color-error);
   font-size: 0.8rem;
   font-weight: 500;
   padding: 6px 10px;
-  background: rgba(239, 68, 68, 0.1);
-  border-radius: 6px;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: var(--color-error-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-error-border);
 }
 
 .avatar-input {
@@ -495,29 +439,23 @@ const handleSubmit = (e: Event) => {
 .form-label {
   font-size: 0.9rem;
   font-weight: 500;
-  color: rgba(147, 197, 253, 0.9);
+  color: var(--color-accent-light);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.label-icon {
-  width: 18px;
-  height: 18px;
-  color: #3b82f6;
-}
-
 .form-input {
-  padding: 10px 16px;
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
   border-radius: 8px;
   font-size: 1rem;
-  color: white;
+  color: var(--color-white);
   transition: all 0.3s ease;
   outline: none;
   backdrop-filter: blur(10px);
-  caret-color: #38BDF8;
+  caret-color: var(--color-accent);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -526,26 +464,55 @@ const handleSubmit = (e: Event) => {
 }
 
 .form-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-glow), 0 0 20px var(--color-accent-glow-softer);
+}
+
+.label-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-accent);
+}
+
+.form-input {
+  padding: 10px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-stronger);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--color-white);
+  transition: all 0.3s ease;
+  outline: none;
+  backdrop-filter: blur(10px);
+  caret-color: var(--color-accent-cyan);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.form-input:hover {
+  cursor: text;
+}
+
+.form-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-glow-soft), 0 0 20px var(--color-accent-glow-softer);
 }
 
 .form-input::placeholder {
-  color: rgba(148, 163, 184, 0.5);
+  color: var(--color-text-placeholder);
 }
 
 /* 修复浏览器自动填充样式 */
 .form-input:-webkit-autofill,
 .form-input:-webkit-autofill:hover,
 .form-input:-webkit-autofill:focus {
-  -webkit-text-fill-color: white;
-  -webkit-box-shadow: 0 0 0 30px rgba(30, 41, 59, 0.4) inset;
+  -webkit-text-fill-color: var(--color-white);
+  -webkit-box-shadow: 0 0 0 30px var(--color-surface) inset;
   transition: background-color 5000s ease-in-out 0s;
-  caret-color: #38BDF8;
+  caret-color: var(--color-accent-cyan);
 }
 
 .form-input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 30px rgba(30, 41, 59, 0.4) inset, 0 0 0 3px rgba(59, 130, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.1);
+  -webkit-box-shadow: 0 0 0 30px var(--color-surface) inset, 0 0 0 3px var(--color-accent-glow-soft), 0 0 20px var(--color-accent-glow-softer);
 }
 
 .terms-section {
@@ -558,44 +525,44 @@ const handleSubmit = (e: Event) => {
   flex-wrap: wrap;
   gap: 4px;
   font-size: 0.85rem;
-  color: rgba(148, 163, 184, 0.8);
+  color: var(--color-text-muted-softer);
   cursor: pointer;
 }
 
 .checkbox {
   cursor: pointer;
-  accent-color: #3b82f6;
+  accent-color: var(--color-accent);
   width: 16px;
   height: 16px;
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-stronger);
   border-radius: 4px;
   backdrop-filter: blur(10px);
 }
 
 .terms-link {
-  color: #3b82f6;
+  color: var(--color-accent);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .terms-link:hover {
-  color: #60a5fa;
-  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  color: var(--color-accent-light);
+  text-shadow: 0 0 10px var(--color-accent-glow-dimmer);
 }
 
 .submit-button {
   padding: 10px 24px;
-  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #8b5cf6 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-secondary) 50%, var(--color-accent-tertiary) 100%);
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 15px var(--color-accent-glow);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -612,7 +579,7 @@ const handleSubmit = (e: Event) => {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-white-soft), transparent);
   transition: left 0.5s ease;
 }
 
@@ -622,7 +589,7 @@ const handleSubmit = (e: Event) => {
 
 .submit-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 25px var(--color-accent-glow-semidark);
 }
 
 .submit-button:active {
@@ -643,17 +610,17 @@ const handleSubmit = (e: Event) => {
   text-align: center;
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(59, 130, 246, 0.2);
+  border-top: 1px solid var(--color-border-strong);
 }
 
 .footer-text {
   font-size: 0.9rem;
-  color: rgba(148, 163, 184, 0.8);
+  color: var(--color-text-muted-softer);
   margin: 0;
 }
 
 .login-link {
-  color: #3b82f6;
+  color: var(--color-accent);
   text-decoration: none;
   font-weight: 600;
   margin-left: 4px;
@@ -661,8 +628,8 @@ const handleSubmit = (e: Event) => {
 }
 
 .login-link:hover {
-  color: #60a5fa;
-  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  color: var(--color-accent-light);
+  text-shadow: 0 0 10px var(--color-accent-glow-dimmer);
 }
 
 @keyframes slideIn {

@@ -41,19 +41,36 @@ const MATRIX_CONFIG = {
   MOBILE_BREAKPOINT: 768, // 移动端断点
   
   // 颜色配置
-  BG_COLOR: '#080b18',
-  NEBULA_COLOR: '#1a1440',
-  GRID_BASE_COLOR: 'rgba(0, 204, 255, 0.25)', // 从0.15提高到0.25
-  GRID_HIGHLIGHT_COLOR: 'rgba(0, 255, 200, 0.55)', // 从0.4提高到0.55
-  CELL_INACTIVE_COLOR: 'rgba(57, 255, 20, 0.25)', // 从0.15提高到0.25
-  CELL_ACTIVE_COLOR: '#39ff14',
-  CELL_FLASH_COLOR: '#00ccff',
-  RAIN_COLOR: '#39ff14',
-  RAIN_HEAD_COLOR: '#00ccff',
+  BG_COLOR: '--color-bg-deepest', // CSS var name, resolved at runtime
+  NEBULA_COLOR: '--color-matrix-nebula', // CSS var name, resolved at runtime
+  GRID_BASE_COLOR: '--color-accent-cyan-electric-soft', // CSS var name, resolved at runtime // 从0.15提高到0.25
+  GRID_HIGHLIGHT_COLOR: '--color-accent-cyan-electric-mid', // CSS var name, resolved at runtime // 从0.4提高到0.55
+  CELL_INACTIVE_COLOR: '--color-accent-green-soft', // CSS var name, resolved at runtime // 从0.15提高到0.25
+  CELL_ACTIVE_COLOR: '--color-accent-green', // CSS var name, resolved at runtime
+  CELL_FLASH_COLOR: '--color-accent-cyan-electric', // CSS var name, resolved at runtime
+  RAIN_COLOR: '--color-accent-green', // CSS var name, resolved at runtime
+  RAIN_HEAD_COLOR: '--color-accent-cyan-electric', // CSS var name, resolved at runtime
 }
 
 // 代码字符集
 const CODE_CHARS = '01<>/{ }[]'
+
+// 将 hex 颜色转换为 rgba 字符串
+const hexToRgba = (hex: string, alpha: number): string => {
+  let r: number, g: number, b: number
+  if (hex.length === 4) {
+    r = parseInt(hex[1] + hex[1], 16)
+    g = parseInt(hex[2] + hex[2], 16)
+    b = parseInt(hex[3] + hex[3], 16)
+  } else if (hex.length === 7) {
+    r = parseInt(hex[1] + hex[2], 16)
+    g = parseInt(hex[3] + hex[4], 16)
+    b = parseInt(hex[5] + hex[6], 16)
+  } else {
+    return hex // 可能是 rgba() 格式
+  }
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+  }
 
 // ============ 单元格类定义 ============
 interface Cell {
@@ -90,6 +107,15 @@ let fps = 60
 let activeRowIndex = 0 // 当前激活的行索引
 let lightTimer: number | null = null
 
+// 从 CSS 变量读取颜色（通过 getComputedStyle）
+let matrixGridBaseColor = 'rgba(0, 204, 255, 0.25)'
+let matrixCellInactiveColor = 'rgba(57, 255, 20, 0.25)'
+let matrixCellActiveColor = '#39ff14'
+let matrixCellFlashColor = '#00ccff'
+let matrixNebulaSoftColor = 'rgba(26, 20, 64, 0.5)'
+let matrixNebulaMidColor = 'rgba(26, 20, 64, 0.35)'
+let matrixBgDeepestColor = 'rgba(8, 11, 24, 0)'
+
 // ============ 初始化 Canvas ============
 const initCanvas = () => {
   const canvas = canvasRef.value
@@ -104,6 +130,16 @@ const initCanvas = () => {
   
   // 检测是否为移动端
   isMobile = window.innerWidth < MATRIX_CONFIG.MOBILE_BREAKPOINT
+  
+  // 从 CSS 变量读取颜色配置
+  const styles = getComputedStyle(document.documentElement)
+  matrixGridBaseColor = styles.getPropertyValue('--color-accent-cyan-electric-soft').trim()
+  matrixCellInactiveColor = styles.getPropertyValue('--color-accent-green-soft').trim()
+  matrixCellActiveColor = styles.getPropertyValue('--color-accent-green').trim()
+  matrixCellFlashColor = styles.getPropertyValue('--color-accent-cyan-electric').trim()
+  matrixNebulaSoftColor = styles.getPropertyValue('--color-matrix-nebula-soft').trim()
+  matrixNebulaMidColor = styles.getPropertyValue('--color-matrix-nebula-mid').trim()
+  matrixBgDeepestColor = styles.getPropertyValue('--color-bg-deepest').trim()
   
   // 初始化单元格
   initCells()
@@ -172,7 +208,7 @@ const drawPerspectiveGrid = (ctx: CanvasRenderingContext2D) => {
   const cols = isMobile ? MATRIX_CONFIG.COLS_MOBILE : MATRIX_CONFIG.COLS_DESKTOP
   
   // 绘制横向线（越往上越稀疏）
-  ctx.strokeStyle = MATRIX_CONFIG.GRID_BASE_COLOR
+  ctx.strokeStyle = matrixGridBaseColor
   ctx.lineWidth = 1
   for (let i = 0; i <= rows; i++) {
     const t = i / rows
@@ -213,19 +249,19 @@ const drawCells = (ctx: CanvasRenderingContext2D) => {
       
       if (progress < 1) {
         // 点亮状态
-        ctx.fillStyle = MATRIX_CONFIG.CELL_ACTIVE_COLOR
+        ctx.fillStyle = matrixCellActiveColor
         ctx.globalAlpha = 0.5 + progress * 0.35
         
         // 闪烁高光
         if (progress < 0.3) {
-          ctx.fillStyle = MATRIX_CONFIG.CELL_FLASH_COLOR
+          ctx.fillStyle = matrixCellFlashColor
           ctx.globalAlpha = 0.3 + (1 - progress / 0.3) * 0.3
         }
       } else {
         // 向下滑动流出
         const slideProgress = (progress - 1) * 2
         if (slideProgress < 1) {
-          ctx.fillStyle = MATRIX_CONFIG.CELL_ACTIVE_COLOR
+          ctx.fillStyle = matrixCellActiveColor
           ctx.globalAlpha = 0.85 * (1 - slideProgress)
           ctx.fillText(cell.char, cell.x, cell.y + slideProgress * 20)
         } else {
@@ -241,7 +277,7 @@ const drawCells = (ctx: CanvasRenderingContext2D) => {
       }
     } else {
       // 未激活状态
-      ctx.fillStyle = MATRIX_CONFIG.CELL_INACTIVE_COLOR
+      ctx.fillStyle = matrixCellInactiveColor
       ctx.globalAlpha = 0.25 // 从0.15提高到0.25
       ctx.fillText(cell.char, cell.x, cell.y)
     }
@@ -266,9 +302,9 @@ const drawRain = (ctx: CanvasRenderingContext2D) => {
     
     // 绘制渐变
     const gradient = ctx.createLinearGradient(0, drop.y - 60, 0, drop.y + 20)
-    gradient.addColorStop(0, 'rgba(57, 255, 20, 0.05)')
-    gradient.addColorStop(0.7, 'rgba(57, 255, 20, 0.45)')
-    gradient.addColorStop(1, 'rgba(0, 204, 255, 0.7)')
+    gradient.addColorStop(0, hexToRgba(matrixCellActiveColor, 0.05))
+    gradient.addColorStop(0.7, hexToRgba(matrixCellActiveColor, 0.45))
+    gradient.addColorStop(1, hexToRgba(matrixCellFlashColor, 0.7))
     
     ctx.fillStyle = gradient
     ctx.fillText(drop.char, drop.x, drop.y)
@@ -282,9 +318,9 @@ const drawNebula = (ctx: CanvasRenderingContext2D) => {
   
   // 径向渐变星云
   const gradient = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, h)
-  gradient.addColorStop(0, 'rgba(26, 20, 64, 0.5)') // 从0.35提高到0.5
-  gradient.addColorStop(0.5, 'rgba(26, 20, 64, 0.35)') // 从0.25提高到0.35
-  gradient.addColorStop(1, 'rgba(8, 11, 24, 0)')
+  gradient.addColorStop(0, matrixNebulaSoftColor) // 从0.35提高到0.5
+  gradient.addColorStop(0.5, matrixNebulaMidColor) // 从0.25提高到0.35
+  gradient.addColorStop(1, matrixBgDeepestColor)
   
   ctx.fillStyle = gradient
   ctx.fillRect(0, 0, w, h)

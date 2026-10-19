@@ -23,17 +23,6 @@
         </div>
       </div>
       
-      <!-- 右侧区域：用户登录 -->
-      <div class="daohang-right">
-        <!-- 用户登录 -->
-        <a href="/user" class="login-link">
-          <svg viewBox="0 0 24 24" class="login-icon">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>登录</span>
-        </a>
-      </div>
     </div>
   </nav>
 </template>
@@ -52,9 +41,9 @@ const props = defineProps<{
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(10, 22, 40, 0.8);
+  background: var(--color-bg-nav);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+  border-bottom: 1px solid var(--color-border-dim);
   transition: all 0.3s ease;
 }
 
@@ -83,7 +72,7 @@ const props = defineProps<{
 .main-divider {
   width: 1px;
   height: 24px;
-  background: rgba(147, 197, 253, 0.3);
+  background: var(--color-border-divider);
 }
 
 .daohang-logo {
@@ -106,13 +95,13 @@ const props = defineProps<{
 .logo-text {
   font-size: 1.1rem;
   font-weight: 600;
-  color: white;
+  color: var(--color-white);
   letter-spacing: 1px;
   transition: color 0.3s ease;
 }
 
 .daohang-logo:hover .logo-text {
-  color: #93c5fd;
+  color: var(--color-accent-light);
 }
 
 .daohang-links {
@@ -124,12 +113,12 @@ const props = defineProps<{
 .nav-divider {
   width: 1px;
   height: 16px;
-  background: rgba(147, 197, 253, 0.3);
+  background: var(--color-border-divider);
 }
 
 .nav-link {
   padding: 8px 16px;
-  color: rgba(147, 197, 253, 0.8);
+  color: var(--color-text-secondary);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -139,13 +128,13 @@ const props = defineProps<{
 }
 
 .nav-link:hover {
-  color: white;
-  background: rgba(59, 130, 246, 0.1);
+  color: var(--color-white);
+  background: var(--color-accent-glow);
 }
 
 .nav-link.active {
-  color: white;
-  background: rgba(59, 130, 246, 0.2);
+  color: var(--color-white);
+  background: var(--color-accent-glow-soft);
 }
 
 .nav-link.active::after {
@@ -156,14 +145,14 @@ const props = defineProps<{
   transform: translateX(-50%);
   width: 20px;
   height: 2px;
-  background: #3b82f6;
-  border-radius: 1px;
+  background: var(--color-accent);
+  border-radius: var(--radius-xs);
 }
 
 .main-divider {
   width: 1px;
   height: 24px;
-  background: rgba(147, 197, 253, 0.3);
+  background: var(--color-border-divider);
 }
 
 .daohang-user {
@@ -181,10 +170,10 @@ const props = defineProps<{
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: var(--color-accent-glow-softer);
+  border: 1px solid var(--color-border-dim);
   border-radius: 8px;
-  color: rgba(147, 197, 253, 0.8);
+  color: var(--color-accent-lighter);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -193,9 +182,9 @@ const props = defineProps<{
 }
 
 .login-link:hover {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.4);
-  color: white;
+  background: var(--color-accent-glow-soft);
+  border-color: var(--color-border-stronger);
+  color: var(--color-white);
   transform: translateY(-1px);
 }
 

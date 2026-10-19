@@ -24,7 +24,16 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  // 导航时滚动至页面顶部（封面区域）
+  scrollBehavior(_to, _from, savedPosition) {
+    // 恢复历史滚动位置
+    if (savedPosition) {
+      return savedPosition
+    }
+    // 路由跳转时定位至页面顶部（封面展示位置）
+    return { top: 0 }
+  }
 })
 
 export default router

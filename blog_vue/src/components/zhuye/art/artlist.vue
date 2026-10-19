@@ -2,7 +2,7 @@
   <div class="artlist-container">
     <section class="blog-list" ref="blogListRef">
       <!-- 文章列表 -->
-      <div v-for="(art, index) in artlist.artlist" :key="art.id">
+      <div v-for="(art, index) in artlist.artlist" :key="art.id.toString()">
             <article 
               :ref="(el) => setCardRef(el as HTMLElement, index)"
               :class="['blog-item', index % 2 === 0 ? 'layout-left' : 'layout-right', { show: isCardShown[index] }]">
@@ -10,7 +10,9 @@
                 <img :src="art.fenmianurl" alt="博客封面图" style="width: 100%; height: 100%; object-fit: cover;">
               </div>
               <div class="blog-content">
-                <h2 class="blog-title text-row">{{ art.name }}</h2>
+                <router-link :to="`/article/${art.id}`" class="blog-title text-row">
+                  {{ art.name }}
+                </router-link>
                 <p class="blog-excerpt text-row">{{ art.sum }}</p>
                 <div class="blog-meta text-row">
                   <span v-for="tag in art.tagvolist" :key="tag.id" class="blog-tags">{{ tag.name }}</span>
@@ -22,26 +24,36 @@
     
     <!-- 分页组件 -->
     <section class="pagination">
-      <button class="pagination-btn pagination-prev" disabled>上一页</button>
-      <div class="pagination-pages">
-        <button class="pagination-page active">1</button>
-        <button class="pagination-page">2</button>
-        <button class="pagination-page">3</button>
-        <span class="pagination-ellipsis">...</span>
-        <button class="pagination-page">10</button>
-      </div>
-      <button class="pagination-btn pagination-next">下一页</button>
+      <el-pagination
+        v-model:current-page="currentPage"
+        :page-size="pageSize"
+        :total="total"
+        :page-count="totalPages"
+        layout="prev, pager, next"
+        @current-change="handlePageChange"
+      />
     </section>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import { artlistpage } from "../../../stores/art/artlist"
 
 const artlist = artlistpage()
 const isCardShown = ref<boolean[]>([])
 const cardRefs = ref<HTMLElement[]>([])
+const currentPage = ref(1)
+const pageSize = 10
+const totalPages = computed(() => artlist.pages)
+const total = computed(() => artlist.total)
+
+// 监听store中的current变化，同步到本地currentPage
+watch(() => artlist.current, (newVal) => {
+  currentPage.value = newVal
+})
+
+
 
 const setCardRef = (el: HTMLElement | null, index: number) => {
   if (el) {
@@ -49,9 +61,26 @@ const setCardRef = (el: HTMLElement | null, index: number) => {
   }
 }
 
+const pageselect = (page: number) => {
+  currentPage.value = page
+  artlist.getartlist(page, pageSize)
+  // 重置卡片显示状态
+  isCardShown.value = new Array(artlist.artlist.length).fill(false)
+  // 触发卡片入场动画
+  setTimeout(() => {
+    startAnimation()
+  }, 100)
+}
+
+const handlePageChange = (page: number) => {
+  pageselect(page)
+}
+
 const modgetartlist = async ()=> {
-  await artlist.getartlist()
+  await artlist.getartlist(1,pageSize)
   console.log(artlist.artlist)
+  // 同步当前页码
+  currentPage.value = artlist.current || 1
   // 初始化卡片显示状态和ref数组
   isCardShown.value = new Array(artlist.artlist.length).fill(false)
   cardRefs.value = new Array(artlist.artlist.length).fill(null)
@@ -103,9 +132,9 @@ defineExpose({
   margin-bottom: 0;
   overflow: hidden;
   border-radius: 16px;
-  background: rgba(30, 41, 59, 0.4);
+  background: var(--color-surface);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(59, 130, 246, 0.15);
+  border: 1px solid var(--color-border);
   transition: all 0.3s ease;
   width: 100%;
   opacity: 0;
@@ -133,15 +162,15 @@ defineExpose({
 
 .blog-item:hover {
   transform: translateY(-4px);
-  border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
+  border-color: var(--color-border-stronger);
+  box-shadow: 0 8px 32px var(--color-accent-glow);
 }
 
 .blog-cover {
   flex: 0 0 50%;
   height: 100%;
   overflow: hidden;
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, var(--color-bg-nav) 0%, var(--color-accent) 100%);
   transition: transform 0.3s ease;
   position: relative;
 }
@@ -198,14 +227,21 @@ defineExpose({
 .blog-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: white;
+  color: var(--color-white);
   margin-bottom: 16px;
   line-height: 1.4;
+  text-decoration: none;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.blog-title:hover {
+  color: var(--color-progress-start);
 }
 
 .blog-excerpt {
   font-size: 1rem;
-  color: rgba(148, 163, 184, 0.8);
+  color: var(--color-text-dim);
   line-height: 1.6;
   margin-bottom: 24px;
   flex: 1;
@@ -215,7 +251,7 @@ defineExpose({
   display: flex;
   gap: 16px;
   font-size: 0.875rem;
-  color: rgba(147, 197, 253, 0.7);
+  color: var(--color-accent-lighter);
 }
 
 .blog-date {
@@ -244,66 +280,75 @@ defineExpose({
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
   padding: 32px 0 64px;
 }
 
-.pagination-btn {
-  padding: 10px 20px;
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+/* Element Plus 分页组件样式覆盖（非background模式） */
+.pagination :deep(.el-pagination) {
+  --el-pagination-text-color: var(--color-text-secondary);
+  --el-pagination-bg-color: transparent;
+  --el-pagination-border-radius: 8px;
+  --el-pagination-font-size: 0.9rem;
+}
+
+/* 普通页码按钮 */
+.pagination :deep(.el-pager li) {
+  background-color: var(--color-border-dim);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-strong);
   border-radius: 8px;
-  color: rgba(147, 197, 253, 0.8);
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.pagination-btn:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.4);
-  color: white;
-  transform: translateY(-1px);
-}
-
-.pagination-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.pagination-pages {
-  display: flex;
-  gap: 8px;
-}
-
-.pagination-page {
-  width: 40px;
+  min-width: 40px;
   height: 40px;
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  line-height: 40px;
+  margin: 0 4px;
+}
+
+/* 普通页码悬停 */
+.pagination :deep(.el-pager li:hover) {
+  background-color: var(--color-accent-glow-soft);
+  color: var(--color-white);
+  border-color: var(--color-border-stronger);
+}
+
+/* 选中页码 - 强制高亮 */
+.pagination :deep(.el-pager li.is-active) {
+  background-color: var(--color-accent-glow-semidark) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-border-strongest) !important;
+  box-shadow: 0 2px 8px var(--color-accent-glow-semidark) !important;
+}
+
+/* 上一页/下一页按钮 - 默认不高亮 */
+.pagination :deep(.el-pagination button) {
+  background-color: var(--color-accent-glow-softer) !important;
+  color: var(--color-text-secondary) !important;
+  border: 1px solid var(--color-border-strong) !important;
   border-radius: 8px;
-  color: rgba(147, 197, 253, 0.8);
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  min-width: 80px;
+  height: 40px;
+  margin: 0 4px;
 }
 
-.pagination-page:hover {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.4);
-  color: white;
+/* 上一页/下一页按钮悬停 */
+.pagination :deep(.el-pagination button:hover:not(:disabled)) {
+  background-color: var(--color-accent-glow-soft) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-border-stronger) !important;
 }
 
-.pagination-page.active {
-  background: rgba(59, 130, 246, 0.3);
-  border-color: rgba(59, 130, 246, 0.5);
-  color: white;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+/* 禁用按钮 */
+.pagination :deep(.el-pagination button:disabled) {
+  background-color: rgba(59, 130, 246, 0.05) !important;
+  color: var(--color-accent-lighter) !important;
+  border-color: var(--color-border-dim) !important;
 }
 
-.pagination-ellipsis {
-  color: rgba(147, 197, 253, 0.5);
-  padding: 0 8px;
+/* 省略号 - 不高亮 */
+.pagination :deep(.el-pager li.more) {
+  background-color: transparent !important;
+  color: var(--color-accent-light) !important;
+  border: none !important;
+  cursor: default !important;
 }
 
 /* 移动端适配 */
