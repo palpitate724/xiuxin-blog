@@ -13,7 +13,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* 隐藏原生滚动条 - Firefox */
   scrollbar-width: none;
 }
 
@@ -26,96 +25,170 @@ body {
   height: 100%;
 }
 
-/* 链接样式重置 */
-a {
-  color: inherit;
-  text-decoration: none;
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: inherit; font-size: inherit; }
+ul, ol { list-style: none; }
+img { max-width: 100%; height: auto; display: block; }
+
+body.hide-default-cursor { cursor: none !important; }
+
+/* 文字选中样式 */
+::selection {
+  background: var(--color-primary-subtle);
+  color: var(--color-text-primary);
 }
 
-/* 按钮样式重置 */
-button {
-  font-family: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
+::-moz-selection {
+  background: var(--color-primary-subtle);
+  color: var(--color-text-primary);
 }
 
-/* 输入框样式重置 */
-input,
-textarea,
-select {
-  font-family: inherit;
-  font-size: inherit;
+/* 自定义滚动条 */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; border-radius: 3px; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-accent-secondary) 100%);
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-accent-secondary-light) 100%);
+  box-shadow: 0 0 6px var(--color-accent-glow);
 }
 
-/* 列表样式重置 */
-ul,
-ol {
-  list-style: none;
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) transparent;
 }
 
-/* 图片样式重置 */
+/* Focus-visible */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button, .submit-button, .login-link, .nav-link, .upload-button {
+  position: relative;
+  overflow: hidden;
+}
+
+input[type="text"], input[type="password"], input[type="email"], textarea, select {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+a:not(.nav-link):not(.login-link):not(.social-icon):not(.terms-link):not(.register-link):not(.forgot-link) {
+  transition: color 0.2s ease;
+}
+
 img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+  max-width: 100%; height: auto; display: block;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
+img[lazy="loaded"] { opacity: 1; transform: none; }
 
-/* 全局自定义鼠标样式 */
-body.hide-default-cursor {
-  cursor: none !important;
+/* ============================================================================
+ * 液态玻璃效果工具类
+ * ============================================================================ */
+.liquid-glass {
+  position: relative;
+  background: linear-gradient(160deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.01) 100%);
+  backdrop-filter: blur(24px) saturate(1.8) brightness(1.05);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8) brightness(1.05);
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-/* 自定义鼠标跟随者 */
-.cursor-follower {
-  position: fixed;
-  width: 36px;
-  height: 18px;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Courier New', monospace;
-  font-size: 14.4px;
-  font-weight: bold;
-  color: var(--color-accent);
-  text-shadow: 0 0 9px var(--color-accent-glow), 0 0 18px rgba(59, 130, 246, 0.5);
-  white-space: nowrap;
+.liquid-glass::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 60%, transparent 100%);
+  border-radius: 20px 20px 0 0; pointer-events: none; z-index: 1;
 }
-
-/* 鼠标轨迹 */
-.cursor-trail {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9997;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.1s ease;
-  font-family: 'Courier New', monospace;
-  font-size: 10.8px;
-  font-weight: bold;
-  color: var(--color-accent-glow-soft);
-  white-space: nowrap;
+.liquid-glass::after {
+  content: ''; position: absolute; top: 0; left: 12px; right: 12px; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.25) 20%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.25) 80%, transparent 100%);
+  pointer-events: none; z-index: 2;
 }
-
-/* 减少 motion 偏好 - 禁用动画以提高可访问性 */
+.liquid-glass:hover {
+  box-shadow: 0 12px 48px rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05);
+  transform: translateY(-2px);
+}
+.liquid-glass-sm { border-radius: 14px; padding: 16px 20px; }
+.liquid-glass-sm::before { border-radius: 14px 14px 0 0; }
+.liquid-glass-lg { border-radius: 28px; padding: 32px 40px; }
+.liquid-glass-lg::before { border-radius: 28px 28px 0 0; }
+.liquid-glass-round { border-radius: 50%; aspect-ratio: 1; }
+.liquid-glass-round::before { border-radius: 50%; }
+.liquid-glass-strong {
+  backdrop-filter: blur(40px) saturate(2) brightness(1.1);
+  -webkit-backdrop-filter: blur(40px) saturate(2) brightness(1.1);
+  background: linear-gradient(160deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.04) 40%, rgba(255,255,255,0.01) 100%);
+}
+.liquid-glass-weak {
+  backdrop-filter: blur(12px) saturate(1.5) brightness(1.02);
+  -webkit-backdrop-filter: blur(12px) saturate(1.5) brightness(1.02);
+}
 @media (prefers-reduced-motion: reduce) {
-  .cursor-follower,
-  .cursor-trail {
-    transition: none;
-  }
+  .liquid-glass, .liquid-glass:hover { transform: none; transition-duration: 0.01ms; }
 }
 
-/* 移动端适配：隐藏自定义鼠标 */
+/* 鼠标跟随 */
+.cursor-follower {
+  position: fixed; width: 32px; height: 32px; pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%); transition: opacity 0.3s ease;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Courier New', monospace; font-size: 14px; font-weight: bold;
+  color: rgba(150, 220, 255, 0.8); text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); white-space: nowrap;
+}
+.cursor-trail {
+  position: fixed; pointer-events: none; z-index: 9997;
+  transform: translate(-50%, -50%); transition: opacity 0.1s ease;
+  font-family: 'Courier New', monospace; font-weight: bold; white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor-follower, .cursor-trail { transition: none; }
+}
 @media (max-width: 768px) {
-  body.hide-default-cursor {
-    cursor: auto !important;
-  }
-
-  .cursor-follower,
-  .cursor-trail {
-    display: none !important;
-  }
+  body.hide-default-cursor { cursor: auto !important; }
+  .cursor-follower, .cursor-trail { display: none !important; }
 }
+
+/* ============================================================================
+ * 主题过渡
+ * ============================================================================ */
+.theme-transitioning * {
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, backdrop-filter 0.5s ease !important;
+}
+
+/* ============================================================================
+ * 浅色主题全局覆盖 — 冷调科技质感
+ * ============================================================================ */
+
+/* 页面背景 */
+
+/* 卡片玻璃质感 */
+
+
+/* 导航栏 */
+
+/* 标题文字 — 深色确保对比度 */
+
+/* 副标题 / 摘要 / 辅助文字 */
+
+/* 导航链接 */
+
+/* 博客标题 */
+
+/* 分页器 */
+
+/* Markdown 内容 — 正文可读性 */
+
+/* 输入框 */
+
+/* 滚动条浅色适配 */
+
+/* Selection 浅色适配 */
