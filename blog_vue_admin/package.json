@@ -15,7 +15,14 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
-    "pinia": "^4.0.3",
+    "@lucide/vue": "^1.66.0",
+    "@types/highlight.js": "^9.12.4",
+    "@types/markdown-it": "^14.2.0",
+    "axios": "^1.20.0",
+    "highlight.js": "^11.12.0",
+    "markdown-it": "^15.0.3",
+    "pinia": "^4.1.0",
+    "pinia-plugin-persistedstate": "^4.7.1",
     "vue": "rc",
     "vue-router": "^5.3.1"
   },
