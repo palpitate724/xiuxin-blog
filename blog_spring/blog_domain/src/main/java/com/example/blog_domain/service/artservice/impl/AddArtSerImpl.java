@@ -59,7 +59,7 @@ public class AddArtSerImpl implements AddArtService {
                 ate.setTagid(tagid);
                 atel.add(ate);
             }
-
+            System.out.println("测试信息" + atel);
             // 插入文章标签
             artTagMapper.insert(atel);
 
@@ -70,6 +70,7 @@ public class AddArtSerImpl implements AddArtService {
             result.setCode(ResultCode.ARTICLE_NOT_INSERT.getCode());
             result.setMessage(ResultCode.ARTICLE_NOT_INSERT.getMessage());
             result.setData(null);
+            throw new RuntimeException("添加文章失败", e);
         }
 
         return result;

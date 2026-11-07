@@ -48,13 +48,13 @@ public class SelectArtPageImpl implements SelectArtPageService {
     public Result selectArtPage(Integer page, Integer size) {
         Result result = Result.getInstance();
 
-//        try{
+        try{
             //设置分页查询条件
             //创建分页对象
             Page<ArtEntity> artPage = new Page<>(page, size);
             //创建查询条件对象
             LambdaQueryWrapper<ArtEntity> lambdaQueryWrapper = new LambdaQueryWrapper<ArtEntity>()
-                    .select(ArtEntity::getId, ArtEntity::getName, ArtEntity::getUserid, ArtEntity::getCatid, ArtEntity::getObjectname, ArtEntity::getSum, ArtEntity::getCjiantime)
+                    .select(ArtEntity::getId, ArtEntity::getName, ArtEntity::getUserid, ArtEntity::getCatid, ArtEntity::getObjectname, ArtEntity::getSum, ArtEntity::getCjiantime, ArtEntity::getUptime, ArtEntity::getStatus)
                     .eq(ArtEntity::getDeleted, 0);
 
             //分页查询文章
@@ -72,6 +72,8 @@ public class SelectArtPageImpl implements SelectArtPageService {
                         BeanUtils.copyProperties(ArtEntity, selectArtVo);
                         selectArtVo.setId(ArtEntity.getId().toString());
                         selectArtVo.setFenmianurl(ArtEntity.getObjectname());
+                        selectArtVo.setCatid(ArtEntity.getCatid().toString());
+                        selectArtVo.setUserid(ArtEntity.getUserid().toString());
                         return selectArtVo;
                     })
                     .toList();
@@ -125,11 +127,11 @@ public class SelectArtPageImpl implements SelectArtPageService {
             result.setCode(ResultCode.SUCCESS.getCode());
             result.setMessage(ResultCode.SUCCESS.getMessage());
             result.setData(savPage);
-//        }catch (Exception e){
-//            result.setCode(ResultCode.FAIL.getCode());
-//            result.setMessage(ResultCode.FAIL.getMessage());
-//            result.setData(null);
-//        }
+        }catch (Exception e){
+            result.setCode(ResultCode.FAIL.getCode());
+            result.setMessage(ResultCode.FAIL.getMessage());
+            result.setData(null);
+        }
 
         return result;
     }

@@ -20,6 +20,7 @@ public class AddArtDto {
     private String objectname; // 封面URL
     private String sum; // 文章摘要
     private String cont; // 文章内容
+    private int status; // 文章状态 0:正常 1:草稿
 
     private List<Long> tagids; // 标签列表
 }

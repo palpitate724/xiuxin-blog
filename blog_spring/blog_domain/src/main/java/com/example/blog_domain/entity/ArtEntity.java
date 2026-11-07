@@ -21,6 +21,8 @@ public class ArtEntity {
     private String sum; //文章摘要
     private String cont; //文章内容
     private String cjiantime; //创建时间
+    private String uptime; //更新时间
+    private int status; //状态 0:正常 1:草稿
     private int deleted; //删除标志 0:未删除 1:已删除
 
 }
