@@ -40,6 +40,8 @@ const currentView = ref<'login' | 'signup'>('login')
   z-index: 3;
 }
 
+/* 浅色主题用户页背景 */
+
 /* 移动端适配 */
 @media (max-width: 768px) {
   .user-page {
@@ -55,6 +57,19 @@ const currentView = ref<'login' | 'signup'>('login')
   gap: 80px;
   align-items: center;
   position: relative;
+  /* 内容区入场动画 */
+  animation: contentFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .logo-section {

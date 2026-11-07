@@ -93,12 +93,17 @@ onUnmounted(() => {
   width: 100%;
   padding: 0;
   margin: 0;
+  /* 平滑滚动 */
+  scroll-behavior: smooth;
 }
+
+/* 浅色主题博客列表背景优化 */
 
 /* 博客容器 */
 .blog-container {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 24px;
 }
 
 /* 移动端适配 */

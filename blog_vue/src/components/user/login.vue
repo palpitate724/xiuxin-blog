@@ -127,83 +127,208 @@ const handleSubmit = (e: Event) => {
 }
 
 .login-card {
-  background: transparent;
-  backdrop-filter: none;
-  border: none;
-  border-radius: 16px;
-  padding: 40px;
-  box-shadow: none;
-  animation: slideIn 0.8s ease-out;
+  /* 液态玻璃基础效果 */
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.03) 40%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  backdrop-filter: blur(32px) saturate(1.9) brightness(1.06);
+  -webkit-backdrop-filter: blur(32px) saturate(1.9) brightness(1.06);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  border-radius: 24px;
+  padding: 44px 40px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.22),
+    0 2px 8px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  animation: slideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 玻璃表面高光 */
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 55%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.025) 55%,
+    transparent 100%
+  );
+  border-radius: 24px 24px 0 0;
+  pointer-events: none;
+  z-index: 1;
+  transition: background 0.4s ease;
+}
+
+/* 顶部边缘光晕 */
+.login-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 20%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0.3) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 卡片装饰光晕 */
+.login-card .deco-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 20%, var(--color-accent-glow-xlight) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
 }
 
 .login-title {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   font-weight: 700;
   color: var(--color-white);
   margin: 0 0 8px 0;
   letter-spacing: 1px;
-  text-shadow: 0 0 20px var(--color-progress-start-soft);
+  text-shadow:
+    0 0 30px var(--color-progress-start-soft),
+    0 2px 10px var(--color-shadow-text);
+  position: relative;
+  /* 渐变文字效果 */
+  background: linear-gradient(135deg, #ffffff 0%, #bae6fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 浅色主题登录标题 */
+
+.login-title::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-secondary));
+  border-radius: 2px;
+  margin: 12px auto 0;
+  box-shadow: 0 0 10px var(--color-accent-glow);
 }
 
 .login-subtitle {
-  font-size: 0.95rem;
-  color: var(--color-accent-lighter);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
   margin: 0;
+  letter-spacing: 0.5px;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  position: relative;
+  z-index: 1;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .form-label {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: var(--color-text-secondary);
   display: flex;
   align-items: center;
   gap: 8px;
+  letter-spacing: 0.3px;
 }
 
 .label-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   color: var(--color-accent);
+  opacity: 0.8;
 }
 
 .form-input {
   padding: 14px 16px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-stronger);
-  border-radius: 8px;
-  font-size: 1rem;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 10px;
+  font-size: 0.95rem;
   color: var(--color-white);
-  transition: all 0.3s ease;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   outline: none;
   backdrop-filter: blur(10px);
   caret-color: var(--color-accent-cyan);
   -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+.form-input::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 11px;
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 0%, transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition: background 0.35s ease;
+  pointer-events: none;
 }
 
 .form-input:hover {
   cursor: text;
+  border-color: var(--color-border-stronger);
+  background: rgba(30, 41, 59, 0.6);
+}
+
+.form-input:hover::before {
+  background: linear-gradient(135deg, var(--color-accent-glow-soft) 0%, transparent 100%);
 }
 
 .form-input:focus {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px var(--color-accent-glow), 0 0 20px rgba(59, 130, 246, 0.1);
+  background: rgba(30, 41, 59, 0.7);
+  box-shadow:
+    0 0 0 3px var(--color-accent-glow-soft),
+    0 0 20px var(--color-accent-glow-softer),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.form-input:focus::before {
+  background: linear-gradient(135deg, var(--color-accent-glow) 0%, var(--color-accent-secondary-soft) 100%);
 }
 
 .form-input::placeholder {
@@ -215,20 +340,20 @@ const handleSubmit = (e: Event) => {
 .form-input:-webkit-autofill:hover,
 .form-input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--color-white);
-  -webkit-box-shadow: 0 0 0 30px var(--color-surface) inset;
+  -webkit-box-shadow: 0 0 0 30px rgba(30, 41, 59, 0.9) inset;
   transition: background-color 5000s ease-in-out 0s;
   caret-color: var(--color-accent-cyan);
 }
 
 .form-input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 30px var(--color-surface) inset, 0 0 0 3px var(--color-accent-glow), 0 0 20px rgba(59, 130, 246, 0.1);
+  -webkit-box-shadow: 0 0 0 30px rgba(30, 41, 59, 0.9) inset, 0 0 0 3px var(--color-accent-glow-soft), 0 0 20px var(--color-accent-glow-softer);
 }
 
 .form-options {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--color-text-muted-softer);
 }
 
@@ -248,12 +373,18 @@ const handleSubmit = (e: Event) => {
 .checkbox {
   cursor: pointer;
   accent-color: var(--color-accent);
-  width: 16px;
-  height: 16px;
-  background: var(--color-surface);
+  width: 15px;
+  height: 15px;
+  background: rgba(30, 41, 59, 0.6);
   border: 1px solid var(--color-border-stronger);
   border-radius: 4px;
   backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.checkbox:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 6px var(--color-accent-glow-soft);
 }
 
 .forgot-link {
@@ -261,6 +392,18 @@ const handleSubmit = (e: Event) => {
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
+  position: relative;
+}
+
+.forgot-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-accent-secondary);
+  transition: width 0.3s ease;
 }
 
 .forgot-link:hover {
@@ -268,23 +411,31 @@ const handleSubmit = (e: Event) => {
   text-shadow: 0 0 10px var(--color-accent-glow);
 }
 
+.forgot-link:hover::after {
+  width: 100%;
+}
+
 .submit-button {
   padding: 14px 24px;
   background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-secondary) 50%, var(--color-accent-tertiary) 100%);
   color: var(--color-white);
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px var(--color-accent-glow);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow:
+    0 4px 20px var(--color-accent-glow),
+    0 0 40px var(--color-accent-glow-xlight);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   position: relative;
   overflow: hidden;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
 }
 
 .submit-button::before {
@@ -294,8 +445,8 @@ const handleSubmit = (e: Event) => {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, var(--color-white-soft), transparent);
-  transition: left 0.5s ease;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left 0.6s ease;
 }
 
 .submit-button:hover::before {
@@ -303,67 +454,93 @@ const handleSubmit = (e: Event) => {
 }
 
 .submit-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px var(--color-accent-glow);
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 30px var(--color-accent-glow),
+    0 0 50px var(--color-accent-glow-soft),
+    0 0 80px var(--color-accent-glow-xlight);
 }
 
 .submit-button:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
+  transition: all 0.1s ease;
 }
 
 .button-icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   transition: transform 0.3s ease;
 }
 
 .submit-button:hover .button-icon {
-  transform: translateX(4px);
+  transform: translateX(5px);
 }
 
 .login-footer {
   text-align: center;
-  margin-top: 16px;
-  padding-top: 16px;
+  margin-top: 20px;
+  padding-top: 20px;
   border-top: 1px solid var(--color-border-dim);
+  position: relative;
+  z-index: 1;
 }
 
 .footer-text {
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
   margin: 0;
 }
 
 .register-link {
-  color: var(--color-accent);
+  color: var(--color-accent-secondary);
   text-decoration: none;
   font-weight: 600;
   margin-left: 4px;
   transition: all 0.3s ease;
+  position: relative;
+}
+
+.register-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-accent-secondary-light);
+  transition: width 0.3s ease;
 }
 
 .register-link:hover {
-  color: var(--color-accent-light);
-  text-shadow: 0 0 10px var(--color-accent-glow);
+  color: var(--color-accent-secondary-light);
+  text-shadow: 0 0 10px var(--color-accent-secondary-soft);
+}
+
+.register-link:hover::after {
+  width: 100%;
 }
 
 .social-login {
-  margin-top: 24px;
+  margin-top: 28px;
   padding-top: 24px;
   border-top: 1px solid var(--color-border-dim);
+  position: relative;
+  z-index: 1;
 }
 
 .social-title {
   text-align: center;
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
   margin: 0 0 16px 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .social-icons {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 16px;
 }
 
 .social-icon {
@@ -373,98 +550,145 @@ const handleSubmit = (e: Event) => {
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-dim);
-  transition: all 0.3s ease;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid var(--color-border);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   backdrop-filter: blur(10px);
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 0%, var(--color-accent-glow-soft) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .social-icon svg {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .social-icon:hover {
   background: var(--color-accent-glow);
-  border-color: var(--color-accent-light);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px var(--color-accent-glow);
+  border-color: var(--color-border-stronger);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px var(--color-accent-glow);
+}
+
+.social-icon:hover::before {
+  opacity: 1;
 }
 
 .social-icon:hover svg {
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .social-icon.github:hover {
   border-color: var(--color-white-softer);
-  box-shadow: 0 4px 15px var(--color-white-soft);
+  box-shadow: 0 6px 20px var(--color-white-soft);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .social-icon.google:hover {
   border-color: var(--color-google-blue-soft);
-  box-shadow: 0 4px 15px var(--color-google-blue-soft);
+  box-shadow: 0 6px 20px var(--color-google-blue-soft);
+  background: rgba(66, 133, 244, 0.1);
 }
 
 .social-icon.gitee:hover {
   border-color: var(--color-gitee-red-soft);
-  box-shadow: 0 4px 15px var(--color-gitee-red-soft);
+  box-shadow: 0 6px 20px var(--color-gitee-red-soft);
+  background: rgba(237, 77, 75, 0.1);
+}
+
+/* 悬浮状态增强 */
+.login-card:hover {
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.28),
+    0 4px 12px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.login-card:hover::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.04) 55%,
+    transparent 100%
+  );
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(40px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
 }
 
 @media (max-width: 480px) {
   .login-card {
-    padding: 30px 20px;
+    padding: 32px 20px;
+    border-radius: 16px;
   }
-  
+
   .login-title {
     font-size: 1.5rem;
   }
-  
+
   .login-header {
     margin-bottom: 20px;
   }
-  
+
   .form-input {
     padding: 12px 14px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
-  
+
   .submit-button {
     padding: 12px 20px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
-  
+
   .social-login {
     margin-top: 20px;
     padding-top: 20px;
   }
-  
+
   .social-title {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     margin-bottom: 12px;
   }
-  
+
   .social-icons {
-    gap: 16px;
+    gap: 12px;
   }
-  
+
   .social-icon {
     width: 40px;
     height: 40px;
   }
-  
+
   .social-icon svg {
     width: 20px;
     height: 20px;
@@ -476,44 +700,74 @@ const handleSubmit = (e: Event) => {
     max-width: 100%;
     padding: 16px;
   }
-  
+
   .login-card {
-    padding: 32px 24px;
+    padding: 36px 24px;
   }
-  
+
   .login-title {
     font-size: 1.6rem;
   }
-  
+
   .form-group {
-    gap: 16px;
+    gap: 14px;
   }
-  
+
   .form-input {
     padding: 12px 16px;
   }
-  
+
   .submit-button {
     padding: 12px 24px;
   }
-  
+
   .social-login {
     margin-top: 20px;
     padding-top: 20px;
   }
-  
+
   .social-icons {
-    gap: 18px;
+    gap: 14px;
   }
-  
+
   .social-icon {
     width: 42px;
     height: 42px;
   }
-  
+
   .social-icon svg {
-    width: 22px;
-    height: 22px;
+    width: 21px;
+    height: 21px;
   }
 }
+
+/* ===== 浅色主题样式 ===== */
+/* 登录卡片浅色适配 — 冷调玻璃质感 */
+
+
+/* 表单输入框浅色适配 */
+
+
+
+/* 标签浅色适配 */
+
+
+/* 复选框浅色适配 */
+
+/* 忘记密码链接 */
+
+
+/* 注册链接 */
+
+
+/* 页脚文字 */
+
+
+/* 第三方登录区域 */
+
+
+
+
+/* 提交按钮浅色适配 */
+
 </style>
