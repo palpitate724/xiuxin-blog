@@ -38,10 +38,10 @@ public class SelectTagListSerImpl implements SelectTagListService {
                 .map(tagEntity -> {
                     SelectTagVo selectTagListVo = new SelectTagVo();
                     BeanUtils.copyProperties(tagEntity, selectTagListVo);
+                    selectTagListVo.setId(tagEntity.getId().toString());
                     return selectTagListVo;
                 })
                 .toList();
-
         result.setCode(ResultCode.SUCCESS.getCode());
         result.setMessage(ResultCode.SUCCESS.getMessage());
         result.setData(selectTagListVoList);

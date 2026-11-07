@@ -40,6 +40,7 @@ public class SelectCatListSerImpl implements SelectCatListService {
                 .map(selectCatEntity -> {
                     SelectCatVo selectCatVo = new SelectCatVo();
                     BeanUtils.copyProperties(selectCatEntity, selectCatVo);
+                    selectCatVo.setId(selectCatEntity.getId().toString());
                     return selectCatVo;
                 })
                 .toList();

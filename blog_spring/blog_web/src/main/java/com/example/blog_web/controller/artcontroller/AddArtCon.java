@@ -30,7 +30,6 @@ public class AddArtCon {
      */
     @PostMapping
     public Result addArt(@RequestBody AddArtDto addArtDto){
-        System.out.println(addArtDto);
         return addArtService.addArt(addArtDto);
     }
 }

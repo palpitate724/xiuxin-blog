@@ -40,9 +40,12 @@ public class MinioUtils {
         if (file == null || file.getSize() == 0)
             return "not N";
         String fileName = file.getOriginalFilename();
-        String houzhui = fileName.substring(fileName.lastIndexOf("."));
+        String houzhui = null;
+        if (fileName != null) {
+            houzhui = fileName.substring(fileName.lastIndexOf("."));
+        }
         // 判断文件类型
-        if (!houzhui.equals(".png") && !houzhui.equals(".jpg") && !houzhui.equals(".webp"))
+        if (houzhui != null && !houzhui.equals(".png") && !houzhui.equals(".jpg") && !houzhui.equals(".webp"))
             return "not T";
         try{
             String key = UUID.randomUUID().toString().replace("-","");
@@ -79,7 +82,7 @@ public class MinioUtils {
                         .build()
             );
         } catch (Exception e) {
-            return "not";
+            return null;
         }
     }
 }
