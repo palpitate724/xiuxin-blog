@@ -163,11 +163,11 @@ defineExpose({
   opacity: 0;
   transition: opacity var(--duration-hero-fade) var(--ease-standard);
   /* 扭曲动画效果 */
-  animation:
+  animation: 
     pulse var(--duration-hero-pulse) var(--ease-standard) infinite,
     subtle-rotate var(--duration-hero-rotate) var(--ease-linear) infinite,
     hue-shift var(--duration-hero-hue) var(--ease-linear) infinite;
-  filter: blur(0px) saturate(1.1);
+  filter: blur(0px);
 }
 
 .hero-video.active {
@@ -175,7 +175,7 @@ defineExpose({
 }
 
 .hero-video:hover {
-  filter: blur(0.5px) saturate(1.2);
+  filter: blur(0.5px);
 }
 
 /* 脉冲缩放效果 */
@@ -220,38 +220,20 @@ defineExpose({
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    135deg,
-    var(--color-cover-gradient-start) 0%,
-    rgba(10, 22, 40, 0.5) 40%,
-    rgba(10, 22, 40, 0.3) 60%,
-    var(--color-cover-gradient-end) 100%
-  );
-  opacity: 0.75;
-  backdrop-filter: blur(1px);
+  background: linear-gradient(135deg, var(--color-cover-gradient-start) 0%, var(--color-cover-gradient-end) 100%);
+  opacity: 0; /* 罩层透明 - 视频完全展示 */
+  /* 叠加动态扭曲效果 */
   animation: overlay-pulse var(--duration-hero-overlay) var(--ease-standard) infinite;
 }
 
 /* 叠加层脉冲效果 */
 @keyframes overlay-pulse {
   0%, 100% {
-    opacity: 0.72;
+    opacity: var(--color-overlay-opacity-soft);
   }
   50% {
-    opacity: 0.82;
+    opacity: var(--color-overlay-opacity-mid);
   }
-}
-
-/* 底部渐变遮罩，让内容区更清晰 */
-.hero-overlay::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 30%;
-  background: linear-gradient(to top, var(--color-bg-deep) 0%, transparent 100%);
-  pointer-events: none;
 }
 
 .hero-text {
@@ -263,29 +245,6 @@ defineExpose({
   z-index: 10;
   /* 文字也添加轻微抖动效果 */
   animation: text-float var(--duration-hero-text-float) var(--ease-standard) infinite;
-}
-
-/* 文字入场动画 */
-.hero-text::before {
-  content: '';
-  display: inline-block;
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-  margin: 0 auto var(--spacing-md);
-  animation: line-grow 1s ease-out forwards;
-  opacity: 0;
-}
-
-@keyframes line-grow {
-  from {
-    width: 0;
-    opacity: 0;
-  }
-  to {
-    width: 60px;
-    opacity: 1;
-  }
 }
 
 /* 文字浮动效果 */
@@ -303,45 +262,14 @@ defineExpose({
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
   margin-bottom: var(--spacing-md);
-  text-shadow:
-    0 0 40px rgba(59, 130, 246, 0.5),
-    0 4px 20px var(--color-shadow-text);
+  text-shadow: 0 4px 20px var(--color-shadow-text);
   letter-spacing: var(--hero-letter-spacing);
-  animation: title-glow 3s ease-in-out infinite alternate;
-  /* 提升文字质感：添加微妙的渐变填充 */
-  background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 50%, #bae6fd 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* 浅色主题Hero — 完全替换为静态背景，隐藏视频+遮罩+动画 */
-
-@keyframes title-glow {
-  from {
-    text-shadow:
-      0 0 40px rgba(59, 130, 246, 0.4),
-      0 4px 20px var(--color-shadow-text);
-  }
-  to {
-    text-shadow:
-      0 0 60px rgba(59, 130, 246, 0.7),
-      0 0 100px rgba(6, 182, 212, 0.3),
-      0 4px 20px var(--color-shadow-text);
-  }
 }
 
 .hero-subtitle {
   font-size: var(--font-size-hero-subtitle);
   color: var(--color-accent-light);
   text-shadow: 0 2px 10px var(--color-shadow-text);
-  letter-spacing: 3px;
-  font-weight: 300;
-  /* 渐变色文字 */
-  background: linear-gradient(90deg, var(--color-accent-lighter) 0%, var(--color-accent-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 /* 移动端适配 */
@@ -349,25 +277,21 @@ defineExpose({
   .hero-content {
     height: calc(100vh - 56px);
   }
-
+  
   .hero-title {
     font-size: var(--font-size-hero-title-mobile);
   }
-
+  
   .hero-subtitle {
     font-size: var(--font-size-hero-subtitle-mobile);
   }
-
+  
   .hero-video {
     /* 移动端减弱动画效果 */
-    animation:
+    animation: 
       pulse var(--duration-hero-pulse-mobile) var(--ease-standard) infinite,
       subtle-rotate var(--duration-hero-rotate-mobile) var(--ease-linear) infinite,
       hue-shift var(--duration-hero-hue-mobile) var(--ease-linear) infinite;
-  }
-
-  .hero-text::before {
-    display: none;
   }
 }
 
@@ -375,14 +299,13 @@ defineExpose({
   .hero-content {
     height: calc(100vh - 56px);
   }
-
+  
   .hero-title {
     font-size: var(--font-size-hero-title-sm);
   }
-
+  
   .hero-subtitle {
     font-size: var(--font-size-hero-subtitle-sm);
-    letter-spacing: 1px;
   }
 }
 
@@ -392,29 +315,16 @@ defineExpose({
     animation: none;
     transition: none;
   }
-
+  
   .hero-overlay {
     animation: none;
-    opacity: 0.75;
+    opacity: 0;
   }
-
-  .hero-overlay::after {
-    display: none;
-  }
-
+  
   .hero-text {
     animation: none;
   }
-
-  .hero-title {
-    animation: none;
-  }
-
-  .hero-text::before {
-    animation: none;
-    opacity: 1;
-  }
-
+  
   .hero-video:hover {
     filter: none;
   }
