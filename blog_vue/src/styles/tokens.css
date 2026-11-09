@@ -1,222 +1,493 @@
 /* =============================================================================
  * CSS Design Tokens — xiuxin-blog
- * Source of truth: DESIGN.md (frontmatter) + .impeccable/design.json
- * 
- * Usage: import in main.ts, then reference via var(--color-*) everywhere.
- * This replaces all hardcoded color/spacing/typography values across the
- * codebase, ensuring design-system consistency and easy theme switching.
+ * 三层令牌系统:
+ * 1. Primitive Tokens (原始令牌) - 基础颜色、间距、字体、圆角、阴影
+ * 2. Semantic Tokens (语义令牌) - 语义化颜色、间距、字体、组件
+ * 3. Component Tokens (组件令牌) - 按钮、输入框、卡片、表单等
  * =========================================================================== */
 
+/* =============================================================================
+ * Primitive Tokens (原始令牌) - 基础设计变量
+ * =========================================================================== */
 :root {
-  /* ===== Color: Background / Surface ===== */
-  /* Deep gradient stops for the app-container background */
-  --color-bg-deep: #0a1628;
-  --color-bg-mid: #1a2a4a;
-  --color-bg-deepest: #080b18; /* article page background */
-  --color-bg-nav: rgba(10, 22, 40, 0.8); /* daohang background */
-  --color-bg-avatar: rgba(15, 26, 44, 0.6); /* avatar circle background */
-  --color-bg-avatar-strong: rgba(15, 26, 44, 0.7); /* avatar info background */
-  --color-cover-gradient-start: rgba(10, 22, 40, 0.9); /* article cover gradient start */
-  --color-cover-gradient-end: rgba(30, 41, 59, 0.8); /* article cover gradient end */
-
-  /* Surface layers (translucent, for glass-morphism cards/inputs) */
-  --color-surface: rgba(30, 41, 59, 0.4); /* rgba(48, 55, 74, 0.4) base */
-  --color-surface-strong: rgba(30, 41, 59, 0.6); /* stronger tint for hover states */
-  --color-surface-light: rgba(30, 41, 59, 0.2); /* lighter tint for disabled */
-
-  /* ===== Color: Accent (primary brand) ===== */
-  --color-accent: #3b82f6;     /* Azure Blue — primary link, focus, active states */
-  --color-accent-light: #60a5fa; /* Light Azure — hover states */
-  --color-accent-lighter: #93c5fd; /* Text-secondary */
-  --color-accent-glow: rgba(59, 130, 246, 0.3);
-  --color-accent-glow-soft: rgba(59, 130, 246, 0.2);
-  --color-accent-glow-softer: rgba(59, 130, 246, 0.1);
-  --color-accent-glow-semidark: rgba(59, 130, 246, 0.4);
-  --color-accent-glow-dimmer: rgba(59, 130, 246, 0.5);
-  --color-accent-glow-light: rgba(59, 130, 246, 0.25);
-  --color-accent-glow-xlight: rgba(59, 130, 246, 0.15);
-  --color-progress-start-soft: rgba(0, 204, 255, 0.5);
-  --color-progress-start-softer: rgba(0, 204, 255, 0.3);
-
-  /* ===== Color: Accent (secondary) ===== */
-  --color-accent-secondary: #06b6d4; /* Neon Cyan / Electric Cyan */
-  --color-accent-secondary-light: #22d3ee;
-  --color-accent-secondary-soft: rgba(6, 182, 212, 0.3);
-  --color-accent-secondary-softer: rgba(6, 182, 212, 0.4);
-  --color-accent-cyan: #38bdf8; /* Signup avatar cyan */
-  --color-accent-laser: #96dcff; /* Meteor/canvas laser cyan */
-  --color-meteor-tail-soft: rgba(150, 220, 255, 0.8); /* Meteor tail gradient color */
-  --color-meteor-tail-fade: rgba(150, 220, 255, 0); /* Meteor tail transparent end */
-  --color-accent-cyan-soft: rgba(56, 189, 248, 0.3);
-  --color-accent-cyan-softer: rgba(56, 189, 248, 0.2);
-
-  /* ===== Color: Particle Matrix ===== */
-  --color-matrix-nebula: #1a1440;
-  --color-matrix-nebula-soft: rgba(26, 20, 64, 0.5);
-  --color-matrix-nebula-mid: rgba(26, 20, 64, 0.35);
-  --color-accent-green: #39ff14;
-  --color-accent-green-soft: rgba(57, 255, 20, 0.25);
-  --color-accent-green-softer: rgba(57, 255, 20, 0.05);
-  --color-accent-green-mid: rgba(57, 255, 20, 0.45);
-  --color-accent-cyan-electric: #00ccff;
-  --color-accent-cyan-electric-soft: rgba(0, 204, 255, 0.25);
-  --color-accent-cyan-electric-mid: rgba(0, 255, 200, 0.55);
-  --color-accent-cyan-electric-opacity: rgba(0, 204, 255, 0.7);
-
-  /* ===== Color: App.vue Canvas ===== */
-  --color-matrix-green: #00ff00;
-  --color-matrix-green-dark: #00aa00;
-  --color-accent-indigo: #6366f1;
-  --color-accent-sky: #0ea5e9;
-  --color-accent-cyan-glow: rgba(56, 189, 248, 0.15);
-  --color-accent-cyan-glow-soft: rgba(56, 189, 248, 0.25);
-
-  /* ===== Color: Accent (tertiary) ===== */
-  --color-accent-tertiary: #8b5cf6; /* Orchid Purple */
-  --color-accent-tertiary-light: #a853f0; /* Light Orchid */
-  --color-accent-tertiary-soft: rgba(139, 92, 246, 0.2);
-  --color-accent-tertiary-softer: rgba(139, 92, 246, 0.3);
-
-  /* ===== Color: Scroll progress / Back-top gradient stops ===== */
-  --color-progress-start: #00ccff; /* Electric blue */
-  --color-progress-mid: #06b6d4;   /* Cyan */
-  --color-progress-end: #8b5cf6;   /* Purple */
-
-  /* ===== Color: Text ===== */
-  --color-text-primary: #e2e8f0;
-  --color-text-primary-soft: rgba(226, 232, 240, 0.85);
-  --color-text-secondary: #93c5fd;
-  --color-text-muted: #94a3b8;
-  --color-text-dim: #475569;
-  --color-text-placeholder: rgba(148, 163, 184, 0.5);
-  --color-text-muted-softer: rgba(148, 163, 184, 0.8);
-
-  /* ===== Color: Borders ===== */
-  --color-border: rgba(59, 130, 246, 0.15); /* default card border */
-  --color-border-strong: rgba(59, 130, 246, 0.3); /* input focus/hover border */
-  --color-border-stronger: rgba(59, 130, 246, 0.4); /* active/pressed border */
-  --color-border-strongest: rgba(59, 130, 246, 0.6); /* active state border */
-  --color-border-dim: rgba(59, 130, 246, 0.1); /* nav divider, subtle borders */
-  --color-border-divider: rgba(147, 197, 253, 0.3); /* light divider */
-
-  /* ===== Color: Shadows / Glows ===== */
-  --color-shadow-card: rgba(0, 0, 0, 0.3); /* card drop shadow */
-  --color-shadow-text: rgba(0, 0, 0, 0.5); /* text shadow for headings */
-  --color-shadow-inner: rgba(0, 0, 0, 0.3); /* secondary shadow */
-
-  /* ===== Color: Status ===== */
-  --color-error: #ef4444;
-  --color-error-soft: rgba(239, 68, 68, 0.8);
-  --color-error-bg: rgba(239, 68, 68, 0.1);
-  --color-error-border: rgba(239, 68, 68, 0.3);
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-
-  /* ===== Color: Special (social icons, etc.) ===== */
+  /* ===== Color Primitives (颜色原始令牌) ===== */
+  /* Base Colors */
   --color-white: #ffffff;
-  --color-white-soft: rgba(255, 255, 255, 0.2);
-  --color-white-softer: rgba(255, 255, 255, 0.3);
-  --color-white-softest: rgba(255, 255, 255, 0.1);
-  
-  /* Overlay opacity - 透明罩层 */
-  --color-overlay-opacity-soft: 0;
-  --color-overlay-opacity-mid: 0;
-  --color-github: #ffffff;
-  --color-google-blue: #4285f4;
-  --color-google-blue-soft: rgba(66, 133, 244, 0.4);
-  --color-google-green: #34a853;
-  --color-google-yellow: #fbbe0b;
-  --color-google-red: #ea4335;
-  --color-gitee: #ed4d4b;
-  --color-gitee-red-soft: rgba(237, 77, 75, 0.4);
+  --color-black: #000000;
 
-  /* ===== Spacing Scale ===== */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-xl2: 40px;
-  --spacing-xl3: 48px;
-  --spacing-xl4: 64px;
+  /* Gray Scale (灰度色板) */
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e8e8e8;
+  --color-gray-300: #d9d9d9;
+  --color-gray-400: #bfbfbf;
+  --color-gray-500: #8c8c8c;
+  --color-gray-600: #595959;
+  --color-gray-700: #434343;
+  --color-gray-800: #262626;
+  --color-gray-900: #1f1f1f;
+  --color-gray-950: #0d0d0d;
 
-  /* ===== Border Radius ===== */
-  --radius-xs: 1px;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-xxl: 20px;
-  --radius-full: 9999px;
+  /* Brand Colors (品牌色 - 蓝色系) */
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e40af;
+  --color-brand-900: #1e3a8a;
+  --color-brand-950: #172554;
 
-  /* ===== Typography ===== */
-  --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  --font-size-xs: 0.8rem;
-  --font-size-sm: 0.85rem;
-  --font-size-base: 1rem;
-  --font-size-md: 1.05rem;
-  --font-size-lg: 1.1rem;
-  --font-size-xl: 1.2rem;
-  --font-size-xl2: 1.5rem;
-  --font-size-xl3: 1.8rem;
-  --font-size-display: 3rem;
+  /* Cyan Colors (青色系 - 次要品牌色) */
+  --color-cyan-50: #ecfeff;
+  --color-cyan-100: #cffafe;
+  --color-cyan-200: #a5f3fc;
+  --color-cyan-300: #67e8f9;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+  --color-cyan-600: #0891b2;
+  --color-cyan-700: #0e7490;
+  --color-cyan-800: #155e75;
+  --color-cyan-900: #164e63;
 
-  /* Hero typography */
-  --font-size-hero-title-mobile: 2rem;
-  --font-size-hero-title-sm: 1.5rem;
-  --font-size-hero-subtitle: 1.2rem;
-  --font-size-hero-subtitle-mobile: 1rem;
-  --font-size-hero-subtitle-sm: 0.9rem;
-  --hero-letter-spacing: 2px;
+  /* Emerald Colors (绿色系 - 成功色) */
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-200: #a7f3d0;
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b;
 
-  --font-weight-regular: 400;
+  /* Amber Colors (黄色系 - 警告色) */
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+
+  /* Rose Colors (红色系 - 危险色) */
+  --color-rose-50: #fff1f2;
+  --color-rose-100: #ffe4e6;
+  --color-rose-200: #fecdd3;
+  --color-rose-300: #fda4af;
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
+  --color-rose-700: #be123c;
+  --color-rose-800: #9f1239;
+  --color-rose-900: #881337;
+
+  /* Violet Colors (紫色系 - 第三品牌色) */
+  --color-violet-50: #f5f3ff;
+  --color-violet-100: #ede9fe;
+  --color-violet-200: #ddd6fe;
+  --color-violet-300: #c4b5fd;
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8b5cf6;
+  --color-violet-600: #7c3aed;
+  --color-violet-700: #6d28d9;
+  --color-violet-800: #5b21b6;
+  --color-violet-900: #4c1d95;
+
+  /* ===== Spacing Primitives (间距原始令牌) ===== */
+  --spacing-0: 0;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+
+  /* ===== Typography Primitives (字体原始令牌) ===== */
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --font-family-serif: 'Georgia', 'Times New Roman', serif;
+
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-base: 1rem;    /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px */
+  --font-size-xl: 1.25rem;   /* 20px */
+  --font-size-2xl: 1.5rem;   /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem;  /* 36px */
+  --font-size-5xl: 3rem;     /* 48px */
+  --font-size-6xl: 3.75rem;  /* 60px */
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.6;
-  --line-height-loose: 1.8;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
 
-  /* ===== Motion ===== */
-  --ease-standard: ease-in-out;
-  --ease-linear: linear;
-  --duration-fast: 0.2s;
-  --duration-normal: 0.3s;
-  --duration-slow: 0.6s;
-  --duration-slower: 0.8s;
-  
-  /* Hero video animation durations */
-  --duration-hero-fade: 1.5s;
-  --duration-hero-pulse: 8s;
-  --duration-hero-rotate: 20s;
-  --duration-hero-hue: 15s;
-  --duration-hero-overlay: 10s;
-  --duration-hero-text-float: 6s;
-  
-  /* Mobile overrides */
-  --duration-hero-pulse-mobile: 10s;
-  --duration-hero-rotate-mobile: 30s;
-  --duration-hero-hue-mobile: 20s;
+  /* ===== Border Radius Primitives (圆角原始令牌) ===== */
+  --radius-none: 0;
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
 
-  /* ===== Z-index scale ===== */
-  --z-dropdown: 1040;
-  --z-sticky: 1050;
-  --z-fixed: 1060;
-  --z-modal-backdrop: 1070;
-  --z-modal: 1080;
-  --z-toast: 1090;
-  --z-tooltip: 1100;
+  /* ===== Shadow Primitives (阴影原始令牌) ===== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
 
-  /* ===== Layout ===== */
-  --layout-max-width: 1400px;
-  --layout-content-width: 900px;
-  --layout-sidebar-width: 250px;
+  /* ===== Z-Index Primitives (层级原始令牌) ===== */
+  --z-hide: -1;
+  --z-auto: auto;
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-toast: 800;
 }
 
-/* ===== Reduced motion support ===== */
+/* =============================================================================
+ * Semantic Tokens - Dark Theme (默认深色主题)
+ * =========================================================================== */
+:root,
+[data-theme="dark"] {
+  /* ===== Color Semantic (语义颜色) ===== */
+  /* Brand Colors (品牌色语义化) */
+  --color-primary: var(--color-brand-500);
+  --color-primary-hover: var(--color-brand-400);
+  --color-primary-active: var(--color-brand-600);
+  --color-primary-subtle: var(--color-brand-900);
+  --color-primary-muted: var(--color-brand-900);
+
+  --color-secondary: var(--color-cyan-400);
+  --color-secondary-hover: var(--color-cyan-300);
+  --color-secondary-active: var(--color-cyan-500);
+
+  --color-tertiary: var(--color-violet-400);
+  --color-tertiary-hover: var(--color-violet-300);
+  --color-tertiary-active: var(--color-violet-500);
+
+  /* Status Colors (状态色) */
+  --color-success: var(--color-emerald-400);
+  --color-success-hover: var(--color-emerald-300);
+  --color-success-bg: rgba(16, 185, 129, 0.15);
+  --color-success-border: var(--color-emerald-700);
+
+  --color-warning: var(--color-amber-400);
+  --color-warning-hover: var(--color-amber-300);
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
+  --color-warning-border: var(--color-amber-700);
+
+  --color-error: var(--color-rose-400);
+  --color-error-hover: var(--color-rose-300);
+  --color-error-bg: rgba(244, 63, 94, 0.15);
+  --color-error-border: var(--color-rose-700);
+
+  --color-info: var(--color-brand-400);
+  --color-info-hover: var(--color-brand-300);
+  --color-info-bg: rgba(59, 130, 246, 0.15);
+  --color-info-border: var(--color-brand-700);
+
+  /* Text Colors (文本色) */
+  --color-text-primary: var(--color-gray-50);
+  --color-text-secondary: var(--color-gray-300);
+  --color-text-tertiary: var(--color-gray-500);
+  --color-text-disabled: var(--color-gray-600);
+  --color-text-inverse: var(--color-gray-900);
+  --color-text-link: var(--color-brand-300);
+  --color-text-link-hover: var(--color-brand-200);
+
+  /* Background Colors (背景色) */
+  --color-bg-primary: var(--color-gray-950);
+  --color-bg-secondary: var(--color-gray-900);
+  --color-bg-tertiary: var(--color-gray-800);
+  --color-bg-card: var(--color-gray-900);
+  --color-bg-card-hover: var(--color-gray-800);
+  --color-bg-overlay: rgba(0, 0, 0, 0.5);
+  --color-bg-disabled: var(--color-gray-800);
+
+  /* Border Colors (边框色) */
+  --color-border-primary: var(--color-gray-700);
+  --color-border-secondary: var(--color-gray-600);
+  --color-border-tertiary: var(--color-gray-500);
+  --color-border-focus: var(--color-brand-400);
+  --color-border-error: var(--color-rose-500);
+
+  /* ===== Shadow Semantic (语义阴影) ===== */
+  --shadow-card: var(--shadow-md);
+  --shadow-card-hover: var(--shadow-lg);
+  --shadow-floating: var(--shadow-xl);
+  --shadow-modal: var(--shadow-2xl);
+  --shadow-dropdown: var(--shadow-lg);
+  --shadow-focus: 0 0 0 3px var(--color-brand-900);
+
+  /* ===== Liquid Glass Semantic (液态玻璃语义化) ===== */
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-bg-strong: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-strong: rgba(255, 255, 255, 0.15);
+  --glass-highlight: rgba(255, 255, 255, 0.12);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+  --glass-shadow-strong: rgba(0, 0, 0, 0.4);
+
+  /* ===== Aurora & Background (极光与背景) ===== */
+  --bg-deep: var(--color-gray-950);
+  --bg-mid: var(--color-gray-900);
+  --bg-deepest: var(--color-black);
+  /* Shorthand aliases so components can use --color-bg-* */
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-deepest: var(--bg-deepest);
+  --color-bg-mid: var(--bg-mid);
+  --aurora-primary: rgba(59, 130, 246, 0.08);
+  --aurora-secondary: rgba(6, 182, 212, 0.05);
+  --aurora-tertiary: rgba(139, 92, 246, 0.04);
+
+  /* ===== Accent & Glow (品牌强调与光晕) ===== */
+  --color-accent: var(--color-brand-500);
+  --color-accent-hover: var(--color-brand-400);
+  --color-accent-light: var(--color-brand-300);
+  --color-accent-lighter: var(--color-brand-200);
+  --color-accent-secondary: var(--color-cyan-400);
+  --color-accent-secondary-light: var(--color-cyan-300);
+  --color-accent-secondary-soft: rgba(6, 182, 212, 0.2);
+  --color-accent-tertiary: var(--color-violet-400);
+  --color-accent-laser: #60a5fa;
+  --color-accent-glow: rgba(59, 130, 246, 0.4);
+  --color-accent-glow-soft: rgba(59, 130, 246, 0.12);
+  --color-accent-glow-softer: rgba(59, 130, 246, 0.06);
+  --color-accent-glow-xlight: rgba(59, 130, 246, 0.06);
+  --color-accent-cyan: var(--color-cyan-400);
+  --color-accent-cyan-soft: rgba(6, 182, 212, 0.4);
+  --color-accent-cyan-softer: rgba(6, 182, 212, 0.2);
+  --color-accent-cyan-glow: rgba(6, 182, 212, 0.3);
+  --color-accent-cyan-glow-xlight: rgba(6, 182, 212, 0.08);
+
+  /* ===== Text Shades (文字深浅) ===== */
+  --color-text-muted: var(--color-gray-400);
+  --color-text-muted-softer: var(--color-gray-500);
+  --color-text-primary-soft: var(--color-gray-200);
+  --color-text-dim: var(--color-gray-500);
+  --color-text-placeholder: var(--color-gray-500);
+  --color-white-soft: rgba(255, 255, 255, 0.8);
+  --color-white-softer: rgba(255, 255, 255, 0.5);
+
+  /* ===== Border & Surface (边框与表面) ===== */
+  --color-border: var(--color-border-primary);
+  --color-border-dim: var(--color-gray-700);
+  --color-border-strong: var(--color-gray-600);
+  --color-border-stronger: var(--color-gray-500);
+  --color-border-divider: var(--color-gray-700);
+  --color-surface: rgba(30, 41, 59, 0.6);
+  --color-bg-nav: rgba(3, 7, 16, 0.85);
+  --color-bg-navy-mid: #0f172a;
+  --color-bg-avatar: rgba(30, 41, 59, 0.5);
+
+  /* ===== Progress Bar ===== */
+  --color-progress-start: var(--color-brand-500);
+  --color-progress-end: var(--color-cyan-400);
+  --color-progress-start-soft: rgba(59, 130, 246, 0.5);
+
+  /* ===== Glass Effects ===== */
+  --color-glass-shine: rgba(255, 255, 255, 0.15);
+  --color-glass-border-top: rgba(255, 255, 255, 0.2);
+  --color-glass-outer-glow: rgba(59, 130, 246, 0.15);
+  --color-glass-hover-highlight: rgba(255, 255, 255, 0.2);
+
+  /* ===== Cover Gradient ===== */
+  --color-cover-gradient-start: rgba(10, 22, 40, 0.85);
+  --color-cover-gradient-end: rgba(10, 22, 40, 0.6);
+
+  /* ===== Shadow & Error ===== */
+  --color-shadow-text: rgba(0, 0, 0, 0.5);
+  --color-error-soft: #fca5a5;
+
+  /* ===== Social Login ===== */
+  --color-google-blue-soft: rgba(66, 133, 244, 0.4);
+  --color-gitee-red-soft: rgba(237, 77, 75, 0.4);
+
+  /* ===== Radius Extras ===== */
+  --radius-xxl: 20px;
+
+  /* ===== Hero Typography ===== */
+  --font-size-display: 4rem;
+  --font-size-hero-title-mobile: 2.5rem;
+  --font-size-hero-title-sm: 2rem;
+  --font-size-hero-subtitle: 1.35rem;
+  --font-size-hero-subtitle-mobile: 1.1rem;
+  --font-size-hero-subtitle-sm: 1rem;
+  --hero-letter-spacing: 0.08em;
+
+  /* ===== Hero Animations ===== */
+  --duration-hero-fade: 0.8s;
+  --duration-hero-pulse: 6s;
+  --duration-hero-rotate: 20s;
+  --duration-hero-hue: 12s;
+  --duration-hero-overlay: 4s;
+  --duration-hero-text-float: 4s;
+  --duration-hero-pulse-mobile: 8s;
+  --duration-hero-rotate-mobile: 30s;
+  --duration-hero-hue-mobile: 16s;
+
+  /* ===== Theme Transition ===== */
+  --duration-theme: 0.5s;
+
+  /* ===== Z-Index ===== */
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --duration-slower: 600ms;
+  --duration-fast: 0.15s;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-linear: linear;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ===== Z-Index ===== */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-toast: 800;
+}
+
+/* =============================================================================
+ * Semantic Tokens - Light Theme (冷调科技质感)
+ * 设计语言：轻玻璃拟态 · 低饱和冷调 · 与深色深空版同源
+ * =========================================================================== */
+
+/* =============================================================================
+ * Component Tokens (组件令牌)
+ * =========================================================================== */
+
+/* Button Component Tokens */
+:root {
+  --button-height-sm: 32px;
+  --button-height-md: 40px;
+  --button-height-lg: 48px;
+  --button-height-xl: 56px;
+
+  --button-padding-sm: var(--spacing-2) var(--spacing-4);
+  --button-padding-md: var(--spacing-3) var(--spacing-6);
+  --button-padding-lg: var(--spacing-4) var(--spacing-8);
+
+  --button-radius-sm: var(--radius-md);
+  --button-radius-md: var(--radius-lg);
+  --button-radius-lg: var(--radius-xl);
+
+  --button-font-size-sm: var(--font-size-sm);
+  --button-font-size-md: var(--font-size-base);
+  --button-font-size-lg: var(--font-size-lg);
+  --button-font-weight: var(--font-weight-medium);
+
+  --button-gap-sm: var(--spacing-2);
+  --button-gap-md: var(--spacing-3);
+  --button-gap-lg: var(--spacing-4);
+}
+
+/* Input Component Tokens */
+:root {
+  --input-height-sm: 32px;
+  --input-height-md: 40px;
+  --input-height-lg: 48px;
+
+  --input-padding-sm: var(--spacing-2) var(--spacing-3);
+  --input-padding-md: var(--spacing-3) var(--spacing-4);
+  --input-padding-lg: var(--spacing-4) var(--spacing-5);
+
+  --input-radius-sm: var(--radius-md);
+  --input-radius-md: var(--radius-lg);
+  --input-radius-lg: var(--radius-xl);
+
+  --input-border-width: 1px;
+  --input-border-color: var(--color-border-primary);
+  --input-border-color-hover: var(--color-border-secondary);
+  --input-border-color-focus: var(--color-border-focus);
+  --input-border-color-error: var(--color-border-error);
+}
+
+/* Card Component Tokens */
+:root {
+  --card-padding-sm: var(--spacing-4);
+  --card-padding-md: var(--spacing-6);
+  --card-padding-lg: var(--spacing-8);
+
+  --card-radius-sm: var(--radius-lg);
+  --card-radius-md: var(--radius-xl);
+  --card-radius-lg: var(--radius-2xl);
+
+  --card-shadow: var(--shadow-card);
+  --card-shadow-hover: var(--shadow-card-hover);
+
+  --card-bg: var(--color-bg-card);
+  --card-bg-hover: var(--color-bg-card-hover);
+  --card-border: var(--color-border-primary);
+}
+
+/* Form Component Tokens */
+:root {
+  --form-gap-sm: var(--spacing-3);
+  --form-gap-md: var(--spacing-4);
+  --form-gap-lg: var(--spacing-6);
+
+  --form-label-font-size: var(--font-size-sm);
+  --form-label-font-weight: var(--font-weight-medium);
+  --form-label-color: var(--color-text-primary);
+
+  --form-error-font-size: var(--font-size-sm);
+  --form-error-color: var(--color-error);
+  --form-error-gap: var(--spacing-1);
+
+  --form-help-font-size: var(--font-size-sm);
+  --form-help-color: var(--color-text-tertiary);
+}
+
+/* Navigation Tokens */
+:root {
+  --nav-height: 64px;
+  --nav-height-mobile: 56px;
+  --nav-padding: var(--spacing-6);
+  --nav-padding-mobile: var(--spacing-4);
+  --nav-gap: var(--spacing-8);
+  --nav-link-padding: var(--spacing-2) var(--spacing-4);
+  --nav-link-radius: var(--radius-lg);
+}
+
+/* =============================================================================
+ * Motion & Reduced Motion
+ * =========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -225,4 +496,95 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* =============================================================================
+ * Focus Visible
+ * =========================================================================== */
+*:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* =============================================================================
+ * Selection
+ * =========================================================================== */
+::selection {
+  background: var(--color-primary-subtle);
+  color: var(--color-text-primary);
+}
+
+/* =============================================================================
+ * Scrollbar
+ * =========================================================================== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-tertiary) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-tertiary);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-secondary);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* =============================================================================
+ * Focus Visible for form elements
+ * =========================================================================== */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* =============================================================================
+ * Transition defaults
+ * =========================================================================== */
+* {
+  transition: background-color var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard),
+              box-shadow var(--duration-fast) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard);
+}
+
+/* =============================================================================
+ * Utility Classes
+ * =========================================================================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.no-transition {
+  transition: none !important;
 }

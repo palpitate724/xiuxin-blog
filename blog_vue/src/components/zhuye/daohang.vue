@@ -5,12 +5,11 @@
       <div class="daohang-left">
         <!-- Logo区域 -->
         <div class="daohang-logo">
-          
           <span class="logo-text">wl-blog</span>
         </div>
-        
+
         <span class="main-divider"></span>
-        
+
         <!-- 导航链接 -->
         <div class="daohang-links">
           <a href="/" class="nav-link">首页</a>
@@ -22,7 +21,8 @@
           <a href="#" class="nav-link">关于</a>
         </div>
       </div>
-      
+
+
     </div>
   </nav>
 </template>
@@ -30,6 +30,7 @@
 <script setup lang="ts">
 // 导航栏透明度
 const props = defineProps<{
+  // 无主题切换逻辑，固定深色
   isTransparent?: boolean
 }>()
 </script>
@@ -42,14 +43,28 @@ const props = defineProps<{
   right: 0;
   z-index: 1000;
   background: var(--color-bg-nav);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
   border-bottom: 1px solid var(--color-border-dim);
-  transition: all 0.3s ease;
+  transition: all var(--duration-theme) ease;
+}
+
+.daohang::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-accent-glow-soft) 20%, var(--color-accent-secondary-soft) 50%, var(--color-accent-glow-soft) 80%, transparent 100%);
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .daohang.transparent {
   background: transparent;
   backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border-bottom: none;
 }
 
@@ -73,6 +88,7 @@ const props = defineProps<{
   width: 1px;
   height: 24px;
   background: var(--color-border-divider);
+  transition: background var(--duration-theme) ease;
 }
 
 .daohang-logo {
@@ -82,23 +98,15 @@ const props = defineProps<{
   text-decoration: none;
 }
 
-.logo-icon {
-  width: 28px;
-  height: 28px;
-  transition: transform 0.3s ease;
-}
-
-.daohang-logo:hover .logo-icon {
-  transform: rotate(10deg);
-}
-
 .logo-text {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--color-white);
+  color: var(--color-text-primary);
   letter-spacing: 1px;
-  transition: color 0.3s ease;
+  transition: color var(--duration-theme) ease;
 }
+
+/* 浅色主题导航栏文字 */
 
 .daohang-logo:hover .logo-text {
   color: var(--color-accent-light);
@@ -114,6 +122,7 @@ const props = defineProps<{
   width: 1px;
   height: 16px;
   background: var(--color-border-divider);
+  transition: background var(--duration-theme) ease;
 }
 
 .nav-link {
@@ -122,19 +131,50 @@ const props = defineProps<{
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  letter-spacing: 0.02em;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-secondary));
+  border-radius: 1px;
+  transform: translateX(-50%);
+  transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .nav-link:hover {
-  color: var(--color-white);
-  background: var(--color-accent-glow);
+  color: var(--color-text-primary);
+  background: var(--color-accent-glow-soft);
+  transform: translateY(-1px);
 }
+
+.nav-link:hover::after {
+  width: 20px;
+}
+
+/* 浅色主题导航链接 */
+
+
+
+/* 浅色主题分隔线 */
+
+/* 浅色主题主题切换按钮 */
+
+
+/* 浅色主题 Logo 文字 */
+
 
 .nav-link.active {
   color: var(--color-white);
-  background: var(--color-accent-glow-soft);
+  background: var(--color-accent-glow);
 }
 
 .nav-link.active::after {
@@ -149,50 +189,22 @@ const props = defineProps<{
   border-radius: var(--radius-xs);
 }
 
-.main-divider {
-  width: 1px;
-  height: 24px;
-  background: var(--color-border-divider);
-}
-
-.daohang-user {
-  display: flex;
-  align-items: center;
-}
-
 .daohang-right {
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
-.login-link {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: var(--color-accent-glow-softer);
-  border: 1px solid var(--color-border-dim);
-  border-radius: 8px;
-  color: var(--color-accent-lighter);
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-}
+/* 导航栏主题切换按钮 */
 
-.login-link:hover {
-  background: var(--color-accent-glow-soft);
-  border-color: var(--color-border-stronger);
-  color: var(--color-white);
-  transform: translateY(-1px);
-}
 
-.login-icon {
+
+.theme-icon-nav {
   width: 18px;
   height: 18px;
-  transition: color 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
 }
+
 
 /* 移动端适配 */
 @media (max-width: 768px) {
@@ -200,32 +212,22 @@ const props = defineProps<{
     padding: 0 16px;
     height: 56px;
   }
-  
+
   .daohang-left {
     gap: 12px;
   }
-  
-  .logo-icon {
-    width: 24px;
-    height: 24px;
-  }
-  
+
   .logo-text {
     font-size: 1rem;
   }
-  
+
   .daohang-links {
-    display: none; /* 移动端暂时隐藏导航链接 */
+    display: none;
   }
-  
-  .login-link {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-  }
-  
-  .login-icon {
-    width: 16px;
-    height: 16px;
+
+  .theme-toggle-nav {
+    width: 32px;
+    height: 32px;
   }
 }
 
@@ -233,19 +235,9 @@ const props = defineProps<{
   .daohang-container {
     padding: 0 12px;
   }
-  
+
   .logo-text {
     font-size: 0.9rem;
-  }
-  
-  .login-link {
-    padding: 6px 10px;
-    font-size: 0.8rem;
-  }
-  
-  .login-icon {
-    width: 14px;
-    height: 14px;
   }
 }
 </style>
