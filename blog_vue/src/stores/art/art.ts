@@ -9,19 +9,6 @@ export const art = defineStore('art',
             id: number
             name: string
         }
-        interface Art {
-            id: string,
-            name: string,
-            userid: string,
-            catid: string,
-            fenmianurl: string,
-            sum: string,
-            cont: string,
-            tags: Tag[],
-            cjiantime: string,
-            uptime: string,
-            status: number
-        }
 
         const id = ref('')
         const name = ref('')
@@ -31,10 +18,7 @@ export const art = defineStore('art',
         const sum = ref('')
         const cont = ref('')
         const tags = ref<Tag[]>([])
-        const cjiantime = ref('')
-        const uptime = ref('')
-        const status = ref(0)
-
+        
         const getart = async (artid: string) => {
             const { data } = await selectart(artid)
             if (data.code !== 200) {
@@ -49,9 +33,6 @@ export const art = defineStore('art',
             sum.value = data.data.sum
             cont.value = data.data.cont
             tags.value = data.data.tags
-            cjiantime.value = data.data.cjiantime
-            uptime.value = data.data.uptime
-            status.value = data.data.status
         }
 
         return {
@@ -63,9 +44,6 @@ export const art = defineStore('art',
             sum,
             cont,
             tags,
-            cjiantime,
-            uptime,
-            status,
             getart
         }
 
@@ -74,7 +52,7 @@ export const art = defineStore('art',
         persist: {
             key: 'art',
             storage: localStorage,
-            pick: ['catid', 'id', 'name', 'userid', 'fenmianurl', 'sum', 'cont', 'tags']
+            pick: ["art"]
         }
     }
 )
