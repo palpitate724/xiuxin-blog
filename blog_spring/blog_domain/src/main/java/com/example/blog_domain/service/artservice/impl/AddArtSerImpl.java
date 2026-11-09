@@ -47,7 +47,8 @@ public class AddArtSerImpl implements AddArtService {
         try{
             ArtEntity ae = new ArtEntity();
             BeanUtils.copyProperties(aad, ae);
-
+            log.info("添加文章参数123: {}", ae);
+            log.info("添加文章参数: {}", aad);
             // 插入文章
             artMapper.insert(ae);
 

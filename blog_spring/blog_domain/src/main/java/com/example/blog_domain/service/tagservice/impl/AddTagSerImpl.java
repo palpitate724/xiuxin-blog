@@ -50,6 +50,8 @@ public class AddTagSerImpl implements AddTagService {
             tagMapper.insert(te);
             SelectTagVo stv = new SelectTagVo();
             BeanUtils.copyProperties(te, stv);
+            stv.setId(te.getId().toString());
+            stv.setCjiantime(te.getCjiantime());
 
             result.setCode(ResultCode.SUCCESS.getCode());
             result.setMessage(ResultCode.SUCCESS.getMessage());

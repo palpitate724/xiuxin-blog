@@ -125,13 +125,22 @@ public enum ResultCode {
     CATEGORY_NOT_EXIST(7002, "分类不存在"),
 
     /**
+     * 该分类还有关联文章
+     */
+    CATEGORY_HAS_ARTICLE(7003, "该分类还有关联文章"),
+
+    /**
      * 标签已存在
      */
     TAG_ALREADY_EXIST(8001, "标签已存在"),
     /**
      * 标签不存在
      */
-    TAG_NOT_EXIST(8002, "标签不存在");
+    TAG_NOT_EXIST(8002, "标签不存在"),
+    /**
+     * 该标签还有关联文章
+     */
+    TAG_HAS_ARTICLE(8003, "该标签还有关联文章");
 
     private final Integer code;
     private final String message;
