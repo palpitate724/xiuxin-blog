@@ -13,4 +13,5 @@ public class SelectCatVo {
 
     private String id; // 分类ID
     private String name; // 分类名称
+    private String cjiantime; // 创建时间
 }

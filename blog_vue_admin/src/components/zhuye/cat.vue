@@ -23,17 +23,13 @@
 
     <!-- 分类列表 -->
     <div class="cat-list">
-      <div
-        v-for="cat in paginatedList"
-        :key="cat.id"
-        class="cat-row"
-      >
+      <div v-for="cat in paginatedList" :key="cat.id" class="cat-row">
         <div class="cat-row__main">
           <span class="cat-row__name">{{ cat.name }}</span>
           <span class="cat-row__id">#{{ cat.id }}</span>
         </div>
         <div class="cat-row__meta">
-          <span class="cat-row__time">{{ cat.createTime }}</span>
+          <span class="cat-row__time">{{ cat.cjiantime }}</span>
           <div class="cat-row__actions">
             <button class="action-btn action-btn--edit" @click="openEditModal(cat)">编辑</button>
             <button class="action-btn action-btn--delete" @click="handleDelete(cat)">删除</button>
@@ -44,7 +40,9 @@
       <div v-if="filteredList.length === 0" class="empty-state">
         <FolderOpen :size="40" class="empty-state__icon" />
         <p>{{ searchKeyword ? '暂无匹配分类' : '暂无分类' }}</p>
-        <p class="empty-state__hint">{{ searchKeyword ? '尝试其他关键词' : '点击「新建分类」开始添加' }}</p>
+        <p class="empty-state__hint">
+          {{ searchKeyword ? '尝试其他关键词' : '点击「新建分类」开始添加' }}
+        </p>
       </div>
     </div>
 
@@ -59,7 +57,8 @@
         class="pagination__number"
         :class="{ active: currentPage === page }"
         @click="goToPage(page)"
-      >{{ page }}</span>
+        >{{ page }}</span
+      >
       <button class="pagination__btn" :disabled="currentPage >= totalPages" @click="nextPage">
         <ChevronRight :size="16" />
       </button>
@@ -100,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { catpage } from '../../stores/cat'
 import { Plus, FolderOpen, X, ChevronLeft, ChevronRight } from '@lucide/vue'
 
@@ -124,21 +123,8 @@ const editingId = ref('')
 /** 弹窗中分类名称的输入绑定 */
 const formName = ref('')
 
-// ─── 模拟数据（后续替换为 store.catlist）────────────────────────────────────────
-/** 本地分类数据源，开发期用于填充列表；上线后应改用 catpage_v.catlist */
-const MOCK_CATS = [
-  { id: '1', name: '技术',     createTime: '2025-01-01' },
-  { id: '2', name: '生活',     createTime: '2025-01-05' },
-  { id: '3', name: '随笔',     createTime: '2025-02-10' },
-  { id: '4', name: '前端',     createTime: '2025-03-15' },
-  { id: '5', name: '后端',     createTime: '2025-03-20' },
-  { id: '6', name: '数据库',   createTime: '2025-04-01' },
-  { id: '7', name: 'DevOps',   createTime: '2025-04-10' },
-  { id: '8', name: '人工智能', createTime: '2025-05-01' },
-]
-
-/** 所有分类的可响应列表（由 MOCK_CATS 初始化） */
-const allCats = ref(MOCK_CATS)
+/** 所有分类的可响应列表（由 catpage_v.catlist 初始化） */
+const allCats = catpage_v.catlist
 
 // ─── 计算属性：过滤 / 分页 ─────────────────────────────────────────────────────
 /**
@@ -146,9 +132,9 @@ const allCats = ref(MOCK_CATS)
  * 匹配分类名称（不区分大小写），关键词为空时返回全量数据。
  */
 const filteredList = computed(() => {
-  if (!searchKeyword.value.trim()) return allCats.value
+  if (!searchKeyword.value.trim()) return allCats
   const kw = searchKeyword.value.toLowerCase()
-  return allCats.value.filter(c => c.name.toLowerCase().includes(kw))
+  return allCats.filter((c) => c.name.toLowerCase().includes(kw))
 })
 
 /** 总页数，基于过滤后的列表长度计算，最小值为 1 */
@@ -165,7 +151,9 @@ const paginatedList = computed(() => {
 
 // ─── 搜索时重置分页 ────────────────────────────────────────────────────────────
 /** 搜索关键词变化时自动将页码重置为 1，避免翻页后搜索时停留在空页面 */
-watch(searchKeyword, () => { currentPage.value = 1 })
+watch(searchKeyword, () => {
+  currentPage.value = 1
+})
 
 // ─── 弹窗控制 ──────────────────────────────────────────────────────────────────
 /** 打开新增弹窗，重置表单状态并标记为非编辑模式 */
@@ -180,7 +168,7 @@ const openAddModal = () => {
  * 打开编辑弹窗，用传入分类对象的数据初始化表单
  * @param cat 要编辑的分类对象
  */
-const openEditModal = (cat: { id: string; name: string }) => {
+const openEditModal = (cat: { id: string; name: string; cjiantime: string }) => {
   isEditing.value = true
   editingId.value = cat.id
   formName.value = cat.name
@@ -188,7 +176,9 @@ const openEditModal = (cat: { id: string; name: string }) => {
 }
 
 /** 关闭弹窗，不保存任何更改 */
-const closeModal = () => { showModal.value = false }
+const closeModal = () => {
+  showModal.value = false
+}
 
 // ─── 提交（预留接入真实 API）──────────────────────────────────────────────────
 /**
@@ -199,18 +189,23 @@ const closeModal = () => { showModal.value = false }
  */
 const handleSubmit = async () => {
   const name = formName.value.trim()
-  if (!name) { alert('请输入分类名称'); return }
+  if (!name) {
+    alert('请输入分类名称')
+    return
+  }
 
   if (isEditing.value) {
     // TODO: await updateCat(editingId.value, { catname: name })
-    const idx = allCats.value.findIndex(c => c.id === editingId.value)
-    if (idx !== -1) allCats.value[idx].name = name
+    const idx = allCats.findIndex((c) => c.id === editingId.value)
+    if (idx !== -1 && allCats[idx]) {
+      allCats[idx].name = name
+    }
     alert('分类已更新（模拟）')
   } else {
     // TODO: const res = await addCat({ catname: name })
     const newId = String(Date.now())
-    allCats.value.unshift({ id: newId, name, createTime: new Date().toISOString().slice(0, 10) })
-    alert('分类已创建（模拟）')
+    allCats.unshift({ id: newId, name: name, cjiantime: new Date().toISOString() })
+    catpage_v.setcat(name)
   }
   closeModal()
 }
@@ -221,24 +216,35 @@ const handleSubmit = async () => {
  * 弹出浏览器原生确认对话框，用户确认后才从列表中移除对应项。
  * @param cat 要删除的分类对象（仅需要 id 字段）
  */
-const handleDelete = async (cat: { id: string }) => {
+const handleDelete = (cat: { id: string; name?: string }) => {
   if (!confirm(`确定要删除分类「${cat.name}」吗？`)) return
-  // TODO: await deleteCat(cat.id)
-  allCats.value = allCats.value.filter(c => c.id !== cat.id)
+  catpage_v.deletecat(cat.id)
+  // ...
 }
 
 // ─── 分页导航 ──────────────────────────────────────────────────────────────────
 /** 搜索触发时重置到第一页（与 watch 作用相同，供模板直接绑定） */
-const onSearch   = () => { currentPage.value = 1 }
+const onSearch = () => {
+  currentPage.value = 1
+}
 /**
  * 跳转到指定页码，自动限制在合法范围 [1, totalPages] 内
  * @param p 目标页码
  */
-const goToPage   = (p: number) => { currentPage.value = Math.max(1, Math.min(totalPages.value, p)) }
+const goToPage = (p: number) => {
+  currentPage.value = Math.max(1, Math.min(totalPages.value, p))
+}
 /** 上一页：当不在第一页时页码减 1 */
-const prevPage   = () => { if (currentPage.value > 1) currentPage.value-- }
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--
+}
 /** 下一页：当不在最后一页时页码加 1 */
-const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage.value++ }
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++
+}
+onMounted(() => {
+  catpage_v.getcat()
+})
 </script>
 
 <style scoped>
@@ -252,7 +258,8 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
 }
 
 /* ── 页头 ── */
-.page-header {}
+.page-header {
+}
 .page-title {
   font-size: var(--font-size-xl3);
   font-weight: var(--font-weight-bold);
@@ -281,10 +288,13 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
   outline: none;
-  transition: border-color var(--duration-fast) var(--ease-standard),
-              box-shadow var(--duration-fast) var(--ease-standard);
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
 }
-.search-input::placeholder { color: var(--color-text-muted); }
+.search-input::placeholder {
+  color: var(--color-text-muted);
+}
 .search-input:focus {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px var(--color-accent-glow-soft);
@@ -310,11 +320,14 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
   justify-content: space-between;
   padding: var(--spacing-md) var(--spacing-lg);
   border-bottom: 1px solid var(--color-border-divider);
-  transition: background-color var(--duration-fast) var(--ease-standard),
-              box-shadow var(--duration-fast) var(--ease-standard),
-              transform var(--duration-fast) var(--ease-standard);
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
 }
-.cat-row:last-child { border-bottom: none; }
+.cat-row:last-child {
+  border-bottom: none;
+}
 .cat-row:hover {
   background: var(--color-surface-hover);
   box-shadow: inset 3px 0 0 var(--color-accent);
@@ -364,7 +377,11 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
   margin-bottom: var(--spacing-md);
   opacity: 0.5;
 }
-.empty-state__hint { font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--spacing-sm); }
+.empty-state__hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-sm);
+}
 
 /* ── 按钮 ── */
 .action-btn {
@@ -381,13 +398,17 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
   color: var(--color-accent);
   border-color: var(--color-accent);
 }
-.action-btn--edit:hover { background: var(--color-accent-soft); }
+.action-btn--edit:hover {
+  background: var(--color-accent-soft);
+}
 .action-btn--delete {
   background: transparent;
   color: var(--color-error);
   border-color: var(--color-error-border);
 }
-.action-btn--delete:hover { background: var(--color-error-soft); }
+.action-btn--delete:hover {
+  background: var(--color-error-soft);
+}
 
 /* ── 弹窗 ── */
 .modal-overlay {
@@ -403,8 +424,12 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
 }
 
 @keyframes modalFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal {
@@ -419,8 +444,14 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
 }
 
 @keyframes modalSlideIn {
-  from { opacity: 0; transform: scale(0.95) translateY(8px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 .modal__header {
   display: flex;
@@ -445,8 +476,12 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
   cursor: pointer;
   transition: background-color var(--duration-fast) var(--ease-standard);
 }
-.modal__close:hover { background: var(--color-bg-secondary); }
-.modal__body { padding: var(--spacing-lg); }
+.modal__close:hover {
+  background: var(--color-bg-secondary);
+}
+.modal__body {
+  padding: var(--spacing-lg);
+}
 .modal__footer {
   display: flex;
   justify-content: flex-end;
@@ -456,7 +491,11 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
 }
 
 /* ── 表单 ── */
-.form-group { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
 .form-label {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
@@ -470,17 +509,21 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
   font-size: var(--font-size-base);
   color: var(--color-text-primary);
   outline: none;
-  transition: border-color var(--duration-fast) var(--ease-standard),
-              box-shadow var(--duration-fast) var(--ease-standard);
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
 }
-.form-input::placeholder { color: var(--color-text-muted); }
+.form-input::placeholder {
+  color: var(--color-text-muted);
+}
 .form-input:focus {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px var(--color-accent-glow-soft);
 }
 
 /* ── 通用按钮 ── */
-.btn-primary, .btn-ghost {
+.btn-primary,
+.btn-ghost {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
@@ -497,13 +540,20 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
   border: 1px solid var(--color-accent);
   box-shadow: var(--color-shadow-sm);
 }
-.btn-primary:hover { background: var(--color-accent-hover); box-shadow: 0 2px 8px var(--color-accent-glow-soft); }
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+  box-shadow: 0 2px 8px var(--color-accent-glow-soft);
+}
 .btn-ghost {
   background: transparent;
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
 }
-.btn-ghost:hover { color: var(--color-text-primary); border-color: var(--color-border-strong); background: var(--color-surface-hover); }
+.btn-ghost:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-hover);
+}
 
 /* ── 分页 ── */
 .pagination {
@@ -513,7 +563,8 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
   gap: var(--spacing-xs);
   padding: var(--spacing-md) 0;
 }
-.pagination__btn, .pagination__number {
+.pagination__btn,
+.pagination__number {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -525,10 +576,32 @@ const nextPage   = () => { if (currentPage.value < totalPages.value) currentPage
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-standard);
 }
-.pagination__btn { background: var(--color-bg-secondary); color: var(--color-text-primary); }
-.pagination__btn:hover:not(:disabled) { background: var(--color-surface-hover); border-color: var(--color-border-strong); }
-.pagination__btn:disabled { cursor: not-allowed; opacity: 0.4; }
-.pagination__number { background: var(--color-bg-tertiary); color: var(--color-text-secondary); padding: 0 var(--spacing-xs); }
-.pagination__number:hover { background: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border-strong); }
-.pagination__number.active { background: var(--color-accent); color: var(--color-white); border-color: var(--color-accent); font-weight: var(--font-weight-medium); }
+.pagination__btn {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+.pagination__btn:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-strong);
+}
+.pagination__btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.pagination__number {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  padding: 0 var(--spacing-xs);
+}
+.pagination__number:hover {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
+}
+.pagination__number.active {
+  background: var(--color-accent);
+  color: var(--color-white);
+  border-color: var(--color-accent);
+  font-weight: var(--font-weight-medium);
+}
 </style>
