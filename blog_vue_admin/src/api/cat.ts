@@ -22,6 +22,20 @@ export const setCat = (name: string) => {
   return http.request({
     url: catapi,
     method: 'POST',
-    data: name,
+    data: {
+      name: name,
+    },
+  })
+}
+
+/**
+ * 删除cat
+ * @param id
+ * @returns
+ */
+export const deleteCat = (id: string) => {
+  return http.request({
+    url: `${catapi}/${id}`,
+    method: 'DELETE',
   })
 }

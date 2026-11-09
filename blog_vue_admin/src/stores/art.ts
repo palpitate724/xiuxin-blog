@@ -61,7 +61,7 @@ export const artpage = defineStore(
      * @param name
      * @param userid
      * @param catid
-     * @param objiectname
+     * @param objectname
      * @param sum
      * @param cont
      * @param tagids
@@ -70,12 +70,12 @@ export const artpage = defineStore(
       name: string,
       userid: string,
       catid: string,
-      objiectname: string,
+      objectname: string,
       sum: string,
       cont: string,
       tagids: string[],
     ) => {
-      const { data } = await addArt(name, userid, catid, objiectname, sum, cont, tagids)
+      const { data } = await addArt(name, userid, catid, objectname, sum, cont, tagids)
       console.log(data)
     }
 

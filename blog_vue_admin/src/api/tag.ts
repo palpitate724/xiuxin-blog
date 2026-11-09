@@ -21,6 +21,20 @@ export const setTag = (name: string) => {
   return http.request({
     url: tagapi,
     method: 'POST',
-    data: name,
+    data: {
+      name: name,
+    },
+  })
+}
+
+/**
+ * 删除标签
+ * @param id
+ * @returns
+ */
+export const deleteTag = (id: string) => {
+  return http.request({
+    url: `${tagapi}/${id}`,
+    method: 'DELETE',
   })
 }

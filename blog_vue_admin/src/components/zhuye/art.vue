@@ -294,75 +294,6 @@ import { catpage } from '../../stores/cat'
 import { tagpage } from '../../stores/tag'
 import { artminio } from '../../stores/artminio'
 
-// ============================================================================
-// 类型定义 — 文章（前端视图用）
-// ============================================================================
-/**
- * Article 接口 — 前端文章管理页面使用的文章数据结构。
- * 字段说明：
- *   id         : 文章唯一标识（字符串型主键）
- *   name       : 文章标题
- *   catid      : 分类 ID，对应 catpage_v.catlist 中的 id 字段
- *   objectname : 封面图片 URL
- *   sum        : 文章摘要（用于列表展示，最多 200 字）
- *   cont       : 文章正文内容（Markdown 原始文本）
- *   tagvolist       : 已选标签名称数组（用于列表展示）；实际提交时为标签 ID 数组
- *   status     : 'published' 已发布 | 'draft' 草稿
- *   updateTime : 最后更新时间，格式 YYYY-MM-DD
- */
-interface Article {
-  id: string
-  name: string
-  catid: string
-  objectname: string
-  sum: string
-  cont: string
-  tagvolist: string[]
-  status: 'published' | 'draft' // 已发布 | 草稿
-  updateTime: string // YYYY-MM-DD
-}
-
-// ============================================================================
-// 类型定义 — 后端返回的文章原始结构
-// ============================================================================
-/**
- * RawArticle 接口 — 从后端 getArtList / getArtDetail 接口返回的原始数据结构。
- * 注意：字段名与前端 Article 不完全一致，需通过 toArticle() 转换。
- * TODO: 与后端联调后对齐字段名（如 tagids → tags）
- */
-interface RawArticle {
-  id: string
-  name: string
-  userid: string
-  catid: string
-  objectname?: string
-  sum?: string
-  cont: string
-  tagids: Array<{ id: string }> // TODO: 后续根据真实接口调整字段名
-  status?: 0 | 1 // 后端用数字表示状态：0=published, 1=draft
-}
-
-/**
- * 将后端 RawArticle 对象转换为前端 Article 格式。
- * 转换规则：
- *   - tags: 将后端 tagids 数组中的每个对象的 id 字段提取为标签名称（TODO: 后续改为从 tagpage_v.taglist 查找名称）
- *   - status: 将数字 0/1 转为字符串 'published'/'draft'
- *   - updateTime: 当前使用生成时间，后续改用后端返回值
- * @param raw 后端返回的原始文章数据
- * @returns 前端 Article 对象
- */
-const toArticle = (raw: RawArticle): Article => ({
-  id: raw.id ?? String(Date.now()),
-  name: raw.name ?? '',
-  catid: raw.catid ?? '',
-  objectname: raw.objectname ?? '',
-  sum: raw.sum ?? '',
-  cont: raw.cont,
-  tagvolist: (raw.tagids ?? []).map((t) => t.id), // TODO: 从后端标签 ID 映射为标签名称
-  status: raw.status === 0 || raw.status === '0' ? 'published' : 'draft',
-  updateTime: formatDate(new Date()), // TODO: 使用后端返回的 updateTime
-})
-
 /**
  * 从分类列表构建分类 ID → 名称 的映射表。
  * 当 catpage_v.catlist 为空时回退到默认的 CATEGORY_FALLBACK。
@@ -519,7 +450,7 @@ const editingArticle = ref()
  * 将 artpage_v.artlist（后端原始数据）转换为前端 Article 数组。
  * 搜索和分页均基于此计算属性，数据始终来源于 store，不依赖本地数组。
  */
-const articlesList = computed<Article[]>(() => artpage_v.artlist.map(toArticle))
+const articlesList = artpage_v.artlist
 /** 用户输入的搜索关键词，用于过滤文章列表 */
 const searchKeyword = ref('')
 /** 当前页码，从 1 开始计数 */
@@ -531,12 +462,11 @@ const currentPage = ref(1)
  * 关键词为空时直接返回全量数据。
  */
 const filteredArticles = computed(() => {
-  if (!searchKeyword.value.trim()) return articlesList.value
+  if (!searchKeyword.value.trim()) return articlesList
   const kw = searchKeyword.value.toLowerCase()
-  return articlesList.value.filter(
+  return articlesList.filter(
     (a) =>
       a.name.toLowerCase().includes(kw) ||
-      a.tags.join(',').toLowerCase().includes(kw) ||
       (categoryMap.value[a.catid] ?? '').toLowerCase().includes(kw),
   )
 })
@@ -669,6 +599,7 @@ const publishArticle = async () => {
       status: editingArticle.value ? 0 : 0, // TODO: 草稿状态 1
       cjiantime: formatDate(new Date()),
     }
+    console.log('[发布] 提交数据:', aart)
     artpage_v.addart(
       aart.name,
       aart.userid,
@@ -726,7 +657,7 @@ const switchToEditor = async (id: string | null) => {
       objectname: editingArticle.value.objectname ?? '',
       sum: editingArticle.value.sum ?? '',
       cont: editingArticle.value.cont,
-      tagids: [...editingArticle.value.tagids],
+      tagids: [...editingArticle.value.tagvolist],
     }
     // 同步已选标签 ID（用于多选框显示选中状态）
     if (!Array.isArray(editingArticle.value.tags)) {
