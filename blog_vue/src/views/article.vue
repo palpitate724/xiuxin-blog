@@ -74,7 +74,7 @@ import { renderMarkdown, parseArticleIndexFromHtml, flattenIndices } from '../ut
 const route = useRoute()
 const arts = art()
 const articleId = route.params.id as string
-
+// 版本覆盖
 // 导航栏透明度控制
 const isNavTransparent = ref(true)
 const coverRef = ref<HTMLElement | null>(null)
