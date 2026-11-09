@@ -115,7 +115,14 @@
   letter-spacing: 4px;
   text-shadow: 0 0 30px var(--color-accent-glow-dimmer);
   font-family: 'Segoe UI', system-ui, sans-serif;
+  /* 渐变文字 */
+  background: linear-gradient(135deg, #ffffff 0%, #93c5fd 60%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
+
+/* 浅色主题Logo标题 */
 
 .logo-subtitle {
   font-size: 1.2rem;

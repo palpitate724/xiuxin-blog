@@ -17,6 +17,9 @@ export const artlistpage = defineStore('artlist',
             fenmianurl: string,
             sum: string,
             tagvolist: Tag[]
+            cjiantime: string,
+            uptime: string,
+            status: number
         }
         const artlist = ref<Art[]>([])
         const current = ref(1)
