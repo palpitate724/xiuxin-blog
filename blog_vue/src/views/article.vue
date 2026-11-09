@@ -3,15 +3,9 @@
     <!-- 顶部导航栏 -->
     <daohang :is-transparent="isNavTransparent" />
     
-    <!-- 文章封面区域 — 有封面图时显示图片，无封面图时显示渐变背景 -->
-    <section
-      class="article-cover"
-      :class="{ 'has-cover': articleCover }"
-      :style="articleCover ? coverStyle : { background: 'linear-gradient(135deg, #e8eef6 0%, #d4dce8 100%)' }"
-      ref="coverRef"
-    >
-      <div class="cover-overlay">
-      </div>
+    <!-- 文章封面区域 -->
+    <section class="article-cover" :style="coverStyle" ref="coverRef">
+      <div class="cover-overlay"></div>
       <div class="cover-container">
         <h1 class="article-title">{{ articleTitle }}</h1>
         <p class="article-meta">{{ articleMeta }}</p>
@@ -27,9 +21,25 @@
     <div v-if="error" class="error-state">
       <p>{{ error }}</p>
     </div>
-    <!-- 主内容区域 -->
+    <!-- 主内容区域 - 三列布局 -->
     <section class="main-content">
-      <!-- 文章摘要 + 正文内容 -->
+      <!-- 左列：章节索引 -->
+      <aside class="chapter-index">
+        <div class="index-container">
+          <h3 class="index-title">章节索引</h3>
+          <ul class="index-list">
+            <li v-for="(chapter, index) in chapters" :key="index" class="index-item" :class="{ active: activeChapter === index, subtitle: chapter.level > 0 }">
+              <a :href="`#${chapter.id}`" @click.prevent="scrollToChapter(index)">
+                <span v-if="chapter.level > 0" class="chapter-number subtitle-num">{{ index + 1 }}</span>
+                <span v-else class="chapter-number">{{ index + 1 }}</span>
+                <span class="chapter-name">{{ chapter.text }}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </aside>
+      
+      <!-- 中列：摘要 + 正文内容 -->
       <main class="article-content">
         <!-- 摘要卡片 -->
         <div class="abstract-card">
@@ -43,17 +53,24 @@
         </div>
       </main>
       
+      <!-- 右列：空侧边栏 -->
+      <aside class="sidebar">
+        <div class="sidebar-container">
+          <!-- 预留空间，未来可添加相关文章、标签等 -->
+        </div>
+      </aside>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 // @ts-ignore
 import daohang from '../components/zhuye/daohang.vue'
 import { art } from '../stores/art/art'
-import { renderMarkdown } from '../utils/markdown'
+import { renderMarkdown, parseArticleIndexFromHtml, flattenIndices } from '../utils/markdown'
+
 const route = useRoute()
 const arts = art()
 const articleId = route.params.id as string
@@ -82,7 +99,7 @@ const articleCover = computed(() => arts.fenmianurl || '')
 const mdtext = computed(() => arts.cont || '# 暂无内容')
 const htmltext = ref('')
 
-// 封面样式 — 响应式主题和封面URL
+// 封面样式
 const coverStyle = computed(() => {
   if (articleCover.value) {
     return {
@@ -96,15 +113,27 @@ const coverStyle = computed(() => {
 })
 
 // 章节索引 (主标题-副标题层级结构)
+const chapters = ref<Array<{ text: string; id: string; level: number }>>([])
+const activeChapter = ref(0)
 
-// 使用 CSS position: sticky，无需 JS 控制
-// 仅用于移动端检测和初始化
+const scrollToChapter = (index: number) => {
+  activeChapter.value = index
+  const element = document.getElementById(chapters.value[index]?.id)
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
 const getselectart = async () => {
   try {
     isLoading.value = true
     error.value = ''
     await arts.getart(articleId)
     htmltext.value = renderMarkdown(mdtext.value)
+    // 从渲染后的 HTML 解析章节索引（树形结构）
+    const indexTree = parseArticleIndexFromHtml(htmltext.value)
+    // 展平为带层级信息的列表：level 0 为主标题，level >0 为副标题
+    chapters.value = flattenIndices(indexTree)
   } catch (err) {
     error.value = '加载文章失败，请稍后重试'
     console.error('加载文章失败:', err)
@@ -115,13 +144,11 @@ const getselectart = async () => {
 
 onMounted(async () => {
   await getselectart()
-  window.addEventListener('scroll', handleNavScroll, { passive: true })
-  
+  window.addEventListener('scroll', handleNavScroll)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleNavScroll)
-  window.removeEventListener('resize', () => {})
 })
 </script>
 
@@ -130,46 +157,30 @@ onUnmounted(() => {
   min-height: 100vh;
   background: var(--color-bg-deepest);
   color: var(--color-text-primary);
-  transition: background var(--duration-theme) ease, color var(--duration-theme) ease;
 }
 
 /* 文章封面区域 */
 .article-cover {
   position: relative;
   width: 100%;
-  height: 75vh;
+  height: 80vh;
   background: linear-gradient(135deg, var(--color-cover-gradient-start) 0%, var(--color-cover-gradient-end) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid var(--color-border-strong);
+  border-bottom: 1px solid var(--color-border-dim);
   overflow: hidden;
-  transition: background var(--duration-theme) ease;
 }
 
-/* 浅色主题封面 — 有封面图时显示图片，无封面图时显示淡蓝灰渐变 */
 .cover-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(10, 22, 40, 0.75) 0%,
-    rgba(10, 22, 40, 0.5) 40%,
-    rgba(10, 22, 40, 0.5) 60%,
-    rgba(10, 22, 40, 0.75) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(10, 22, 40, 0.7) 0%,
+      rgba(10, 22, 40, 0.4) 50%,
+      rgba(10, 22, 40, 0.7) 100%
+    );
   z-index: 1;
-}
-
-.cover-overlay::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40%;
-  background: linear-gradient(to top, var(--color-bg-deepest) 0%, transparent 100%);
-  pointer-events: none;
 }
 
 .cover-container {
@@ -185,37 +196,14 @@ onUnmounted(() => {
   font-weight: 700;
   color: var(--color-white);
   margin-bottom: 1rem;
-  text-shadow:
-    0 0 40px rgba(59, 130, 246, 0.4),
-    0 4px 20px var(--color-shadow-text);
+  text-shadow: 0 4px 20px var(--color-shadow-text);
   letter-spacing: 2px;
-  animation: article-title-glow 3s ease-in-out infinite alternate;
-  /* 渐变文字质感 */
-  background: linear-gradient(135deg, #ffffff 0%, #bae6fd 60%, #7dd3fc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-@keyframes article-title-glow {
-  from {
-    text-shadow:
-      0 0 40px rgba(59, 130, 246, 0.3),
-      0 4px 20px var(--color-shadow-text);
-  }
-  to {
-    text-shadow:
-      0 0 60px rgba(59, 130, 246, 0.6),
-      0 0 100px rgba(6, 182, 212, 0.2),
-      0 4px 20px var(--color-shadow-text);
-  }
 }
 
 .article-meta {
   font-size: 1.1rem;
   color: var(--color-text-secondary);
   text-shadow: 0 2px 10px var(--color-shadow-text);
-  letter-spacing: 1px;
 }
 
 /* 加载状态 */
@@ -223,26 +211,9 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 60px;
-  color: var(--color-text-muted);
+  padding: 40px;
+  color: var(--color-text-secondary);
   font-size: 1.1rem;
-  position: relative;
-}
-
-.loading-state::after {
-  content: '';
-  display: block;
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--color-border-dim);
-  border-top-color: var(--color-accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-left: 12px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 
 /* 错误状态 */
@@ -250,251 +221,159 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 60px;
+  padding: 40px;
   color: var(--color-error-soft);
   font-size: 1.1rem;
-  background: var(--color-error-bg);
-  border: 1px solid var(--color-error-border);
-  border-radius: 12px;
-  margin: 40px auto;
-  max-width: 600px;
 }
 
-/* 主内容区域 */
+/* 主内容区域 - 三列布局 */
 .main-content {
-  max-width: 900px;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 900px) 250px;
+  gap: 32px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 56px 24px;
+  padding: 64px 24px;
+  align-items: start;
 }
 
-/* 章节索引 - 使用 sticky 固定 */
+/* 左列：章节索引 - 独立滚动 */
+.chapter-index {
+  position: sticky;
+  top: 80px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent-glow) var(--color-border-dim);
+}
 
-
-/* 移动端模式 */
-
-
-/* 液态玻璃章节索引容器 */
-
-
-/* 玻璃表面高光 */
-
-
-/* 顶部边缘光晕 */
-
-
-/* 渐变顶条装饰 */
-
+.index-container {
+  background: var(--color-surface);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 24px;
+}
 
 .index-title {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--color-white);
   margin-bottom: 20px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--color-border-dim);
-  letter-spacing: 0.5px;
-  /* 标题前装饰线 */
-  position: relative;
-  padding-left: 14px;
 }
 
-.index-title::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 25%;
-  bottom: 25%;
-  width: 3px;
-  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
-  border-radius: 2px;
-  box-shadow: 0 0 8px var(--color-accent-glow);
+.index-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
+.index-item {
+  margin-bottom: 8px;
+}
 
+.index-item a {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
 
+.index-item a:hover {
+  background: var(--color-accent-glow);
+  color: var(--color-white);
+}
 
+.index-item.active a {
+  background: var(--color-accent-glow-soft);
+  color: var(--color-accent-light);
+}
 
+.index-item.active .chapter-number {
+  color: var(--color-accent);
+}
 
+.chapter-number {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin-right: 12px;
+  font-weight: 600;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.chapter-name {
+  font-size: 0.95rem;
+}
 
 /* 副标题（子级章节） */
+.index-item.subtitle {
+  margin-left: 16px;
+  margin-bottom: 6px;
+}
 
+.index-item.subtitle .chapter-number {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  margin-right: 8px;
+}
 
+.index-item.subtitle .chapter-name {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
 
-
-
-
-
+.index-item.subtitle.active .chapter-name,
+.index-item.subtitle.active .chapter-number {
+  color: var(--color-accent-secondary);
+}
 
 /* 中列：正文内容 - 完全展示 */
 .article-content {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 32px;
   max-width: 900px;
 }
 
-/* 液态玻璃摘要卡片 */
+/* 摘要卡片 */
 .abstract-card {
-  /* 液态玻璃基础效果 */
-  background: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.07) 0%,
-    rgba(255, 255, 255, 0.03) 40%,
-    rgba(255, 255, 255, 0.01) 100%
-  );
-  backdrop-filter: blur(32px) saturate(1.9) brightness(1.06);
-  -webkit-backdrop-filter: blur(32px) saturate(1.9) brightness(1.06);
-  border: 1px solid transparent;
-  background-clip: padding-box;
-  border-radius: 20px;
-  padding: 28px 32px;
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.2),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  background: var(--color-surface);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 20px var(--color-shadow-card);
   width: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-/* 玻璃表面高光 */
-.abstract-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.02) 60%,
-    transparent 100%
-  );
-  border-radius: 20px 20px 0 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* 渐变顶条装饰 */
-.abstract-card .top-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-accent-secondary), var(--color-accent-tertiary), var(--color-accent));
-  opacity: 0.7;
-  border-radius: 20px 20px 0 0;
 }
 
 .abstract-title {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: var(--color-white);
-  margin-bottom: 14px;
-  padding-bottom: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--color-border-dim);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.abstract-title::before {
-  content: '';
-  display: inline-block;
-  width: 4px;
-  height: 16px;
-  background: linear-gradient(180deg, var(--color-accent), var(--color-accent-secondary));
-  border-radius: 2px;
 }
 
 .abstract-text {
-  font-size: 1.02rem;
+  font-size: 1.05rem;
   line-height: 1.8;
   color: var(--color-text-primary-soft);
 }
 
-/* 液态玻璃正文容器 */
+/* 正文内容 - Markdown 渲染样式 */
 .content-container {
-  /* 液态玻璃基础效果 */
-  background: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    rgba(255, 255, 255, 0.025) 40%,
-    rgba(255, 255, 255, 0.008) 100%
-  );
-  backdrop-filter: blur(32px) saturate(1.9) brightness(1.06);
-  -webkit-backdrop-filter: blur(32px) saturate(1.9) brightness(1.06);
-  border: 1px solid transparent;
-  background-clip: padding-box;
-  border-radius: 20px;
+  background: var(--color-surface);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
   padding: 40px;
   width: 100%;
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.2),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.06),
-    0 0 60px var(--color-accent-glow-xlight);
-  position: relative;
-  overflow: hidden;
-}
-
-/* 玻璃表面高光 */
-.content-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.07) 0%,
-    rgba(255, 255, 255, 0.015) 60%,
-    transparent 100%
-  );
-  border-radius: 20px 20px 0 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* 顶部边缘光晕 */
-.content-container::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 20px;
-  right: 20px;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0.2) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 2;
 }
 
 /* 深度选择器：样式作用于 v-html 渲染的 Markdown 内容 */
@@ -510,71 +389,47 @@ onUnmounted(() => {
   margin-top: 2em;
   margin-bottom: 1em;
   scroll-margin-top: 80px;
-  /* 平滑滚动锚点 */
-  scroll-padding-top: 80px;
 }
 
 :deep(h1) {
-  font-size: 2.2rem;
+  font-size: 2.25rem;
   color: var(--color-white);
   border-bottom: 2px solid var(--color-border-dim);
   padding-bottom: 0.5em;
-  position: relative;
-}
-
-:deep(h1)::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-accent), transparent);
 }
 
 :deep(h2) {
-  font-size: 1.75rem;
-  color: var(--color-accent-light);
+  font-size: 1.8rem;
+  color: var(--color-accent);
   border-bottom: 1px solid var(--color-border-dim);
   padding-bottom: 0.4em;
-  position: relative;
-}
-
-:deep(h2)::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 40px;
-  height: 1px;
-  background: linear-gradient(90deg, var(--color-accent-secondary), transparent);
 }
 
 :deep(h3) {
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   color: var(--color-white);
   margin-top: 1.5em;
 }
 
 :deep(h4) {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   color: var(--color-white);
 }
 
 :deep(h5) {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   color: var(--color-accent-light);
 }
 
 :deep(h6) {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--color-text-secondary);
 }
 
 /* 段落 */
 :deep(p) {
   font-size: 1.05rem;
-  line-height: 1.9;
+  line-height: 1.8;
   color: var(--color-text-primary-soft);
   margin-bottom: 1.2em;
 }
@@ -584,13 +439,12 @@ onUnmounted(() => {
   color: var(--color-accent);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 :deep(a:hover) {
-  border-color: var(--color-accent);
-  color: var(--color-accent-light);
-  text-shadow: 0 0 8px var(--color-accent-glow);
+  border-color: var(--color-accent-glow);
+  color: var(--color-white);
 }
 
 /* 行内代码 */
@@ -599,58 +453,45 @@ onUnmounted(() => {
   font-size: 0.85em;
   padding: 0.15em 0.4em;
   border-radius: 4px;
-  background: rgba(6, 182, 212, 0.1);
+  background: var(--color-surface-dark);
   color: var(--color-accent-secondary);
   line-height: 1.5;
-  border: 1px solid rgba(6, 182, 212, 0.15);
 }
 
 /* 避免行内代码被 pre 规则覆盖 */
 :deep(p code),
 :deep(li code) {
-  background: rgba(6, 182, 212, 0.1);
+  background: var(--color-surface-dark);
 }
 
 /* 代码块 */
 :deep(pre) {
   position: relative;
-  background: rgba(13, 17, 23, 0.8);
-  border-radius: 12px;
-  padding: 24px;
+  background: #0d1117;
+  border-radius: 8px;
+  padding: 20px;
   margin: 1.5em 0;
   overflow-x: auto;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   line-height: 1.6;
   border: 1px solid var(--color-border-dim);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-:deep(pre)::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-accent-glow-soft), transparent);
 }
 
 :deep(pre code) {
   background: transparent;
   padding: 0;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   color: #e6edf3;
   border-radius: 0;
-  border: none;
 }
 
 /* 引用块 */
 :deep(blockquote) {
   margin: 1.5em 0;
-  padding: 0.8em 1.6em;
-  background: linear-gradient(90deg, var(--color-accent-glow-soft) 0%, transparent 100%);
+  padding: 0.7em 1.6em;
+  background: var(--color-surface-dark);
   border-radius: 8px;
-  border-left: 3px solid var(--color-accent);
+  border: 1px solid var(--color-border-dim);
   color: var(--color-text-primary-soft);
   font-style: italic;
 }
@@ -664,14 +505,13 @@ onUnmounted(() => {
 :deep(ul),
 :deep(ol) {
   margin: 1em 0;
-  padding-left: 2.2em;
+  padding-left: 2.5em;
   color: var(--color-text-primary-soft);
   line-height: 1.8;
 }
 
 :deep(li) {
   margin-bottom: 0.5em;
-  position: relative;
 }
 
 :deep(li > p) {
@@ -686,34 +526,32 @@ onUnmounted(() => {
   margin: 1.5em 0;
   font-size: 0.95rem;
   color: var(--color-text-primary-soft);
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
-  border: 1px solid var(--color-border-dim);
 }
 
 :deep(th),
 :deep(td) {
-  padding: 0.8em 1em;
+  padding: 0.7em 1em;
   text-align: left;
   border-bottom: 1px solid var(--color-border-dim);
 }
 
 :deep(th) {
-  background: rgba(30, 41, 59, 0.6);
+  background: var(--color-surface);
   color: var(--color-white);
   font-weight: 600;
-  letter-spacing: 0.3px;
 }
 
 :deep(tr:hover td) {
-  background: var(--color-accent-glow-xlight);
+  background: var(--color-accent-glow-soft);
 }
 
 /* 横分割线 */
 :deep(hr) {
   border: none;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-border-dim), transparent);
+  background: var(--color-border-dim);
   margin: 2em 0;
 }
 
@@ -723,95 +561,88 @@ onUnmounted(() => {
   height: auto;
   display: block;
   margin: 1.5em auto;
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1px solid var(--color-border-dim);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-:deep(img:hover) {
-  transform: scale(1.01);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 /* 图片标题 */
 :deep(figcaption) {
   text-align: center;
-  font-size: 0.88rem;
-  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
   margin-top: 0.5em;
-  font-style: italic;
 }
 
 /* 右列：空侧边栏 */
+.sidebar {
+  position: sticky;
+  top: 80px;
+  height: fit-content;
+}
 
-/* 液态玻璃侧边栏 */
-
-/* 玻璃表面高光 */
-
-/* 顶部边缘光晕 */
-
-/* 悬浮状态增强 */
-.abstract-card:hover,
-.content-container:hover,
+.sidebar-container {
+  background: var(--color-surface-light);
+  border: 1px dashed var(--color-border-dim);
+  border-radius: 12px;
+  padding: 24px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-dim);
+  font-size: 0.9rem;
+}
 
 /* 移动端适配 */
+@media (max-width: 1024px) {
+  .main-content {
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+  }
+  
+  .sidebar {
+    display: none;
+  }
+}
 
-
-  .abstract-card {
-    padding: 20px 24px;
+@media (max-width: 768px) {
+  .article-title {
+    font-size: 2rem;
+  }
+  
+  .article-meta {
+    font-size: 1rem;
+  }
+  
+  .article-cover {
+    height: 50vh;
+  }
+  
+  .main-content {
+    grid-template-columns: 1fr;
+    padding: 32px 16px;
+  }
+  
+  .chapter-index {
+    position: static;
+    order: 2;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+  
+  .article-content {
+    order: 1;
+    max-height: none;
+    overflow: visible;
+  }
+  
+  .content-container {
+    padding: 24px;
   }
 
   :deep(h2) {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
   }
-
-
-/* ===== 亮色主题适配 — 冷调科技质感 ===== */
-
-/* 浅色主题封面 — 有封面图时显示图片，无封面图时显示淡蓝灰渐变 */
-
-/* 浅色主题封面底部渐变 — 仅用于过渡，不遮挡封面图 */
-
-/* 浅色主题封面 — 有封面图时显示图片，无封面图时显示淡蓝灰渐变 */
-
-
-/* 浅色主题封面区标题 — 深色文字 + 白色外发光确保可读 */
-
-
-/* 文章详情页卡片 — 玻璃质感 */
-
-/* 浅色主题卡片高光 — 极淡，不产生过曝效果 */
-
-
-/* 浅色主题隐藏所有渐变装饰条 */
-
-/* 浅色主题摘要标题前装饰条 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 浅色主题章节索引样式 */
-
-
-
-
-/* 浅色主题摘要卡片样式 */
-
-
-
-/* 浅色主题加载和错误状态 */
-
-
-/* 浅色主题侧边栏 */
+}
 </style>

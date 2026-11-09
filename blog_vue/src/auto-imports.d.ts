@@ -10,7 +10,6 @@ export {}
 declare global {
   const EffectScope: typeof import('vue').EffectScope
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
-  const checkContrast: typeof import('./utils/contrast').checkContrast
   const computed: typeof import('vue').computed
   const createApp: typeof import('vue').createApp
   const createPinia: typeof import('pinia').createPinia
@@ -20,15 +19,12 @@ declare global {
   const defineStore: typeof import('pinia').defineStore
   const effectScope: typeof import('vue').effectScope
   const flattenIndices: typeof import('./utils/markdown').flattenIndices
-  const generateContrastReport: typeof import('./utils/contrast').generateContrastReport
   const getActivePinia: typeof import('pinia').getActivePinia
-  const getContrastRatio: typeof import('./utils/contrast').getContrastRatio
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
   const getCurrentWatcher: typeof import('vue').getCurrentWatcher
   const gethtml: typeof import('./utils/md').gethtml
   const h: typeof import('vue').h
-  const hexToRgb: typeof import('./utils/contrast').hexToRgb
   const inject: typeof import('vue').inject
   const isProxy: typeof import('vue').isProxy
   const isReactive: typeof import('vue').isReactive
@@ -88,10 +84,6 @@ declare global {
   const useRouter: typeof import('vue-router').useRouter
   const useSlots: typeof import('vue').useSlots
   const useTemplateRef: typeof import('vue').useTemplateRef
-  const useTheme: typeof import('./composables/useTheme').useTheme
-  const useThemeStore: typeof import('./stores/theme').useThemeStore
-  const validateCurrentTheme: typeof import('./utils/contrast').validateCurrentTheme
-  const validateThemeContrast: typeof import('./utils/contrast').validateThemeContrast
   const watch: typeof import('vue').watch
   const watchEffect: typeof import('vue').watchEffect
   const watchPostEffect: typeof import('vue').watchPostEffect
@@ -102,12 +94,6 @@ declare global {
   // @ts-ignore
   export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, ShallowRef, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
-  // @ts-ignore
-  export type { ThemeState } from './composables/useTheme'
-  import('./composables/useTheme')
-  // @ts-ignore
-  export type { ColorRGB, ContrastResult, ThemeColors, ValidationResult } from './utils/contrast'
-  import('./utils/contrast')
   // @ts-ignore
   export type { ArticleIndex } from './utils/markdown'
   import('./utils/markdown')
