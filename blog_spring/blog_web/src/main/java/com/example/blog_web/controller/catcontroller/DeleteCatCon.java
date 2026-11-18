@@ -3,6 +3,7 @@ package com.example.blog_web.controller.catcontroller;
 
 import com.example.blog_common.result.Result;
 import com.example.blog_domain.service.catservice.DeleteCatService;
+import com.example.blog_web.config.IntercptoAnnotation;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ public class DeleteCatCon {
      * @param id
      * @return
      */
+    @IntercptoAnnotation
     @DeleteMapping("/{id}")
     public Result deleteCat(@PathVariable Long id) {
         return deleteCatService.deleteCat(id);

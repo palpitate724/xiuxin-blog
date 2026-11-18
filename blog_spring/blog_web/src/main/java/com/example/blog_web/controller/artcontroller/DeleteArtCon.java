@@ -2,6 +2,7 @@ package com.example.blog_web.controller.artcontroller;
 
 import com.example.blog_common.result.Result;
 import com.example.blog_domain.service.artservice.DeleteArtService;
+import com.example.blog_web.config.IntercptoAnnotation;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ public class DeleteArtCon {
      * @param id
      * @return
      */
+    @IntercptoAnnotation
     @DeleteMapping("/{id}")
     public Result deleteArt(@PathVariable Long id) {
         return deleteArtService.deleteArt(id);

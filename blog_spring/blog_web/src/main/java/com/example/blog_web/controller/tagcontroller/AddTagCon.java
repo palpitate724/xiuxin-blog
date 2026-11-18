@@ -4,6 +4,7 @@ package com.example.blog_web.controller.tagcontroller;
 import com.example.blog_common.result.Result;
 import com.example.blog_domain.dto.tag.AddTagDto;
 import com.example.blog_domain.service.tagservice.AddTagService;
+import com.example.blog_web.config.IntercptoAnnotation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class AddTagCon {
      * @param atd
      * @return
      */
+    @IntercptoAnnotation
     @PostMapping
     public Result addTag(@RequestBody AddTagDto atd) {
         return addTagService.addTag(atd);

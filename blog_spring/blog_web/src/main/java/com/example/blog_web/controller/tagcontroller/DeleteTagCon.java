@@ -3,6 +3,7 @@ package com.example.blog_web.controller.tagcontroller;
 
 import com.example.blog_common.result.Result;
 import com.example.blog_domain.service.tagservice.DeleteTagService;
+import com.example.blog_web.config.IntercptoAnnotation;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ public class DeleteTagCon {
       * @param id 标签id
      * @return Result
      */
+    @IntercptoAnnotation
     @DeleteMapping("/{id}")
     public Result deleteTag(@PathVariable Long id){
         return deleteTagService.deleteTag(id);
