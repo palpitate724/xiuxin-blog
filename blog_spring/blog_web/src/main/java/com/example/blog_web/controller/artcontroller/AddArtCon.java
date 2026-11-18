@@ -4,6 +4,7 @@ package com.example.blog_web.controller.artcontroller;
 import com.example.blog_common.result.Result;
 import com.example.blog_domain.dto.art.AddArtDto;
 import com.example.blog_domain.service.artservice.AddArtService;
+import com.example.blog_web.config.IntercptoAnnotation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class AddArtCon {
      * @param addArtDto
      * @return
      */
+    @IntercptoAnnotation
     @PostMapping
     public Result addArt(@RequestBody AddArtDto addArtDto){
         return addArtService.addArt(addArtDto);

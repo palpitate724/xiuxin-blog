@@ -3,6 +3,7 @@ package com.example.blog_web.controller.artcontroller;
 
 import com.example.blog_common.result.Result;
 import com.example.blog_domain.service.artservice.SelectArtPageService;
+import com.example.blog_web.config.IntercptoAnnotation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
