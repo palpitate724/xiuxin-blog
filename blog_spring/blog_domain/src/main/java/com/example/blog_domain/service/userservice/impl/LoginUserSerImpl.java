@@ -7,9 +7,12 @@ import com.example.blog_common.utils.bcrypt.BcryptUtils;
 import com.example.blog_common.utils.jwt.JwtUtils;
 import com.example.blog_common.utils.minio.MinioUtils;
 import com.example.blog_domain.dto.user.LoginUserDto;
+import com.example.blog_domain.entity.RoleEntity;
 import com.example.blog_domain.entity.UserEntity;
+import com.example.blog_domain.entity.UserRoleEntity;
 import com.example.blog_domain.mapper.UserMapper;
 import com.example.blog_common.result.Result;
+import com.example.blog_domain.mapper.UserRoleMapper;
 import com.example.blog_domain.service.userservice.LoginUserService;
 import com.example.blog_domain.vo.user.LoginUserVo;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +34,14 @@ public class LoginUserSerImpl implements LoginUserService {
      */
     private final UserMapper userMapper;
     private final MinioUtils minioUtils;
+    private final UserRoleMapper userRoleMapper;
     private final JwtUtils jwtUtils;
-    public LoginUserSerImpl(UserMapper userMapper, MinioUtils minioUtils, JwtUtils jwtUtils) {
+    public LoginUserSerImpl(UserMapper userMapper, MinioUtils minioUtils, UserRoleMapper userRoleMapper, JwtUtils jwtUtils) {
         this.userMapper = userMapper;
+        this.userRoleMapper = userRoleMapper;
         this.jwtUtils = jwtUtils;
         this.minioUtils = minioUtils;
     }
-    private static final Result result = Result.getInstance();
 
     /**
      * 用户登录
@@ -68,10 +72,20 @@ public class LoginUserSerImpl implements LoginUserService {
         }
         // 登录成功
         else {
+
+            // 查询用户角色
+            UserRoleEntity ure = userRoleMapper.selectOne(
+                    new LambdaQueryWrapper<UserRoleEntity>()
+                            .eq(UserRoleEntity::getUserid, ue.getId())
+            );
+
+            // 准备登录用户信息
             LoginUserVo luv = new LoginUserVo();
             BeanUtils.copyProperties(ue,luv);
+            luv.setId(ue.getId().toString());
             luv.setTouxiangurl(minioUtils.getObjectUrl(ue.getObjectname()));
             luv.setToken(jwtUtils.getToken(ue.getId(),ue.getName()));
+            luv.setRoleid(ure.getRoleid().intValue());
 
             result.setCode(ResultCode.SUCCESS.getCode());
             result.setMessage(ResultCode.SUCCESS.getMessage());
