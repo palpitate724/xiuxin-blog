@@ -56,6 +56,18 @@ export const getArtList = (paget: number, size: number) => {
 }
 
 /**
+ * 根据删除文章
+ * @param id
+ * @returns
+ */
+export const deleteArt = (id: string) => {
+  return http.request({
+    url: `${apiart}/${id}`,
+    method: 'DELETE',
+  })
+}
+
+/**
  * 根据id获取文章详情
  * @param id
  * @returns

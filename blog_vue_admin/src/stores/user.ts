@@ -1,37 +1,52 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { userlogin, userupfenmian } from '@/api/user'
+import { userlogin, userUpfenmian } from '@/api/user'
 
 export const userpage = defineStore(
   'userpage',
   () => {
-    const id = ref<string>('')
-    const name = ref<string>('')
-    const fenmianurl = ref<string>('')
-    const token = ref<string>('')
+    interface UserState {
+      id: string
+      name: string
+      touxiangurl?: string
+      token: string
+      roleid: number
+    }
+    const user = ref<UserState>({
+      id: '',
+      name: '',
+      token: '',
+      roleid: -1,
+    })
 
     /**
      * 设置登录状态（由 login.vue 在登录成功后调用）
      * @param id 用户ID
      * @param name 用户名
-     * @param fenmianurl 头像URL
+     * @param touxiangurl 头像URL
      * @param token JWT令牌
      */
-    const setLoginState = (userId: string, userName: string, url: string, jwtToken: string) => {
-      id.value = userId
-      name.value = userName
-      fenmianurl.value = url
-      token.value = jwtToken
+    const login = async (name: string, password: string) => {
+      const { data } = await userlogin(name, password)
+      user.value.id = data.data.id
+      user.value.name = data.data.name
+      user.value.touxiangurl = data.data.touxiangurl
+      user.value.token = data.data.token
+      user.value.roleid = data.data.roleid
     }
 
     /**
      * 退出登录
      */
     const logout = () => {
-      id.value = ''
-      name.value = ''
-      fenmianurl.value = ''
-      token.value = ''
+      user.value.id = ''
+      user.value.name = ''
+      user.value.touxiangurl = ''
+      user.value.token = ''
+    }
+
+    const userupfenmian = async (file: File) => {
+      await userUpfenmian(file)
     }
 
     /**
@@ -43,13 +58,11 @@ export const userpage = defineStore(
     }
 
     return {
-      id,
-      name,
-      fenmianurl,
-      token,
-      setLoginState,
+      user,
+      login,
       logout,
       getUserRole,
+      userupfenmian,
     }
   },
   {

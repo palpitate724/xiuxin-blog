@@ -35,11 +35,21 @@
             <span class="article-row__title">{{ article.name }}</span>
           </div>
           <div class="article-row__meta">
-            <span class="article-row__category">{{ article.catid }}</span>
+            <span class="article-row__category">{{
+              categoryMap[article.catid] ?? article.catid
+            }}</span>
             <span class="article-row__tags" v-for="tag in article.tagvolist" :key="tag.id">
               {{ tag.name }}
             </span>
             <span class="article-row__time">{{ formatRelativeTime(article.uptime) }}</span>
+            <button
+              class="btn-delete"
+              title="删除文章"
+              @click.stop="deleteArticle(article.id, article.name)"
+            >
+              <Trash2 :size="14" />
+              <span>{{ '删除' }}</span>
+            </button>
           </div>
         </div>
 
@@ -287,6 +297,7 @@ import {
   MoreHorizontal,
   Inbox,
   X,
+  Trash2,
 } from '@lucide/vue'
 
 import { artpage } from '../../stores/art'
@@ -923,6 +934,18 @@ const handleTextareaKeydown = (e: KeyboardEvent) => {
   }
 }
 
+/** 删除文章（确认后从列表移除并重新拉取） */
+const deleteArticle = async (id: string, name: string) => {
+  if (!confirm(`确定要删除文章「${name}」吗？此操作不可撤销。`)) return
+  try {
+    await artpage_v.deleteart(id)
+    await artpage_v.getartlist(1, PAGE_SIZE)
+    alert('删除成功')
+  } catch (e: any) {
+    alert('删除失败：' + (e?.message || '未知错误'))
+  }
+}
+
 // ============================================================================
 // Markdown 编辑器快捷键 (Ctrl+B / Ctrl+I / Ctrl+K)
 // ============================================================================
@@ -1182,6 +1205,31 @@ onUnmounted(() => {
   color: var(--color-text-muted);
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
+}
+
+/* 删除按钮 */
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+  flex-shrink: 0;
+}
+
+.btn-delete:hover {
+  background: var(--color-error-soft, #fef2f2);
+  border-color: var(--color-error, #ef4444);
+  color: var(--color-error, #ef4444);
 }
 
 /* 空状态 */

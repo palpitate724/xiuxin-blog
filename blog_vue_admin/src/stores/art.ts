@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { addArt, getArtList, getArtDetail } from '../api/art'
+import { addArt, getArtList, getArtDetail, deleteArt } from '../api/art'
 
 export const artpage = defineStore(
   'artpage',
@@ -105,6 +105,11 @@ export const artpage = defineStore(
       console.log('art-getartdetail-artdetail', artdetail.value)
     }
 
+    const deleteart = async (id: string) => {
+      const { data } = await deleteArt(id)
+      console.log('art-deleteart-data', data)
+    }
+
     return {
       artlist,
       current,
@@ -115,6 +120,7 @@ export const artpage = defineStore(
       addart,
       getartlist,
       getartdetail,
+      deleteart,
     }
   },
   {

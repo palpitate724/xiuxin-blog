@@ -25,7 +25,7 @@ export const userlogin = (name: string, password: string) => {
  * @param file
  * @returns
  */
-export const userupfenmian = (file: File) => {
+export const userUpfenmian = (file: File) => {
   const formData = new FormData()
   formData.append('file', file)
   return http.request({

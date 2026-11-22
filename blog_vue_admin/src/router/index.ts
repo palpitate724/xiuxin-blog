@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
+import { userpage } from '@/stores/user'
 
 // ============================================================================
 // 路由结构: 两个模块 — zhuye + user
@@ -50,13 +51,33 @@ const routes: RouteRecordRaw[] = [
         name: 'tag',
         component: () => import('@/components/zhuye/tag.vue'),
       },
+      {
+        path: 'userguanli',
+        name: 'userguanli',
+        component: () => import('@/components/zhuye/userguanli.vue'),
+      },
     ],
   },
   // ── user 模块 (用户管理 / 登录) ──
   {
     path: '/user',
-    name: 'user',
     component: () => import('@/views/uesrls.vue'),
+    children: [
+      {
+        path: '',
+        redirect: { name: 'login' },
+      },
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('@/components/user/login.vue'),
+      },
+      {
+        path: 'signup',
+        name: 'signup',
+        component: () => import('@/components/user/signin.vue'),
+      },
+    ],
   },
 ]
 
@@ -73,6 +94,19 @@ const router = createRouter({
     }
     return { top: 0 }
   },
+})
+
+router.beforeEach((to) => {
+  const userpage_r = userpage() // 获取用户状态
+  if (!userpage_r.user.token && to.name != 'login') {
+    window.alert('请先登录')
+    return {
+      name: 'login',
+      query: {
+        redirect: to.fullPath,
+      },
+    }
+  }
 })
 
 export default router
