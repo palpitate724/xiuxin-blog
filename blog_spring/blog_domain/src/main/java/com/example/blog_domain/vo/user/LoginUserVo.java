@@ -14,4 +14,5 @@ public class LoginUserVo {
     private String name; // 用户名
     private String touxiangurl; // 头像地址
     private String token; // token
+    private int roleid; // 角色ID
 }
